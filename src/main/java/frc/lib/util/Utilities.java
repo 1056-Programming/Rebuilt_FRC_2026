@@ -1,8 +1,6 @@
 package frc.lib.util;
 
 public class Utilities {
-    public static final double sparkFlexResolution = 7168;
-
     public static double polynomialAccleration(double x) {
         return Math.pow(x,3) * 0.795903 + x * 0.203938;
     }
@@ -10,9 +8,6 @@ public class Utilities {
     // keep drive values within the range of -1 and 1 
     public static double clampDriveValues(double driveInput) {
         driveInput = Math.min(1, Math.max(-1, driveInput));
-        // Math.min(1,driveInput);
-        // driveInput = Math.max(-1, driveInput);
-
         return driveInput; 
     }
 
