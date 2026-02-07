@@ -11,6 +11,7 @@ public class Utilities {
         return driveInput; 
     }
 
+    // convert from -180 to 180 range to raw 360 range
     public static double convertGyroReadings(double reading) {
         double processedReading = reading % 360;
         if(processedReading > 180) {
