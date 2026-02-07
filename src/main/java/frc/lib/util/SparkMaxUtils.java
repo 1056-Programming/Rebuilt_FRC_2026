@@ -1,13 +1,13 @@
 package frc.lib.util;
 
 import com.revrobotics.spark.SparkBase;
-import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SignalsConfig;
 import com.revrobotics.spark.config.SparkBaseConfig;
-import com.revrobotics.spark.config.SparkFlexConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
 /** Sets motor usage for a Spark Max motor controller. */
-public class SparkFlexUtil {
+public class SparkMaxUtils {
   public enum Usage {
     kAll,
     kAbsolutePositionOnly,
@@ -30,9 +30,9 @@ public class SparkFlexUtil {
    *     constructed.
    * @param enableFollowing Whether to enable motor following.
    */
-  public static void setSparkFlexBusUsage(SparkFlex motor, SparkFlexUtil.Usage usage, SparkBaseConfig.IdleMode idleMode, boolean enableFollowing, boolean setInverted) {
-    SparkFlexUtil.sparkConfigurationBase configuration = new SparkFlexUtil.sparkConfigurationBase();
-    SparkFlexConfig motorConfiguration = new SparkFlexConfig();
+  public static void setSparkMaxBusUsage(SparkMax motor, SparkMaxUtils.Usage usage, SparkBaseConfig.IdleMode idleMode, boolean enableFollowing, boolean setInverted) {
+    SparkMaxUtils.sparkConfigurationBase configuration = new SparkMaxUtils.sparkConfigurationBase();
+    SparkMaxConfig motorConfiguration = new SparkMaxConfig();
 
     if(enableFollowing) {
       configuration.setBusVoltageOn();

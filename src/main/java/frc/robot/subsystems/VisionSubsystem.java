@@ -58,19 +58,20 @@ public class VisionSubsystem extends SubsystemBase {
                 );
     }
 
-private Matrix<N3, N1> calculateStdDevs(double distance) {
-    // 1. Define your base trust (error in meters/radians when very close)
-    double baseStdDevTrans = 0.05; // 5 centimeters
-    double baseStdDevRot = 0.1;    // ~5.7 degrees
+    private Matrix<N3, N1> calculateStdDevs(double distance) {
+        // 1. Define your base trust (error in meters/radians when very close)
+        double baseStdDevTrans = 0.05; // 5 centimeters
+        double baseStdDevRot = 0.1;    // ~5.7 degrees
 
-    // Adjust these based on your specific camera mounting height and light levels
+        // Adjust these based on your specific camera mounting height and light levels
 
-    // Calculate the dynamic std dev using a quadratic curve (distance^2)
-    double calculatedTrans = baseStdDevTrans + (0.24 * Math.pow(distance, 2));
-    double calculatedRot = baseStdDevRot + (0.43 * Math.pow(distance, 2));
+        // Calculate the dynamic std dev using a quadratic curve (distance^2)
+        double calculatedTrans = baseStdDevTrans + (0.24 * Math.pow(distance, 2));
+        double calculatedRot = baseStdDevRot + (0.43 * Math.pow(distance, 2));
 
-    // 4. Return the matrix for the Pose Estimator
-    return VecBuilder.fill(calculatedTrans, calculatedTrans, calculatedRot);
-}
+        // 4. Return the matrix for the Pose Estimator
+        return VecBuilder.fill(calculatedTrans, calculatedTrans, calculatedRot);
+    }
+
 
 }
