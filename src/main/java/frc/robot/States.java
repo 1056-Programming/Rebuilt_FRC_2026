@@ -21,12 +21,12 @@ public class States {
         FORWARD_SHOOT(-1, -1),
         VARIABLE_SHOOT(0, 0);
         
-        public final double backSpinSpeed;
-        public final double shootingSpeed;
+        public final double backSpinRPS;
+        public final double shootingRPS;
 
-        ShooterStates (double backSpinSpeed, double shootingSpeed) {
-            this.backSpinSpeed = backSpinSpeed;
-            this.shootingSpeed = shootingSpeed;
+        ShooterStates (double backSpinRPS, double shootingRPS) {
+            this.backSpinRPS = backSpinRPS;
+            this.shootingRPS = shootingRPS;
         }
     }
 

@@ -12,6 +12,11 @@ public class Constants {
         public static final int kRightShootingID = 20;
         public static final int kMiddleShootingID = 21;
         public static final int kLeftShootingID = 22;
+
+        // PID Controller
+        public static final int kShooterP = 0;
+        public static final int kShooterI = 0;
+        public static final int kShooterD = 0;
     }
 
     public class Indexor {

@@ -51,6 +51,7 @@ public class RobotContainer {
 
     public RobotContainer() {
         configureBindings();
+        setDriverBindings();
     }
 
     private void configureBindings() {
