@@ -1,9 +1,12 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import frc.lib.util.SparkFlexUtils;
 import frc.robot.Constants;
 import frc.robot.States.ShooterStates;
 
@@ -14,16 +17,21 @@ public class ShooterSubsystem extends SubsystemBase {
     private final TalonFX m_leftShooter; 
 
     // One backspin motor for all channels 
-    private final TalonFX m_backSpin;
+    private final SparkFlex m_leftBackSpin;
+    private final SparkFlex m_rightBackSpin;
 
     private ShooterStates s_state; 
 
     public ShooterSubsystem() {
-        m_rightShooter = new TalonFX(Constants.Shooter.kShootingID);
-        m_middleShooter = new TalonFX(Constants.Shooter.kShootingID);
-        m_leftShooter = new TalonFX(Constants.Shooter.kShootingID);
+        m_rightShooter = new TalonFX(Constants.Shooter.kRightShootingID);
+        m_middleShooter = new TalonFX(Constants.Shooter.kMiddleShootingID);
+        m_leftShooter = new TalonFX(Constants.Shooter.kLeftShootingID);
 
-        m_backSpin = new TalonFX(Constants.Shooter.kBackspinID);
+        m_leftBackSpin = new SparkFlex(Constants.Shooter.kLeftBackspinID, MotorType.kBrushless);
+        m_rightBackSpin = new SparkFlex(Constants.Shooter.kRightBackspinID, MotorType.kBrushless);
+
+        //SparkFlexUtils.setSparkFlexBusUsage(m_leftBackSpin, SparkFlexUtils.Usage.kMinimal, IdleMode.kCoast, false, false);
+        //SparkFlexUtils.setSparkFlexBusUsage(m_rightBackSpin, SparkFlexUtils.Usage.kMinimal, IdleMode.kCoast, false, true);
 
         // Initalize shooter in STOP position
         setShooterState(ShooterStates.STOP);
@@ -50,11 +58,20 @@ public class ShooterSubsystem extends SubsystemBase {
         } 
 
         // Otherwise use setpoint based motor speeds 
-        m_rightShooter.set(state.shootingSpeed);
-        m_middleShooter.set(state.shootingSpeed);
-        m_leftShooter.set(state.shootingSpeed);
+        setBackSpinSpeed(state.backSpinSpeed);
+        setAllShooterSpeed(state.shootingSpeed);
+    }
 
-        m_backSpin.set(state.backSpinSpeed);
+    // create functions to set all the speed 
+    public void setBackSpinSpeed(double speed) {
+        m_leftBackSpin.set(speed);
+        m_rightBackSpin.set(speed);
+    }   
+
+    public void setAllShooterSpeed(double speed) {
+        m_rightShooter.set(speed);
+        m_middleShooter.set(speed);
+        m_leftShooter.set(speed);
     }
 
     // Set dashboard data for testing and debugging purposes

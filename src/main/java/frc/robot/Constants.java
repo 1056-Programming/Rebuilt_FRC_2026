@@ -4,27 +4,27 @@ public class Constants {
     public static final double kTranslationLimiter = 0.05;
 
     public class Shooter {
-        public static final int kBackspinID = 10;
-        public static final int kShootingID = 11;
-
-        public static final int kIndexerID = 12;
-        public static final int kConveyorID= 13;
+        // REV SparkFlex 
+        public static final int kLeftBackspinID = 33;
+        public static final int kRightBackspinID = 34;
+        
+        // Pheonix Krakens
+        public static final int kRightShootingID = 20;
+        public static final int kMiddleShootingID = 21;
+        public static final int kLeftShootingID = 22;
     }
 
-    public class Indexing {
-        public static final int kIndexerID = 12;
-        public static final int kConveyorID= 13;
+    public class Indexor {
+        // REV SparkMax 
+        public static final int kIndexorID = 32;
+        public static final int kConveyorID = 30;
     }
 
     public class Intake{
-        public static final int kLeft = 12;
-        public static final int kRight= 13;
+        // REV SparkFLex 
+        public static final int kIntakeID = 35;
+
+        // REV SparkMax
+        public static final int kPivotID = 31;
     }
-
-
-
-
-    public static final String[] limelightNames = {"limelight", "limelight-apriltag", "limelight-megatag2" };
-    public static final double ambiguityThreshold = 0.7;
-    public static final double distanceThreshold = 3;
 }

@@ -12,15 +12,20 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+
 import frc.robot.States.IndexStates;
 import frc.robot.States.ShooterStates;
-import frc.robot.commands.ShooterCommand;
+
 import frc.robot.generated.TunerConstants;
+
 import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.ShooterSubsytem;
+import frc.robot.subsystems.IndexingSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -35,15 +40,13 @@ public class RobotContainer {
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
-    private final CommandXboxController main_driver = new CommandXboxController(0);
+    private final CommandXboxController driver0 = new CommandXboxController(0);
+    private final CommandXboxController driver1 = new CommandXboxController(1);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
-
-
-    private final ShooterSubsytem s_shooter = new ShooterSubsytem();
-
-    private final ShooterCommand c_shoot = new ShooterCommand(s_shooter, IndexStates.SHOOT, ShooterStates.SHOOT);
-    private final ShooterCommand c_stop = new ShooterCommand(s_shooter, IndexStates.STOP, ShooterStates.STOP);
+    private final ShooterSubsystem s_shooter = new ShooterSubsystem();
+    private final IndexingSubsystem s_indexor = new IndexingSubsystem();
+    private final IntakeSubsystem s_intake = new IntakeSubsystem();
 
 
     public RobotContainer() {
@@ -51,14 +54,35 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
+        driver1.a().onTrue(new InstantCommand(() -> s_shooter.setAllShooterSpeed(0.5)));
+        driver1.a().onTrue(new InstantCommand(() -> s_shooter.setBackSpinSpeed(0.5)));
+
+        driver1.a().onFalse(new InstantCommand(() -> s_shooter.setAllShooterSpeed(0)));
+        driver1.a().onFalse(new InstantCommand(() -> s_shooter.setBackSpinSpeed(0)));
+
+        driver1.b().onTrue(new InstantCommand(() -> s_indexor.m_indexing.set(0.5)));
+        driver1.b().onTrue(new InstantCommand(() -> s_indexor.m_conveyor.set(0.5)));
+
+        driver1.b().onFalse(new InstantCommand(() -> s_indexor.m_indexing.set(0)));
+        driver1.b().onFalse(new InstantCommand(() -> s_indexor.m_conveyor.set(0)));
+
+        driver1.y().onTrue(new InstantCommand(() -> s_intake.m_pivotIntake.set(0.4)));
+        driver1.y().onFalse(new InstantCommand(() -> s_intake.m_pivotIntake.set(0)));
+
+        driver1.x().onTrue(new InstantCommand(() -> s_intake.m_pivotIntake.set(-0.2)));
+        driver1.x().onFalse(new InstantCommand(() -> s_intake.m_pivotIntake.set(0)));
+
+    }
+
+    public void setDriverBindings() {
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
-                drive.withVelocityX(-main_driver.getLeftY() * MaxSpeed * 0.5) // Drive forward with negative Y (forward)
-                    .withVelocityY(-main_driver.getLeftX() * MaxSpeed * 0.5) // Drive left with negative X (left)
-                    .withRotationalRate(-main_driver.getRightX() * MaxAngularRate * 0.5) // Drive counterclockwise with negative X (left)
+                drive.withVelocityX(-driver0.getLeftY() * MaxSpeed * 0.5) // Drive forward with negative Y (forward)
+                    .withVelocityY(-driver0.getLeftX() * MaxSpeed * 0.5) // Drive left with negative X (left)
+                    .withRotationalRate(-driver0.getRightX() * MaxAngularRate * 0.5) // Drive counterclockwise with negative X (left)
             )
         );
 
@@ -69,23 +93,20 @@ public class RobotContainer {
             drivetrain.applyRequest(() -> idle).ignoringDisable(true)
         );
 
-        main_driver.a().whileTrue(drivetrain.applyRequest(() -> brake));
-        main_driver.b().whileTrue(drivetrain.applyRequest(() ->
-            point.withModuleDirection(new Rotation2d(-main_driver.getLeftY(), -main_driver.getLeftX()))
+        driver0.a().whileTrue(drivetrain.applyRequest(() -> brake));
+        driver0.b().whileTrue(drivetrain.applyRequest(() ->
+            point.withModuleDirection(new Rotation2d(-driver0.getLeftY(), -driver0.getLeftX()))
         ));
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
-        main_driver.back().and(main_driver.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
-        main_driver.back().and(main_driver.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
-        main_driver.start().and(main_driver.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
-        main_driver.start().and(main_driver.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
-
-        main_driver.a().onTrue(c_shoot);
-        main_driver.a().onFalse(c_stop);
+        driver0.back().and(driver0.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
+        driver0.back().and(driver0.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
+        driver0.start().and(driver0.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
+        driver0.start().and(driver0.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
         // reset the field-centric heading on left bumper press
-        main_driver.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+        driver0.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }

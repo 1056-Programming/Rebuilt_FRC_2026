@@ -16,18 +16,18 @@ public class IndexingSubsystem extends SubsystemBase{
     // Intialize motors on the indexing subsystem
     // Conveyor is the front PVC that feeds into the indexor
     // Indexor feeds the balls into shooter 
-    private final SparkFlex m_conveyor;
-    private final SparkMax m_Indexing; 
+    public final SparkMax m_conveyor;
+    public final SparkMax m_indexing; 
     
     private IndexStates i_state; 
 
     public IndexingSubsystem(){
-        m_conveyor = new SparkFlex(Constants.Indexing.kConveyorID, MotorType.kBrushless) ;
-        m_Indexing = new SparkMax(Constants.Indexing.kIndexerID, MotorType.kBrushless);
+        m_conveyor = new SparkMax(Constants.Indexor.kConveyorID, MotorType.kBrushless) ;
+        m_indexing = new SparkMax(Constants.Indexor.kIndexorID, MotorType.kBrushless);
 
         // Optimize BUS usage 
-        SparkFlexUtils.setSparkFlexBusUsage(m_conveyor, SparkFlexUtils.Usage.kMinimal, IdleMode.kCoast, false, false);
-        SparkMaxUtils.setSparkMaxBusUsage(m_Indexing, SparkMaxUtils.Usage.kMinimal, IdleMode.kCoast, false, false);
+        SparkMaxUtils.setSparkMaxBusUsage(m_conveyor, SparkMaxUtils.Usage.kMinimal, IdleMode.kCoast, false, true);
+        SparkMaxUtils.setSparkMaxBusUsage(m_indexing, SparkMaxUtils.Usage.kMinimal, IdleMode.kCoast, false, false);
 
         // Start indexor in STOP position
         setIndexState(IndexStates.STOP);
@@ -44,7 +44,7 @@ public class IndexingSubsystem extends SubsystemBase{
         i_state = state; 
         
         // Set motor speeds according to the values in Index
-        m_Indexing.set(state.indexerSpeed);
+        m_indexing.set(state.indexerSpeed);
         m_conveyor.set(state.conveyorSpeed);
     }
 

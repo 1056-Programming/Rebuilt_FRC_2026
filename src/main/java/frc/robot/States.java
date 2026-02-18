@@ -35,12 +35,12 @@ public class States {
         INDEX(1.0, 1.0),
         REVERSE(-1.0, -1.0);
 
-        public final double indexerSpeed;
-        public final double conveyorSpeed;
+        public final double intakeSpeed;
+        public final double angle;
 
-         IntakeStates(double indexerSpeed, double conveyorSpeed) {
-            this.indexerSpeed = indexerSpeed;
-            this.conveyorSpeed = conveyorSpeed;
+        IntakeStates(double intakeSpeed, double angle) {
+            this.intakeSpeed = intakeSpeed;
+            this.angle = angle;
         }
     }
 }
