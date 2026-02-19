@@ -8,22 +8,29 @@ import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-
+import frc.robot.Constants.Intake;
 import frc.robot.States.IndexStates;
+import frc.robot.States.IntakeStates;
 import frc.robot.States.ShooterStates;
-
+import frc.robot.commands.IndexCommand;
+import frc.robot.commands.IntakeCommand;
 import frc.robot.generated.TunerConstants;
 
 import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.IndexingSubsystem;
+import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
@@ -43,10 +50,17 @@ public class RobotContainer {
     private final CommandXboxController driver0 = new CommandXboxController(0);
     private final CommandXboxController driver1 = new CommandXboxController(1);
 
+    //** Initialize Subsystems **//
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     private final ShooterSubsystem s_shooter = new ShooterSubsystem();
-    private final IndexingSubsystem s_indexor = new IndexingSubsystem();
+    private final IndexSubsystem s_indexor = new IndexSubsystem();
     private final IntakeSubsystem s_intake = new IntakeSubsystem();
+
+    //** Initialize Commands **//
+    private final IndexCommand c_indexCommand = new IndexCommand(s_indexor);
+    private final IntakeCommand c_intakeCommand = new IntakeCommand(s_intake);    
+    
+    private SendableChooser<Command> m_chooser;
 
 
     public RobotContainer() {
@@ -55,23 +69,20 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        driver1.a().onTrue(new InstantCommand(() -> s_shooter.setAllShooterSpeed(0.5)));
-        driver1.a().onTrue(new InstantCommand(() -> s_shooter.setBackSpinSpeed(0.5)));
+        driver1.rightTrigger().onTrue(new InstantCommand(() -> s_shooter.setAllShooterSpeed(0.5)));
+        driver1.rightTrigger().onTrue(new InstantCommand(() -> s_shooter.setBackSpinSpeed(0.5)));
 
-        driver1.a().onFalse(new InstantCommand(() -> s_shooter.setAllShooterSpeed(0)));
-        driver1.a().onFalse(new InstantCommand(() -> s_shooter.setBackSpinSpeed(0)));
+        driver1.rightTrigger().onFalse(new InstantCommand(() -> s_shooter.setAllShooterSpeed(0)));
+        driver1.rightTrigger().onFalse(new InstantCommand(() -> s_shooter.setBackSpinSpeed(0)));   
 
-        driver1.b().onTrue(new InstantCommand(() -> s_indexor.m_indexing.set(0.5)));
-        driver1.b().onTrue(new InstantCommand(() -> s_indexor.m_conveyor.set(0.5)));
+        driver1.rightBumper().onTrue(c_indexCommand.setIndexState(IndexStates.INDEX));
+        driver1.rightBumper().onFalse(c_indexCommand.setIndexState(IndexStates.STOP));
 
-        driver1.b().onFalse(new InstantCommand(() -> s_indexor.m_indexing.set(0)));
-        driver1.b().onFalse(new InstantCommand(() -> s_indexor.m_conveyor.set(0)));
+        driver1.leftTrigger().onTrue(c_intakeCommand.setIntakeState(IntakeStates.INTAKE));
+        driver1.leftTrigger().onTrue(c_intakeCommand.setIntakeState(IntakeStates.STOP));
 
-        driver1.y().onTrue(new InstantCommand(() -> s_intake.m_pivotIntake.set(0.4)));
-        driver1.y().onFalse(new InstantCommand(() -> s_intake.m_pivotIntake.set(0)));
-
-        driver1.x().onTrue(new InstantCommand(() -> s_intake.m_pivotIntake.set(-0.2)));
-        driver1.x().onFalse(new InstantCommand(() -> s_intake.m_pivotIntake.set(0)));
+        driver1.leftBumper().onTrue(c_intakeCommand.setIntakeState(IntakeStates.REVERSE));
+        driver1.leftBumper().onTrue(c_intakeCommand.setIntakeState(IntakeStates.STOP));
 
     }
 
@@ -112,7 +123,12 @@ public class RobotContainer {
         drivetrain.registerTelemetry(logger::telemeterize);
     }
 
+    private void configureAuto() {
+        m_chooser = AutoBuilder.buildAutoChooser();
+        SmartDashboard.putData(m_chooser);
+    }
+
     public Command getAutonomousCommand() {
-        return Commands.print("No autonomous command configured");
+        return m_chooser.getSelected();
     }
 }

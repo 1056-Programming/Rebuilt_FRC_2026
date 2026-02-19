@@ -32,7 +32,7 @@ public class States {
 
     public enum IntakeStates {
         STOP(0, 0),
-        INDEX(1.0, 1.0),
+        INTAKE(1.0, 1.0),
         REVERSE(-1.0, -1.0);
 
         public final double intakeSpeed;
