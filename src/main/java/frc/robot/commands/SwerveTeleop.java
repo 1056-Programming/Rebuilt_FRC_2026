@@ -71,12 +71,12 @@ public class SwerveTeleop extends Command {
     @Override
     public void execute() {
         // Set contoller speeds 
-        xInput = -controller.getLeftY();
-        yInput = -controller.getLeftX();
+        xInput = controller.getLeftY();
+        yInput = controller.getLeftX();
         rInput = -controller.getRightX();
 
         setPolynomialAcceleration();
-        // setSlewAcceleration();
+        //setSlewAcceleration();
 
         drivetrain.applyRequest(() -> drive.withVelocityX(ySpeed)
             .withVelocityY(xSpeed)
@@ -90,8 +90,8 @@ public class SwerveTeleop extends Command {
     
     // Apply a polynomial acceleration curve to the joystick inputs for smoother control
     private void setPolynomialAcceleration() {
-        xSpeed = Utilities.polynomialAccleration(xInput) * MaxSpeed;
-        ySpeed = Utilities.polynomialAccleration(yInput) * MaxSpeed;
+        xSpeed = Utilities.polynomialAccleration(yInput) * MaxSpeed;
+        ySpeed = Utilities.polynomialAccleration(xInput) * MaxSpeed;
         rSpeed = Utilities.polynomialAccleration(rInput) * MaxAngularRate; 
     }
 
