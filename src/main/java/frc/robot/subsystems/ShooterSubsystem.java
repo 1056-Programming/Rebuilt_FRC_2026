@@ -66,11 +66,25 @@ public class ShooterSubsystem extends SubsystemBase {
         // TODO: Constantly read vision measuremnts and then calculate optimal shooting speed 
         // Only use this when target is visiable
         // Possible to use based on the odomtery reading of the robot 
+<<<<<<< HEAD
         r_shooterRPS = m_rightShooter.getVelocity().getValueAsDouble(); 
         m_shooterRPS = m_middleShooter.getVelocity().getValueAsDouble(); 
         l_shooterRPS = m_leftShooter.getVelocity().getValueAsDouble(); 
         
         
+=======
+        m_rightShooter.set(
+            rightPID.calculate(m_rightShooter.getVelocity().getValueAsDouble())
+        );
+        
+        m_leftShooter.set(
+            leftPID.calculate(m_leftShooter.getVelocity().getValueAsDouble())
+        );
+
+        m_rightShooter.set(
+            leftPID.calculate(m_rightShooter.getVelocity().getValueAsDouble())
+        );
+>>>>>>> 4db722caac6fa2f4182bf11b4e5bfaeef66c1367
 
 
         // Update dashboard data periodically
@@ -92,8 +106,13 @@ public class ShooterSubsystem extends SubsystemBase {
 
     private void setShooterSetpoint(double desiredRPS) {
         rightPID.setSetpoint(desiredRPS);
+<<<<<<< HEAD
         middlePID.setSetpoint(desiredRPS); 
         leftPID.setSetpoint(desiredRPS); 
+=======
+        middlePID.setSetpoint(desiredRPS);
+        leftPID.setSetpoint(desiredRPS);
+>>>>>>> 4db722caac6fa2f4182bf11b4e5bfaeef66c1367
     }
 
     private void setBackSetpoint(double desiredRPS) {
