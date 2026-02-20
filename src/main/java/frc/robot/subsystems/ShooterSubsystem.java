@@ -95,7 +95,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     private void setBackSetpoint(double desiredRPS) {
-        m
+        
     }
 
     private void setShooterState(ShooterStates state) {
