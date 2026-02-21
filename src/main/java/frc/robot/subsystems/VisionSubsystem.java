@@ -4,6 +4,7 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.Utilities;
 import frc.robot.Constants;
@@ -13,6 +14,7 @@ import frc.robot.LimelightHelpers.PoseEstimate;
 public class VisionSubsystem extends SubsystemBase {
     private final CommandSwerveDrivetrain drivetrain; 
     private final boolean useMegaTag2;
+    private LimelightHelpers.PoseEstimate s_poseEstimate; 
 
     private double robotYaw;
 
@@ -21,18 +23,22 @@ public class VisionSubsystem extends SubsystemBase {
         this.useMegaTag2 = false; // Set to true to use MegaTag2, false for AprilTag 
 
         this.robotYaw = 0; 
+
+        LimelightHelpers.setPipelineIndex("limelight-hotrock", 0);
     }
 
     @Override
     public void periodic() {
-
+        s_poseEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-hotrock");  
+        megaTag2(s_poseEstimate);
+        SmartDashboard.putNumber("Number of AprilTags", s_poseEstimate.tagCount);
     }
 
     private void megaTag1(PoseEstimate poseEstimate) {
         // No vaild april tags detected or pose estimate too unreliable 
         if(poseEstimate.tagCount == 0  
-            || poseEstimate.rawFiducials[0].ambiguity > Constants.ambiguityThreshold
-            || poseEstimate.rawFiducials[0].distToCamera > Constants.distanceThreshold) {
+            || poseEstimate.rawFiducials[0].ambiguity > Constants.Vision.ambiguityThreshold
+            || poseEstimate.rawFiducials[0].distToCamera > Constants.Vision.distanceThreshold) {
             return;
         } else if (poseEstimate.tagCount == 1) {
             drivetrain.addVisionMeasurement(
@@ -40,22 +46,32 @@ public class VisionSubsystem extends SubsystemBase {
                 poseEstimate.timestampSeconds,
                 calculateStdDevs(poseEstimate.rawFiducials[0].distToCamera)
                 );
+            SmartDashboard.putNumber("Limelight Distance", poseEstimate.rawFiducials[0].distToCamera);
         }
 
         
     }
-        
-    private void megaTag2 (PoseEstimate poseEstimate) {
-        robotYaw = Utilities.convertGyroReadings(drivetrain.getPigeon2().getYaw().getValueAsDouble());
-        // find angular velocity later 
 
-        LimelightHelpers.SetRobotOrientation("limelight", drivetrain.getPigeon2().getYaw().getValueAsDouble(), 0, 0, 0, 0, 0);
-        LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
-        drivetrain.addVisionMeasurement(
-                poseEstimate.pose, 
-                poseEstimate.timestampSeconds,
-                calculateStdDevs(poseEstimate.rawFiducials[0].distToCamera)
-                );
+    public void megaTag2 (LimelightHelpers.PoseEstimate poseEstimate) {
+        if(poseEstimate.tagCount == 0  
+            || poseEstimate.rawFiducials[0].ambiguity > Constants.Vision.ambiguityThreshold
+            || poseEstimate.rawFiducials[0].distToCamera > Constants.Vision.distanceThreshold) {
+            return;
+        } else if (poseEstimate.tagCount == 1) {
+            robotYaw = Utilities.convertGyroReadings(drivetrain.getPigeon2().getYaw().getValueAsDouble());
+                    // find angular velocity later 
+
+            LimelightHelpers.SetRobotOrientation("limelight", drivetrain.getPigeon2().getYaw().getValueAsDouble(), 0, 0, 0, 0, 0);
+            LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+            drivetrain.addVisionMeasurement(
+                    poseEstimate.pose, 
+                    poseEstimate.timestampSeconds,
+                    calculateStdDevs(poseEstimate.rawFiducials[0].distToCamera)
+            );
+            
+            SmartDashboard.putNumber("Limelight Distance", poseEstimate.rawFiducials[0].distToCamera);
+        }
+         
     }
 
     private Matrix<N3, N1> calculateStdDevs(double distance) {
