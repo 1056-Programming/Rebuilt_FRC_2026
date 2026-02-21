@@ -32,4 +32,7 @@ public class Constants {
         // REV SparkMax
         public static final int kPivotID = 31;
     }
+
+    public static final double distanceThreshold = 3.0; // meters
+    public static final double ambiguityThreshold = 0.2; // 0 to 1, where 0 is no ambiguity and 1 is high ambiguity
 }
