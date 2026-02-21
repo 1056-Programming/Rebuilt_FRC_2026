@@ -50,11 +50,11 @@ public class RobotContainer {
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     private final CommandXboxController driver0 = new CommandXboxController(0);
-    private final CommandXboxController driver1 = new CommandXboxController(1);
+    private final CommandXboxController driver1 = new CommandXboxController(4);
 
     //** Initialize Subsystems **//
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
-    private final ShooterSubsystem s_shooter = new ShooterSubsystem();
+    private final ShooterSubsystem s_shooter = new ShooterSubsystem(drivetrain);
     private final IndexSubsystem s_indexor = new IndexSubsystem();
   //  private final IntakeSubsystem s_intake = new IntakeSubsystem();
 
@@ -70,14 +70,19 @@ public class RobotContainer {
        // configureBindings();
         setDriverBindings();
         configureAuto();
+        configureBindings();
     }
 
     private void configureBindings() {
-        driver1.rightTrigger().onTrue(new InstantCommand(() -> s_shooter.setAllShooterSpeed(0.5)));
+        driver1.rightTrigger().onTrue(new InstantCommand(() -> s_shooter.setShooterSetpoint(80)));
         driver1.rightTrigger().onTrue(new InstantCommand(() -> s_shooter.setBackSpinSpeed(0.5)));
 
+        // driver1.rightTrigger().onTrue(new InstantCommand(() -> s_shooter.setShooterState(ShooterStates.VARIABLE_SHOOT)));
+
         driver1.rightTrigger().onFalse(new InstantCommand(() -> s_shooter.setAllShooterSpeed(0)));
-        driver1.rightTrigger().onFalse(new InstantCommand(() -> s_shooter.setBackSpinSpeed(0)));   
+        driver1.rightTrigger().onFalse(new InstantCommand(() -> s_shooter.setBackSpinSpeed(0)));  
+        
+        // driver1.rightTrigger().onTrue(new InstantCommand(() -> s_shooter.setShooterState(ShooterStates.STOP)));
 
         driver1.rightBumper().onTrue(c_indexCommand.setIndexState(IndexStates.INDEX));
         driver1.rightBumper().onFalse(c_indexCommand.setIndexState(IndexStates.STOP));

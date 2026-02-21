@@ -14,13 +14,13 @@ public class Constants {
         public static final int kLeftShootingID = 22;
 
         // PID Controller
-        public static final int kShooterP = 0;
-        public static final int kShooterI = 0;
-        public static final int kShooterD = 0;
+        public static final double kShooterP = 0.01; // kinda good P is at value 0.1
+        public static final double kShooterI = 0.0;
+        public static final double kShooterD = 0.0;
 
-        public static final int kBackP = 0;
-        public static final int kBackI = 0;
-        public static final int kBackD = 0;
+        public static final double kBackP = 0;
+        public static final double kBackI = 0;
+        public static final double kBackD = 0;
     }
 
     public class Indexor {
@@ -42,7 +42,7 @@ public class Constants {
         public static final double ambiguityThreshold = 0.5;
 
         // Vision distance to camera threshold: 
-        public static final double distanceThreshold = 20; 
+        public static final double distanceThreshold = 5; 
     }
 
     public class CalculateShooter{
