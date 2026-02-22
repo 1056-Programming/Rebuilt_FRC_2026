@@ -6,6 +6,8 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import org.ejml.equation.VariableType;
+
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -50,17 +52,17 @@ public class RobotContainer {
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     private final CommandXboxController driver0 = new CommandXboxController(0);
-    private final CommandXboxController driver1 = new CommandXboxController(4);
+    private final CommandXboxController driver1 = new CommandXboxController(1);
 
     //** Initialize Subsystems **//
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     private final ShooterSubsystem s_shooter = new ShooterSubsystem(drivetrain);
     private final IndexSubsystem s_indexor = new IndexSubsystem();
-  //  private final IntakeSubsystem s_intake = new IntakeSubsystem();
+   private final IntakeSubsystem s_intake = new IntakeSubsystem();
 
     //** Initialize Commands **//
     private final IndexCommand c_indexCommand = new IndexCommand(s_indexor);
-   // private final IntakeCommand c_intakeCommand = new IntakeCommand(s_intake); 
+    private final IntakeCommand c_intakeCommand = new IntakeCommand(s_intake); 
     private final SwerveTeleop c_teleop = new SwerveTeleop(drivetrain, driver0);   
     
     private SendableChooser<Command> m_chooser;
@@ -74,24 +76,34 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        driver1.rightTrigger().onTrue(new InstantCommand(() -> s_shooter.setShooterSetpoint(80)));
-        driver1.rightTrigger().onTrue(new InstantCommand(() -> s_shooter.setBackSpinSpeed(0.5)));
+        driver1.rightTrigger().onTrue(new InstantCommand(() -> s_shooter.setShooterState(States.ShooterStates.VARIABLE_SHOOT)));
+        driver1.rightTrigger().onFalse(new InstantCommand(() -> s_shooter.setShooterState(States.ShooterStates.STOP))); 
+
+        // testing controls
+        // driver1.rightTrigger().onTrue(new InstantCommand(() -> s_shooter.setAllShooterSpeed(0.45))); 
+        // driver1.rightTrigger().onFalse(new InstantCommand(() -> s_shooter.setAllShooterSpeed(0))); 
+
+        // driver1.rightTrigger().onTrue(new InstantCommand(() -> s_shooter.setBackSetpoint(s_shooter.optimalShotsResult[1])));
+        // driver1.rightTrigger().onFalse(new InstantCommand(() -> s_shooter.setBackSetpoint(0))); 
 
         // driver1.rightTrigger().onTrue(new InstantCommand(() -> s_shooter.setShooterState(ShooterStates.VARIABLE_SHOOT)));
 
-        driver1.rightTrigger().onFalse(new InstantCommand(() -> s_shooter.setAllShooterSpeed(0)));
-        driver1.rightTrigger().onFalse(new InstantCommand(() -> s_shooter.setBackSpinSpeed(0)));  
+        // driver1.rightTrigger().onFalse(new InstantCommand(() -> s_shooter.setAllShooterSpeed(0)));
+        // driver1.rightTrigger().onFalse(new InstantCommand(() -> s_shooter.setBackSpinSpeed(0)));  
         
         // driver1.rightTrigger().onTrue(new InstantCommand(() -> s_shooter.setShooterState(ShooterStates.STOP)));
 
         driver1.rightBumper().onTrue(c_indexCommand.setIndexState(IndexStates.INDEX));
         driver1.rightBumper().onFalse(c_indexCommand.setIndexState(IndexStates.STOP));
 
-        // driver1.leftTrigger().onTrue(c_intakeCommand.setIntakeState(IntakeStates.INTAKE));
-        // driver1.leftTrigger().onTrue(c_intakeCommand.setIntakeState(IntakeStates.STOP));
+        driver1.leftTrigger().onTrue(c_intakeCommand.setIntakeState(IntakeStates.INTAKE));
+        driver1.leftTrigger().onFalse(c_intakeCommand.setIntakeState(IntakeStates.STOP));
 
-        // driver1.leftBumper().onTrue(c_intakeCommand.setIntakeState(IntakeStates.REVERSE));
-        // driver1.leftBumper().onTrue(c_intakeCommand.setIntakeState(IntakeStates.STOP));
+        driver1.leftBumper().onTrue(c_intakeCommand.setIntakeState(IntakeStates.REVERSE));
+        driver1.leftBumper().onFalse(c_intakeCommand.setIntakeState(IntakeStates.STOP));
+
+        driver1.y().onTrue(c_intakeCommand.setIntakeState(IntakeStates.FORWARD));
+        driver1.y().onFalse(c_intakeCommand.setIntakeState(IntakeStates.STOP));
 
     }
 

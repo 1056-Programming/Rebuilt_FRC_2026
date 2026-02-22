@@ -14,7 +14,7 @@ public class Constants {
         public static final int kLeftShootingID = 22;
 
         // PID Controller
-        public static final double kShooterP = 0.01; // kinda good P is at value 0.1
+        public static final double kShooterP = 0.1; // kinda good P is at value 0.1
         public static final double kShooterI = 0.0;
         public static final double kShooterD = 0.0;
 
@@ -46,7 +46,8 @@ public class Constants {
     }
 
     public class CalculateShooter{
-         // PHYSICAL CONSTANTS
+            // PHYSICAL CONSTANTS
+            // PHYSICAL CONSTANTS
         public static final double GRAVITY = 32.174; // ft/s²
         public static final double AIR_DENSITY = 0.0765; // lb/ft³ at sea level
         public static final double BALL_MASS = 0.32; // lbs (typical for 8" ball)
@@ -57,11 +58,13 @@ public class Constants {
         // MOTOR PROPERTIES
         // Launcher motor: Kraken X60 BLDC Motor WCP 1080 (022024)
         public static final double LAUNCHER_MAX_RPM = 6000; // Max RPM
+        public static final double LAUNCHER_MAX_RPS = LAUNCHER_MAX_RPM / 60.0; // Max RPS
         public static final double LAUNCHER_MAX_TORQUE = 4.5; // Nm (approx)
         public static final double LAUNCHER_KV = 180; // RPM per volt (approx)
         
         // Backspin motor: Rev NEO Vortex 21-1652
         public static final double BACKSPIN_MAX_RPM = 6784; // Max RPM
+        public static final double BACKSPIN_MAX_RPS = BACKSPIN_MAX_RPM / 60.0; // Max RPS
         public static final double BACKSPIN_MAX_TORQUE = 3.2; // Nm (approx)
         public static final double BACKSPIN_KV = 200; // RPM per volt (approx)
         
@@ -94,7 +97,6 @@ public class Constants {
         // SYSTEM LIMITS
         public static final double MIN_LAUNCH_VELOCITY = 10.0; // ft/s (minimum to get anywhere)
         public static final double MAX_LAUNCH_VELOCITY = 60.0; // ft/s (maximum achievable)
-        public static final double MAX_BACKSPIN_RPS = BACKSPIN_MAX_RPM / 60.0; // Rotations per second
         public static final double MIN_ANGLE = 20.0; // degrees
         public static final double MAX_ANGLE = 80.0; // degrees
 
