@@ -33,6 +33,12 @@ public class ShooterSubsystem extends SubsystemBase {
     private final SparkFlex m_leftBackSpin;
     private final SparkFlex m_rightBackSpin;
 
+<<<<<<< HEAD
+    // Current shooter state 
+    private ShooterStates s_state; 
+
+    public ShooterSubsystem() {
+=======
     // Shooter PID to maintain cconstants RPS 
     private final PIDController rightPID;
     private final PIDController middlePID;
@@ -58,23 +64,23 @@ public class ShooterSubsystem extends SubsystemBase {
 
 
     public ShooterSubsystem(CommandSwerveDrivetrain drivetrain) {
+>>>>>>> 247593aab8e295f17e7173707608dbf4c1e94fd8
         m_rightShooter = new TalonFX(Constants.Shooter.kRightShootingID);
         m_middleShooter = new TalonFX(Constants.Shooter.kMiddleShootingID);
         m_leftShooter = new TalonFX(Constants.Shooter.kLeftShootingID);
 
-        rightPID = new PIDController(Constants.Shooter.kShooterP, Constants.Shooter.kShooterI, Constants.Shooter.kShooterD); 
-        middlePID = new PIDController(Constants.Shooter.kShooterP, Constants.Shooter.kShooterI, Constants.Shooter.kShooterD); 
-        leftPID = new PIDController(Constants.Shooter.kShooterP, Constants.Shooter.kShooterI, Constants.Shooter.kShooterD);
-
         m_leftBackSpin = new SparkFlex(Constants.Shooter.kLeftBackspinID, MotorType.kBrushless);
         m_rightBackSpin = new SparkFlex(Constants.Shooter.kRightBackspinID, MotorType.kBrushless);
 
+<<<<<<< HEAD
+=======
         backSpinPID = new PIDController(Constants.Shooter.kBackP, Constants.Shooter.kBackI, Constants.Shooter.kBackD); 
 
         s_poseEstimate = new PoseEstimate(); 
 
         s_limeDist = new VisionSubsystem(drivetrain); // unsure on where and how to get the drivetrain
 
+>>>>>>> 247593aab8e295f17e7173707608dbf4c1e94fd8
         SparkFlexUtils.setSparkFlexBusUsage(m_leftBackSpin, SparkFlexUtils.Usage.kVelocityOnly, IdleMode.kCoast, false, false);
         SparkFlexUtils.setSparkFlexBusUsage(m_rightBackSpin, SparkFlexUtils.Usage.kVelocityOnly, IdleMode.kCoast, false, true);
 
@@ -94,6 +100,9 @@ public class ShooterSubsystem extends SubsystemBase {
         // TODO: Constantly read vision measuremnts and then calculate optimal shooting speed 
         // Only use this when target is visiable
         // Possible to use based on the odomtery reading of the robot 
+<<<<<<< HEAD
+
+=======
         // NEW TODO: Have to calculate the set point for the back spin motors
         
         if (DesiredRPS == 0) {
@@ -107,6 +116,7 @@ public class ShooterSubsystem extends SubsystemBase {
                 leftPIDCalc = leftPID.calculate(m_leftShooter.getVelocity().getValueAsDouble())
             );
 
+<<<<<<< HEAD
             m_middleShooter.set(
                 middlePIDCalc = middlePID.calculate(m_middleShooter.getVelocity().getValueAsDouble())
             );
@@ -120,6 +130,12 @@ public class ShooterSubsystem extends SubsystemBase {
             );
         }
         
+=======
+        m_middleShooter.set(
+            middlePIDCalc = middlePID.calculate(m_middleShooter.getVelocity().getValueAsDouble())
+        );
+>>>>>>> 247593aab8e295f17e7173707608dbf4c1e94fd8
+>>>>>>> f66c78ef3489385d36716339c622ba51a1417896
 
         // Update dashboard data periodically
         setDashboardData();
@@ -137,7 +153,11 @@ public class ShooterSubsystem extends SubsystemBase {
         m_leftShooter.set(speed);
     }
 
+<<<<<<< HEAD
+    private void setShooterState(ShooterStates state) {
+=======
     public void setShooterState(ShooterStates state) {
+>>>>>>> 247593aab8e295f17e7173707608dbf4c1e94fd8
         s_state = state; 
 
         // If using variable calculations set motor speed to optimal speed 

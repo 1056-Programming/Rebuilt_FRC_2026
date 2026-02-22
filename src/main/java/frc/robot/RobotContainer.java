@@ -58,19 +58,29 @@ public class RobotContainer {
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     private final ShooterSubsystem s_shooter = new ShooterSubsystem(drivetrain);
     private final IndexSubsystem s_indexor = new IndexSubsystem();
+<<<<<<< HEAD
    private final IntakeSubsystem s_intake = new IntakeSubsystem();
+=======
+    private final IntakeSubsystem s_intake = new IntakeSubsystem();
+>>>>>>> f66c78ef3489385d36716339c622ba51a1417896
 
     //** Initialize Commands **//
     private final IndexCommand c_indexCommand = new IndexCommand(s_indexor);
     private final IntakeCommand c_intakeCommand = new IntakeCommand(s_intake); 
     private final SwerveTeleop c_teleop = new SwerveTeleop(drivetrain, driver0);   
-    
     private SendableChooser<Command> m_chooser;
 
-
     public RobotContainer() {
-       // configureBindings();
+        configureBindings();
         setDriverBindings();
+<<<<<<< HEAD
+       // configureAuto();
+    }
+
+    private void configureBindings() {
+        driver1.rightTrigger().onTrue(new InstantCommand(() -> s_shooter.setAllShooterSpeed(0.35)));
+        driver1.rightTrigger().onTrue(new InstantCommand(() -> s_shooter.setBackSpinSpeed(0.35)));
+
         configureAuto();
         configureBindings();
     }
@@ -85,6 +95,11 @@ public class RobotContainer {
 
         // driver1.rightTrigger().onTrue(new InstantCommand(() -> s_shooter.setBackSetpoint(s_shooter.optimalShotsResult[1])));
         // driver1.rightTrigger().onFalse(new InstantCommand(() -> s_shooter.setBackSetpoint(0))); 
+=======
+        driver1.rightTrigger().onTrue(new InstantCommand(() -> s_shooter.setShooterSetpoint(80)));
+        driver1.rightTrigger().onTrue(new InstantCommand(() -> s_shooter.setBackSpinSpeed(0.5)));
+>>>>>>> 247593aab8e295f17e7173707608dbf4c1e94fd8
+>>>>>>> f66c78ef3489385d36716339c622ba51a1417896
 
         // driver1.rightTrigger().onTrue(new InstantCommand(() -> s_shooter.setShooterState(ShooterStates.VARIABLE_SHOOT)));
 
@@ -97,6 +112,7 @@ public class RobotContainer {
         driver1.rightBumper().onFalse(c_indexCommand.setIndexState(IndexStates.STOP));
 
         driver1.leftTrigger().onTrue(c_intakeCommand.setIntakeState(IntakeStates.INTAKE));
+<<<<<<< HEAD
         driver1.leftTrigger().onFalse(c_intakeCommand.setIntakeState(IntakeStates.STOP));
 
         driver1.leftBumper().onTrue(c_intakeCommand.setIntakeState(IntakeStates.REVERSE));
@@ -104,6 +120,13 @@ public class RobotContainer {
 
         driver1.y().onTrue(c_intakeCommand.setIntakeState(IntakeStates.FORWARD));
         driver1.y().onFalse(c_intakeCommand.setIntakeState(IntakeStates.STOP));
+=======
+        driver1.leftTrigger().onTrue(c_intakeCommand.setIntakeState(IntakeStates.STOP));
+
+        driver1.leftBumper().onTrue(c_intakeCommand.setIntakeState(IntakeStates.REVERSE));
+        driver1.leftBumper().onTrue(c_intakeCommand.setIntakeState(IntakeStates.STOP));
+
+>>>>>>> f66c78ef3489385d36716339c622ba51a1417896
 
     }
 
@@ -141,7 +164,7 @@ public class RobotContainer {
 
         // reset the field-centric heading on left bumper press
         driver0.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
-        
+
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }
