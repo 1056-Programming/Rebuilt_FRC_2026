@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.lang.Thread.State;
+
 import org.opencv.video.DenseOpticalFlow;
 
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -54,8 +56,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
     private double DesiredRPS; 
 
-    public double[] optimalShotsResult; 
-
 
     public ShooterSubsystem(CommandSwerveDrivetrain drivetrain) {
         m_rightShooter = new TalonFX(Constants.Shooter.kRightShootingID);
@@ -81,11 +81,10 @@ public class ShooterSubsystem extends SubsystemBase {
         setShooterSetpoint(0);
         setBackSetpoint(0);
 
-        optimalShotsResult = new double[2];
-
         // Initalize shooter in STOP position
         setShooterState(ShooterStates.STOP);
         LimelightHelpers.setPipelineIndex("limelight-hotrock", 0);
+        LimelightHelpers.SetFiducialIDFiltersOverride("limelight-hotrock", Constants.Shooter.validIDs);
 
     }
 
@@ -101,9 +100,9 @@ public class ShooterSubsystem extends SubsystemBase {
             setAllShooterSpeed(0);
             setBackSpinSpeed(0);
         } else {
-            m_rightShooter.set(
-                rightPIDCalc = rightPID.calculate(m_rightShooter.getVelocity().getValueAsDouble())
-            );
+            // m_rightShooter.set(
+            //     rightPIDCalc = rightPID.calculate(m_rightShooter.getVelocity().getValueAsDouble())
+            // );
             
             m_leftShooter.set(
                 leftPIDCalc = leftPID.calculate(m_leftShooter.getVelocity().getValueAsDouble())
@@ -146,14 +145,18 @@ public class ShooterSubsystem extends SubsystemBase {
         if(state.equals(ShooterStates.VARIABLE_SHOOT)) {
             // TODO insert code to calculate variable shooting speed
             // SHould be based on Limlight vision calculations and distance to target
-            optimalShotsResult = CalculateShooterSpeed.calculateOptimalShot(
-                s_poseEstimate.rawFiducials[0].distToCamera, Constants.CalculateShooter.TARGET_HEIGHT);
+            // double[] optimalShotsResult = CalculateShooterSpeed.calculateOptimalShot(
+            //     s_poseEstimate.rawFiducials[0].distToCamera, Constants.CalculateShooter.TARGET_HEIGHT);
+
+            // SmartDashboard.putNumber("Optimal Shoot Values", optimalShotsResult[0]);
             
-            setShooterSetpoint(optimalShotsResult[0]);
-            setBackSetpoint(optimalShotsResult[1]);
+            // setShooterSetpoint(optimalShotsResult[0]);
+            // setBackSetpoint(optimalShotsResult[1]);
+            setShooterSetpoint(50);
+            setBackSetpoint(20);
             
             return;
-        } else {
+        } else if (state.equals(ShooterStates.STOP)) {
             setShooterSetpoint(0);
             setBackSetpoint(0);
         }
@@ -166,9 +169,7 @@ public class ShooterSubsystem extends SubsystemBase {
     public void setShooterSetpoint(double desiredRPS) {
         DesiredRPS = desiredRPS; 
 
-        if (desiredRPS == 0) {
-            setAllShooterSpeed(0);
-        } else {
+        if (desiredRPS != 0) {
             rightPID.setSetpoint(desiredRPS);
             middlePID.setSetpoint(desiredRPS);
             leftPID.setSetpoint(desiredRPS);
@@ -177,9 +178,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public void setBackSetpoint(double desiredRPS) {
         DesiredRPS = desiredRPS;
-        if (desiredRPS == 0) {
-            setBackSpinSpeed(0); 
-        } else {
+
+        if (desiredRPS != 0) {
             backSpinPID.setSetpoint(desiredRPS);
         }
     }
@@ -199,8 +199,10 @@ public class ShooterSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Left PID Calculated Val", leftPIDCalc);
         SmartDashboard.putNumber("Middle PID Calculated Val", middlePIDCalc);
 
-        SmartDashboard.putNumber("Right Back Spin Motor Speed", m_rightBackSpin.get());
-        SmartDashboard.putNumber("Left Back Spin Speed", m_leftBackSpin.get()); 
+        SmartDashboard.putNumber("Right Back Spin Motor Speed", m_rightBackSpin.getAbsoluteEncoder().getVelocity());
+        SmartDashboard.putNumber("Left Back Spin Speed", m_leftBackSpin.getAbsoluteEncoder().getVelocity()); 
+        
+        
         
     }
 }

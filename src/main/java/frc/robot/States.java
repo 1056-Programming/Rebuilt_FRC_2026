@@ -33,8 +33,8 @@ public class States {
     public enum IntakeStates {
         STOP(0, 0),
         INTAKE(-0.8, 0),
-        REVERSE(0,-0.5),
-        FORWARD(0,0.5); 
+        REVERSE(0,-50),
+        FORWARD(0,50); 
 
         public final double intakeSpeed;
         public final double angle;

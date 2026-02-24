@@ -5,7 +5,7 @@ public class CalculateShooterSpeed {
     public static double[] calculateOptimalShot(double targetDistanceFeet, double targetHeightFeet) {
         // Validate input
         if (targetDistanceFeet <= 0 || targetHeightFeet <= 0) {
-            return new double[]{0, 0, 0, 0, 0};
+            return new double[]{0, 0};
         }
         
         // Find optimal combination of angle and velocity
@@ -20,9 +20,9 @@ public class CalculateShooterSpeed {
         return new double[]{
             wheelRPS[0],              // Launcher wheel RPS
             wheelRPS[1],              // Backspin wheel RPS (negative for reverse direction)
-            optimalAngle,              // Launch angle
-            requiredVelocity,          // Exit velocity (ft/s)
-            requiredBallBackspinRPS    // Ball backspin RPS
+            // optimalAngle,              // Launch angle
+            // requiredVelocity,          // Exit velocity (ft/s)
+            // requiredBallBackspinRPS    // Ball backspin RPS
         };
     }
     
