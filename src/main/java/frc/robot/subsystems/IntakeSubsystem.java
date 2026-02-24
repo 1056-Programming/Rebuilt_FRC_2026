@@ -6,6 +6,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -13,6 +14,7 @@ import frc.robot.States.IntakeStates;
 import frc.lib.util.SparkFlexUtils;
 import frc.lib.util.SparkMaxUtils;
 import frc.robot.Constants;
+import frc.robot.Constants.Intake;
 
 
 public class IntakeSubsystem extends SubsystemBase {
@@ -21,11 +23,14 @@ public class IntakeSubsystem extends SubsystemBase {
     private final AbsoluteEncoder pivotAbsoluteEncoder;
     private final RelativeEncoder pre; 
 
+    private final PIDController intakePID; 
+
     private IntakeStates i_states;
 
     public IntakeSubsystem() {
         m_intake = new SparkFlex(Constants.Intake.kIntakeID, MotorType.kBrushless);
         m_pivotIntake = new SparkMax(Constants.Intake.kPivotID, MotorType.kBrushless);
+        intakePID = new PIDController(Constants.Intake.kIntakeP, Constants.Intake.kIntakeI, Constants.Intake.kIntakeD); 
         
         pivotAbsoluteEncoder = m_pivotIntake.getAbsoluteEncoder();
         pre = m_pivotIntake.getEncoder();
@@ -48,7 +53,11 @@ public class IntakeSubsystem extends SubsystemBase {
     public void setIntakeState(IntakeStates state) {
         i_states = state;
         m_intake.set(state.intakeSpeed);
-        m_pivotIntake.set(state.angle);
+        setIntakeSetpoint(state.angle);
+    }
+
+    public void setIntakeSetpoint(double setPoint) {
+        intakePID.setSetpoint(setPoint);
     }
 
     private void setDashboardData() {

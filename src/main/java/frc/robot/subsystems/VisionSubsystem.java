@@ -31,7 +31,10 @@ public class VisionSubsystem extends SubsystemBase {
     public void periodic() {
         s_poseEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-hotrock");  
         megaTag2(s_poseEstimate);
+
+
         SmartDashboard.putNumber("Number of AprilTags", s_poseEstimate.tagCount);
+        SmartDashboard.putNumber("Yaw of Robot", robotYaw);
     }
 
     private void megaTag1(PoseEstimate poseEstimate) {
@@ -40,7 +43,7 @@ public class VisionSubsystem extends SubsystemBase {
             || poseEstimate.rawFiducials[0].ambiguity > Constants.Vision.ambiguityThreshold
             || poseEstimate.rawFiducials[0].distToCamera > Constants.Vision.distanceThreshold) {
             return;
-        } else if (poseEstimate.tagCount == 1) {
+        } else if (poseEstimate.tagCount >= 1) {
             drivetrain.addVisionMeasurement(
                 poseEstimate.pose, 
                 poseEstimate.timestampSeconds,
@@ -60,14 +63,16 @@ public class VisionSubsystem extends SubsystemBase {
         } else if (poseEstimate.tagCount == 1) {
             robotYaw = Utilities.convertGyroReadings(drivetrain.getPigeon2().getYaw().getValueAsDouble());
                     // find angular velocity later 
-
-            LimelightHelpers.SetRobotOrientation("limelight", drivetrain.getPigeon2().getYaw().getValueAsDouble(), 0, 0, 0, 0, 0);
-            LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+            
+            LimelightHelpers.SetRobotOrientation("limelight-hotrock", drivetrain.getPigeon2().getYaw().getValueAsDouble(), 0, 0, 0, 0, 0);
+            LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-hotrock");
+            
+            drivetrain.setVisionMeasurementStdDevs(calculateStdDevs(poseEstimate.rawFiducials[0].distToCamera));
             drivetrain.addVisionMeasurement(
                     poseEstimate.pose, 
-                    poseEstimate.timestampSeconds,
-                    calculateStdDevs(poseEstimate.rawFiducials[0].distToCamera)
+                    poseEstimate.timestampSeconds
             );
+            
             
             SmartDashboard.putNumber("Limelight Distance", poseEstimate.rawFiducials[0].distToCamera);
         }

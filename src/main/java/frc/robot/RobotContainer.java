@@ -6,6 +6,8 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import org.ejml.equation.VariableType;
+
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -28,6 +30,7 @@ import frc.robot.States.IntakeStates;
 import frc.robot.States.ShooterStates;
 import frc.robot.commands.IndexCommand;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.SwerveTeleop;
 import frc.robot.generated.TunerConstants;
 
@@ -50,7 +53,7 @@ public class RobotContainer {
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     private final CommandXboxController driver0 = new CommandXboxController(0);
-    private final CommandXboxController driver1 = new CommandXboxController(4);
+    private final CommandXboxController driver1 = new CommandXboxController(1);
 
     //** Initialize Subsystems **//
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
@@ -61,22 +64,41 @@ public class RobotContainer {
     //** Initialize Commands **//
     private final IndexCommand c_indexCommand = new IndexCommand(s_indexor);
     private final IntakeCommand c_intakeCommand = new IntakeCommand(s_intake); 
+    private final ShooterCommand c_shooterCommand = new ShooterCommand(s_shooter); 
     private final SwerveTeleop c_teleop = new SwerveTeleop(drivetrain, driver0);   
     private SendableChooser<Command> m_chooser;
 
     public RobotContainer() {
         // configureBindings();
         setDriverBindings();
-        configureAuto();
-        // configureBindings();
+       // configureAuto();
     }
 
     private void configureBindings() {
-       // driver1.rightBumper().onTrue(c_indexCommand.setIndexState(IndexStates.INDEX));
-        // driver1.rightBumper().onFalse(c_indexCommand.setIndexState(IndexStates.STOP));
+        driver1.rightTrigger().onTrue(c_shooterCommand.setShooterState(States.ShooterStates.VARIABLE_SHOOT));
+        driver1.rightTrigger().onFalse(c_shooterCommand.setShooterState(States.ShooterStates.STOP)); 
 
-        // driver1.leftTrigger().onTrue(c_intakeCommand.setIntakeState(IntakeStates.INTAKE));
-        // driver1.leftTrigger().onTrue(c_intakeCommand.setIntakeState(IntakeStates.STOP));
+        // testing controls
+        // driver1.rightTrigger().onTrue(new InstantCommand(() -> s_shooter.setAllShooterSpeed(0.45))); 
+        // driver1.rightTrigger().onFalse(new InstantCommand(() -> s_shooter.setAllShooterSpeed(0))); 
+        // driver1.rightTrigger().onTrue(new InstantCommand(() -> s_shooter.setShooterSetpoint(80)));
+        // driver1.rightTrigger().onTrue(new InstantCommand(() -> s_shooter.setBackSpinSpeed(0.5)));
+
+        // driver1.rightTrigger().onTrue(new InstantCommand(() -> s_shooter.setShooterState(ShooterStates.VARIABLE_SHOOT)));
+
+        // driver1.rightTrigger().onFalse(new InstantCommand(() -> s_shooter.setAllShooterSpeed(0)));
+        // driver1.rightTrigger().onFalse(new InstantCommand(() -> s_shooter.setBackSpinSpeed(0)));  
+        
+        // driver1.rightTrigger().onTrue(new InstantCommand(() -> s_shooter.setShooterState(ShooterStates.STOP)));
+
+        driver1.rightBumper().onTrue(c_indexCommand.setIndexState(IndexStates.INDEX));
+        driver1.rightBumper().onFalse(c_indexCommand.setIndexState(IndexStates.STOP));
+
+        driver1.leftTrigger().onTrue(c_intakeCommand.setIntakeState(IntakeStates.INTAKE));
+        driver1.leftTrigger().onFalse(c_intakeCommand.setIntakeState(IntakeStates.STOP));
+
+        driver1.leftBumper().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.FORWARD));
+        driver1.leftBumper().toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.REVERSE));
 
         // driver1.leftBumper().onTrue(c_intakeCommand.setIntakeState(IntakeStates.REVERSE));
         // driver1.leftBumper().onTrue(c_intakeCommand.setIntakeState(IntakeStates.STOP));
