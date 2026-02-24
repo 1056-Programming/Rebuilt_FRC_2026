@@ -36,12 +36,12 @@ public class ShooterSubsystem extends SubsystemBase {
     private final SparkFlex m_rightBackSpin;
 
     // Shooter PID to maintain cconstants RPS 
-    private final PIDController c_rightPID;
-    private final PIDController c_middlePID;
-    private final PIDController c_leftPID;
-    private final PIDController c_backSpinPID; 
+    private final PIDController rightPID;
+    private final PIDController middlePID;
+    private final PIDController leftPID;
 
-    private final boolean useRPS;
+    // Backspin PID to maintain cconstants RPS 
+    private final PIDController backSpinPID;
 
     // Current shooter state 
     private ShooterStates s_state; 
@@ -61,9 +61,16 @@ public class ShooterSubsystem extends SubsystemBase {
         m_rightShooter = new TalonFX(Constants.Shooter.kRightShootingID);
         m_middleShooter = new TalonFX(Constants.Shooter.kMiddleShootingID);
         m_leftShooter = new TalonFX(Constants.Shooter.kLeftShootingID);
+        
+        // m_rightShooter.disable();
+        // m_middleShooter.disable();
+        // m_leftShooter.disable();
 
         m_leftBackSpin = new SparkFlex(Constants.Shooter.kLeftBackspinID, MotorType.kBrushless);
         m_rightBackSpin = new SparkFlex(Constants.Shooter.kRightBackspinID, MotorType.kBrushless);
+
+        m_leftBackSpin.disable();
+        m_rightBackSpin.disable();
 
         rightPID = new PIDController(Constants.Shooter.kShooterP, Constants.Shooter.kShooterI, Constants.Shooter.kBackD);
         leftPID = new PIDController(Constants.Shooter.kShooterP, Constants.Shooter.kShooterI, Constants.Shooter.kShooterD);
@@ -126,22 +133,13 @@ public class ShooterSubsystem extends SubsystemBase {
         setDashboardData();
     }
 
-    private void setSetpoints(double shootSetpoint, double backSpinSetpoint) {
-        c_rightPID.setSetpoint(shootSetpoint);
-        c_middlePID.setSetpoint(shootSetpoint);
-        c_leftPID.setSetpoint(shootSetpoint);
-
-        c_backSpinPID.setSetpoint(backSpinSetpoint);
-
-    }
-
     // create functions to set all the speed 
-    private void setBackSpinSpeed(double speed) {
+    public void setBackSpinSpeed(double speed) {
         m_leftBackSpin.set(speed);
         m_rightBackSpin.set(speed);
     }   
 
-    private void setShootSpeed(double speed) {
+    public void setAllShooterSpeed(double speed) {
         m_rightShooter.set(speed);
         m_middleShooter.set(speed);
         m_leftShooter.set(speed);
