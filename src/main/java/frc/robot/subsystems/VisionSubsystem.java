@@ -15,8 +15,10 @@ public class VisionSubsystem extends SubsystemBase {
     private final CommandSwerveDrivetrain drivetrain; 
     private final boolean useMegaTag2;
     private LimelightHelpers.PoseEstimate s_poseEstimate; 
-
+    
+    private double limelight_tx; 
     private double robotYaw;
+    public static double tag_distance; 
 
     public VisionSubsystem(CommandSwerveDrivetrain drivetrain){
         this.drivetrain = drivetrain;
@@ -55,7 +57,7 @@ public class VisionSubsystem extends SubsystemBase {
         
     }
 
-    public void megaTag2 (LimelightHelpers.PoseEstimate poseEstimate) {
+    public void megaTag2 (LimelightHelpers.PoseEstimate poseEstimate) {        
         if(poseEstimate.tagCount == 0  
             || poseEstimate.rawFiducials[0].ambiguity > Constants.Vision.ambiguityThreshold
             || poseEstimate.rawFiducials[0].distToCamera > Constants.Vision.distanceThreshold) {
@@ -63,8 +65,11 @@ public class VisionSubsystem extends SubsystemBase {
         } else if (poseEstimate.tagCount == 1) {
             robotYaw = Utilities.convertGyroReadings(drivetrain.getPigeon2().getYaw().getValueAsDouble());
                     // find angular velocity later 
-            
-            LimelightHelpers.SetRobotOrientation("limelight-hotrock", drivetrain.getPigeon2().getYaw().getValueAsDouble(), 0, 0, 0, 0, 0);
+
+            // gets the horizontal, angular offset of the liemlight relative to the middle of the april tag
+            limelight_tx = LimelightHelpers.getTX("limelight-hotrock"); 
+            limelight_tx+=robotYaw; 
+            LimelightHelpers.SetRobotOrientation("limelight-hotrock", limelight_tx, 0, 0, 0, 0, 0);
             LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-hotrock");
             
             drivetrain.setVisionMeasurementStdDevs(calculateStdDevs(poseEstimate.rawFiducials[0].distToCamera));
@@ -73,8 +78,8 @@ public class VisionSubsystem extends SubsystemBase {
                     poseEstimate.timestampSeconds
             );
             
-            
-            SmartDashboard.putNumber("Limelight Distance", poseEstimate.rawFiducials[0].distToCamera);
+            tag_distance = poseEstimate.rawFiducials[0].distToCamera;
+            SmartDashboard.putNumber("Limelight Distance", tag_distance);
         }
          
     }

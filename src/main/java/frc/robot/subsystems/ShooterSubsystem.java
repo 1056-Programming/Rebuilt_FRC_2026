@@ -48,13 +48,11 @@ public class ShooterSubsystem extends SubsystemBase {
 
     private VisionSubsystem s_limeDist; 
 
-    private PoseEstimate s_poseEstimate; 
-
     private double rightPIDCalc;
     private double middlePIDCalc;
     private double leftPIDCalc; 
 
-    private double DesiredRPS; 
+    private double desiredRPS; 
 
 
     public ShooterSubsystem(CommandSwerveDrivetrain drivetrain) {
@@ -70,8 +68,6 @@ public class ShooterSubsystem extends SubsystemBase {
         middlePID = new PIDController(Constants.Shooter.kShooterP, Constants.Shooter.kShooterI, Constants.Shooter.kShooterD);
 
         backSpinPID = new PIDController(Constants.Shooter.kBackP, Constants.Shooter.kBackI, Constants.Shooter.kBackD); 
-
-        s_poseEstimate = new PoseEstimate(); 
 
         s_limeDist = new VisionSubsystem(drivetrain); // unsure on where and how to get the drivetrain
 
@@ -96,13 +92,16 @@ public class ShooterSubsystem extends SubsystemBase {
 
         // NEW TODO: Have to calculate the set point for the back spin motors
         
-        if (DesiredRPS == 0) {
+        if (desiredRPS == 0) {
             setAllShooterSpeed(0);
             setBackSpinSpeed(0);
-        } else {
-            // m_rightShooter.set(
-            //     rightPIDCalc = rightPID.calculate(m_rightShooter.getVelocity().getValueAsDouble())
-            // );
+        } else if (Math.round(m_leftShooter.getVelocity().getValueAsDouble()) == Math.round(desiredRPS)
+        || Math.round(m_middleShooter.getVelocity().getValueAsDouble()) == Math.round(desiredRPS) 
+        || Math.round(m_rightShooter.getVelocity().getValueAsDouble()) == Math.round(desiredRPS)) {
+
+            m_rightShooter.set(
+                rightPIDCalc = rightPID.calculate(m_rightShooter.getVelocity().getValueAsDouble())
+            );
             
             m_leftShooter.set(
                 leftPIDCalc = leftPID.calculate(m_leftShooter.getVelocity().getValueAsDouble())
@@ -147,13 +146,17 @@ public class ShooterSubsystem extends SubsystemBase {
             // SHould be based on Limlight vision calculations and distance to target
             // double[] optimalShotsResult = CalculateShooterSpeed.calculateOptimalShot(
             //     s_poseEstimate.rawFiducials[0].distToCamera, Constants.CalculateShooter.TARGET_HEIGHT);
-
+            double[] optimalShotsResult = CalculateShooterSpeed.calculateOptimalShot(VisionSubsystem.tag_distance, 4);
             // SmartDashboard.putNumber("Optimal Shoot Values", optimalShotsResult[0]);
             
-            // setShooterSetpoint(optimalShotsResult[0]);
-            // setBackSetpoint(optimalShotsResult[1]);
-            setShooterSetpoint(50);
-            setBackSetpoint(20);
+            setShooterSetpoint(optimalShotsResult[0]);
+            setBackSetpoint(optimalShotsResult[1]);
+
+            SmartDashboard.putNumber("Optimal Shooter RPS: ", optimalShotsResult[0]);
+            SmartDashboard.putNumber("Optimal Back Spin RPS: ", optimalShotsResult[1]);
+
+            // setShooterSetpoint(50);
+            // setBackSetpoint(20);
             
             return;
         } else if (state.equals(ShooterStates.STOP)) {
@@ -166,21 +169,21 @@ public class ShooterSubsystem extends SubsystemBase {
         // setAllShooterSpeed(state.shootingRPS);
     }
 
-    public void setShooterSetpoint(double desiredRPS) {
-        DesiredRPS = desiredRPS; 
+    public void setShooterSetpoint(double rpsGoal) {
+        desiredRPS = rpsGoal; 
 
-        if (desiredRPS != 0) {
-            rightPID.setSetpoint(desiredRPS);
-            middlePID.setSetpoint(desiredRPS);
-            leftPID.setSetpoint(desiredRPS);
+        if (rpsGoal != 0) {
+            rightPID.setSetpoint(rpsGoal);
+            middlePID.setSetpoint(rpsGoal);
+            leftPID.setSetpoint(rpsGoal);
         }
     }
 
-    public void setBackSetpoint(double desiredRPS) {
-        DesiredRPS = desiredRPS;
+    public void setBackSetpoint(double rpsGoal) {
+        desiredRPS = rpsGoal;
 
-        if (desiredRPS != 0) {
-            backSpinPID.setSetpoint(desiredRPS);
+        if (rpsGoal != 0) {
+            backSpinPID.setSetpoint(rpsGoal);
         }
     }
 

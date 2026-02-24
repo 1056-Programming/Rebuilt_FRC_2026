@@ -1,11 +1,71 @@
 package frc.robot; 
 
 public class CalculateShooterSpeed {
-        
+
+    // PHYSICAL CONSTANTS
+    private static final double GRAVITY = 32.174; // ft/s²
+    private static final double AIR_DENSITY = 0.0765; // lb/ft³ at sea level
+    private static final double BALL_MASS = 0.32; // lbs (typical for 8" ball)
+    private static final double BALL_DIAMETER = 8.0 / 12.0; // feet (8" ball)
+    private static final double BALL_CROSS_SECTION = Math.PI * Math.pow(BALL_DIAMETER / 2, 2); // ft²
+    private static final double DRAG_COEFFICIENT = 0.47; // Sphere drag coefficient
+    
+    // MOTOR PROPERTIES
+    // Launcher motor: Kraken X60 BLDC Motor WCP 1080 (022024)
+    private static final double LAUNCHER_MAX_RPM = 6000; // Max RPM
+    private static final double LAUNCHER_MAX_RPS = LAUNCHER_MAX_RPM / 60.0; // Max RPS
+    private static final double LAUNCHER_MAX_TORQUE = 4.5; // Nm (approx)
+    private static final double LAUNCHER_KV = 180; // RPM per volt (approx)
+    
+    // Backspin motor: Rev NEO Vortex 21-1652
+    private static final double BACKSPIN_MAX_RPM = 6784; // Max RPM
+    private static final double BACKSPIN_MAX_RPS = BACKSPIN_MAX_RPM / 60.0; // Max RPS
+    private static final double BACKSPIN_MAX_TORQUE = 3.2; // Nm (approx)
+    private static final double BACKSPIN_KV = 200; // RPM per volt (approx)
+    
+    // WHEEL SPECIFICATIONS
+    // Launcher flywheel: 1.5 lbs, 4" diameter, 1.5" width
+    private static final double LAUNCHER_WHEEL_DIAMETER = 4.0 / 12.0; // feet
+    private static final double LAUNCHER_WHEEL_RADIUS = LAUNCHER_WHEEL_DIAMETER / 2;
+    private static final double LAUNCHER_WHEEL_MASS = 1.5; // lbs
+    private static final double LAUNCHER_WHEEL_MOMENT_OF_INERTIA = 0.5 * LAUNCHER_WHEEL_MASS * Math.pow(LAUNCHER_WHEEL_RADIUS, 2); // lb-ft²
+    private static final double LAUNCHER_WHEEL_CIRCUMFERENCE = Math.PI * LAUNCHER_WHEEL_DIAMETER;
+    
+    // Backspin wheels: 3 wheels, each 1" wide, 2" diameter
+    private static final double BACKSPIN_WHEEL_DIAMETER = 2.0 / 12.0; // feet
+    private static final double BACKSPIN_WHEEL_RADIUS = BACKSPIN_WHEEL_DIAMETER / 2;
+    private static final double BACKSPIN_WHEEL_CIRCUMFERENCE = Math.PI * BACKSPIN_WHEEL_DIAMETER;
+    private static final int BACKSPIN_WHEEL_COUNT = 3;
+    private static final double BACKSPIN_WHEEL_MASS = 0.4; // lbs per wheel (approx)
+    private static final double BACKSPIN_TOTAL_INERTIA = BACKSPIN_WHEEL_COUNT * 0.5 * BACKSPIN_WHEEL_MASS * Math.pow(BACKSPIN_WHEEL_RADIUS, 2);
+    
+    // MECHANICAL GEOMETRY
+    private static final double BACKSPIN_HORIZONTAL_OFFSET = 5.875 / 12.0; // feet
+    private static final double BACKSPIN_VERTICAL_OFFSET = 4.25 / 12.0; // feet
+    private static final double CONTACT_POINT_ANGLE = Math.atan2(BACKSPIN_VERTICAL_OFFSET, BACKSPIN_HORIZONTAL_OFFSET); // radians
+    
+    // BALL-MECHANICS INTERACTION
+    private static final double FRICTION_COEFFICIENT = 0.8; // Between wheel and ball
+    private static final double RESTITUTION_COEFFICIENT = 0.85; // Energy transfer efficiency
+    private static final double BACKSPIN_TRANSFER_RATIO = 0.7; // How much wheel spin transfers to ball spin
+    
+    // SYSTEM LIMITS
+    private static final double MIN_LAUNCH_VELOCITY = 10.0; // ft/s (minimum to get anywhere)
+    private static final double MAX_LAUNCH_VELOCITY = 60.0; // ft/s (maximum achievable)
+    private static final double MIN_ANGLE = 20.0; // degrees
+    private static final double MAX_ANGLE = 80.0; // degrees
+    
+    /**
+     * Calculate optimal shot parameters for a target position
+     * 
+     * @param targetDistanceFeet Horizontal distance to target
+     * @param targetHeightFeet Height of target above shooter
+     * @return [launcherRPS, backspinRPS, launchAngle°, velocity, ballBackspinRPS]
+     */
     public static double[] calculateOptimalShot(double targetDistanceFeet, double targetHeightFeet) {
         // Validate input
         if (targetDistanceFeet <= 0 || targetHeightFeet <= 0) {
-            return new double[]{0, 0};
+            return new double[]{0, 0, 0, 0, 0};
         }
         
         // Find optimal combination of angle and velocity
@@ -20,9 +80,9 @@ public class CalculateShooterSpeed {
         return new double[]{
             wheelRPS[0],              // Launcher wheel RPS
             wheelRPS[1],              // Backspin wheel RPS (negative for reverse direction)
-            // optimalAngle,              // Launch angle
-            // requiredVelocity,          // Exit velocity (ft/s)
-            // requiredBallBackspinRPS    // Ball backspin RPS
+            optimalAngle,              // Launch angle
+            requiredVelocity,          // Exit velocity (ft/s)
+            requiredBallBackspinRPS    // Ball backspin RPS
         };
     }
     
@@ -36,11 +96,11 @@ public class CalculateShooterSpeed {
         double minError = Double.MAX_VALUE;
         
         // Search through possible launch angles
-        for (double angle = Constants.CalculateShooter.MIN_ANGLE; angle <= Constants.CalculateShooter.MAX_ANGLE; angle += 1.0) {
+        for (double angle = MIN_ANGLE; angle <= MAX_ANGLE; angle += 1.0) {
             // For each angle, find minimum velocity needed
             double minVelocity = findMinimumVelocityForAngle(angle, distance, targetHeight);
             
-            if (minVelocity <= 0 || minVelocity > Constants.CalculateShooter.MAX_LAUNCH_VELOCITY) {
+            if (minVelocity <= 0 || minVelocity > MAX_LAUNCH_VELOCITY) {
                 continue;
             }
             
@@ -81,10 +141,10 @@ public class CalculateShooterSpeed {
         double bestVelocity = 0;
         double minError = Double.MAX_VALUE;
         
-        for (double angle = Constants.CalculateShooter.MIN_ANGLE; angle <= Constants.CalculateShooter.MAX_ANGLE; angle += 1.0) {
+        for (double angle = MIN_ANGLE; angle <= MAX_ANGLE; angle += 1.0) {
             double minVelocity = findMinimumVelocityForAngle(angle, distance, targetHeight);
             
-            if (minVelocity <= 0 || minVelocity > Constants.CalculateShooter.MAX_LAUNCH_VELOCITY) {
+            if (minVelocity <= 0 || minVelocity > MAX_LAUNCH_VELOCITY) {
                 continue;
             }
             
@@ -92,7 +152,7 @@ public class CalculateShooterSpeed {
             double angleRad = Math.toRadians(angle);
             double timeToTarget = distance / (minVelocity * Math.cos(angleRad));
             double heightAtTarget = minVelocity * Math.sin(angleRad) * timeToTarget - 
-                                   0.5 * Constants.CalculateShooter.GRAVITY * timeToTarget * timeToTarget;
+                                   0.5 * GRAVITY * timeToTarget * timeToTarget;
             
             double error = Math.abs(heightAtTarget - targetHeight);
             
@@ -113,8 +173,8 @@ public class CalculateShooterSpeed {
         double angleRad = Math.toRadians(angleDeg);
         
         // Binary search for minimum velocity
-        double lowVel = Constants.CalculateShooter.MIN_LAUNCH_VELOCITY;
-        double highVel = Constants.CalculateShooter.MAX_LAUNCH_VELOCITY;
+        double lowVel = MIN_LAUNCH_VELOCITY;
+        double highVel = MAX_LAUNCH_VELOCITY;
         double bestVel = -1;
         
         for (int iter = 0; iter < 20; iter++) {
@@ -123,7 +183,7 @@ public class CalculateShooterSpeed {
             // Calculate height at target distance (simplified no-drag version)
             double timeToTarget = distance / (midVel * Math.cos(angleRad));
             double heightAtTarget = midVel * Math.sin(angleRad) * timeToTarget - 
-                                   0.5 * Constants.CalculateShooter.GRAVITY * timeToTarget * timeToTarget;
+                                   0.5 * GRAVITY * timeToTarget * timeToTarget;
             
             if (heightAtTarget >= targetHeight) {
                 bestVel = midVel;
@@ -146,14 +206,14 @@ public class CalculateShooterSpeed {
         // Required lift depends on trajectory and target
         
         // Calculate time of flight approximation
-        double flightTime = 2.0 * velocity * Math.sin(angleRad) / Constants.CalculateShooter.GRAVITY;
+        double flightTime = 2.0 * velocity * Math.sin(angleRad) / GRAVITY;
         
         // Calculate spin rate needed for stabilization
         // Based on ball diameter and velocity (dimensionless spin factor)
         // Typical spin rates for sports balls: 5-50 RPS
         
         // Base spin proportional to velocity and inversely proportional to ball diameter
-        double baseSpinRPS = (velocity / Constants.CalculateShooter.BALL_DIAMETER) * 0.15; // Empirical factor
+        double baseSpinRPS = (velocity / BALL_DIAMETER) * 0.15; // Empirical factor
         
         // Adjust for target height - higher targets need more spin for lift
         double heightRatio = targetHeight / distance;
@@ -192,17 +252,17 @@ public class CalculateShooterSpeed {
             double v = Math.sqrt(vx*vx + vy*vy);
             
             // Drag force (opposite to velocity direction)
-            double dragForce = 0.5 * Constants.CalculateShooter.AIR_DENSITY * Constants.CalculateShooter.DRAG_COEFFICIENT * Constants.CalculateShooter.BALL_CROSS_SECTION * v * v;
-            double dragAccel = dragForce / Constants.CalculateShooter.BALL_MASS;
+            double dragForce = 0.5 * AIR_DENSITY * DRAG_COEFFICIENT * BALL_CROSS_SECTION * v * v;
+            double dragAccel = dragForce / BALL_MASS;
             
             // Magnus force due to backspin (perpendicular to velocity)
             // Simplified Magnus effect: F_magnus = CL * ρ * ω × v
             // Lift coefficient increases with spin rate up to a point
-            double spinRatio = spinRate * Constants.CalculateShooter.BALL_DIAMETER / v; // Dimensionless spin factor
+            double spinRatio = spinRate * BALL_DIAMETER / v; // Dimensionless spin factor
             double magnusCoeff = Math.min(0.3, 0.1 + 0.5 * spinRatio); // Empirical
             
-            double magnusForce = magnusCoeff * Constants.CalculateShooter.AIR_DENSITY * spinRate * v * Constants.CalculateShooter.BALL_CROSS_SECTION;
-            double magnusAccel = magnusForce / Constants.CalculateShooter.BALL_MASS;
+            double magnusForce = magnusCoeff * AIR_DENSITY * spinRate * v * BALL_CROSS_SECTION;
+            double magnusAccel = magnusForce / BALL_MASS;
             
             // Update velocities with forces
             if (v > 0.01) {
@@ -212,7 +272,7 @@ public class CalculateShooterSpeed {
             }
             
             // Gravity
-            vy -= Constants.CalculateShooter.GRAVITY * dt;
+            vy -= GRAVITY * dt;
             
             // Update position
             x += vx * dt;
@@ -235,18 +295,18 @@ public class CalculateShooterSpeed {
         double wheelSurfaceSpeed = requiredBallVelocity / 0.9; // ft/s
         
         // Convert to wheel RPS (revolutions per second)
-        double launcherWheelRPS = wheelSurfaceSpeed / Constants.CalculateShooter.LAUNCHER_WHEEL_CIRCUMFERENCE;
+        double launcherWheelRPS = wheelSurfaceSpeed / LAUNCHER_WHEEL_CIRCUMFERENCE;
         
         // Verify against energy requirements
         // Energy to accelerate ball: 0.5 * m * v²
-        double ballKE = 0.5 * Constants.CalculateShooter.BALL_MASS * requiredBallVelocity * requiredBallVelocity;
+        double ballKE = 0.5 * BALL_MASS * requiredBallVelocity * requiredBallVelocity;
         
         // Account for flywheel inertia and energy transfer efficiency
-        double requiredWheelKE = ballKE / (Constants.CalculateShooter.RESTITUTION_COEFFICIENT * Constants.CalculateShooter.RESTITUTION_COEFFICIENT);
+        double requiredWheelKE = ballKE / (RESTITUTION_COEFFICIENT * RESTITUTION_COEFFICIENT);
         
         // Calculate required wheel RPS from kinetic energy
         // KE_rotational = 0.5 * I * (2π * RPS)²
-        double requiredOmega = Math.sqrt(2.0 * requiredWheelKE / Constants.CalculateShooter.LAUNCHER_WHEEL_MOMENT_OF_INERTIA);
+        double requiredOmega = Math.sqrt(2.0 * requiredWheelKE / LAUNCHER_WHEEL_MOMENT_OF_INERTIA);
         double requiredWheelRPSFromEnergy = requiredOmega / (2.0 * Math.PI);
         
         // Use the higher of the two RPS requirements to ensure enough energy
@@ -256,12 +316,12 @@ public class CalculateShooterSpeed {
         
         // Required backspin wheel RPS (ball spin is less than wheel spin)
         // Backspin wheels need to spin faster to impart the required ball spin
-        double backspinWheelRPS = requiredBallBackspinRPS / Constants.CalculateShooter.BACKSPIN_TRANSFER_RATIO;
+        double backspinWheelRPS = requiredBallBackspinRPS / BACKSPIN_TRANSFER_RATIO;
         
         // Account for multiple wheels and their inertia
         // Verify energy requirements for backspin
         double requiredBackspinOmega = backspinWheelRPS * 2.0 * Math.PI;
-        double backspinKE = 0.5 * Constants.CalculateShooter.BACKSPIN_TOTAL_INERTIA * requiredBackspinOmega * requiredBackspinOmega;
+        double backspinKE = 0.5 * BACKSPIN_TOTAL_INERTIA * requiredBackspinOmega * requiredBackspinOmega;
         
         // Add a small factor for maintaining spin under load
         if (backspinWheelRPS > 0) {
@@ -271,12 +331,12 @@ public class CalculateShooterSpeed {
         
         // Apply mechanical geometry correction
         // Backspin motor positioned behind and above affects contact efficiency
-        double geometryFactor = Math.cos(Constants.CalculateShooter.CONTACT_POINT_ANGLE) * 0.8 + 0.4;
+        double geometryFactor = Math.cos(CONTACT_POINT_ANGLE) * 0.8 + 0.4;
         backspinWheelRPS /= geometryFactor;
         
         // Clamp values to realistic ranges based on motor capabilities
-        targetLauncherRPS = clamp(targetLauncherRPS, 5.0, Constants.CalculateShooter.LAUNCHER_MAX_RPS * 0.95);
-        backspinWheelRPS = clamp(backspinWheelRPS, 2.0, Constants.CalculateShooter.BACKSPIN_MAX_RPS * 0.95);
+        targetLauncherRPS = clamp(targetLauncherRPS, 5.0, LAUNCHER_MAX_RPS * 0.95);
+        backspinWheelRPS = clamp(backspinWheelRPS, 2.0, BACKSPIN_MAX_RPS * 0.95);
         
         // Backspin motor runs in reverse for backspin (negative RPS)
         return new double[]{targetLauncherRPS, -backspinWheelRPS};
@@ -294,9 +354,24 @@ public class CalculateShooterSpeed {
     }
     
     /**
+     * Convert RPS to RPM for display purposes
+     */
+    public static double rpsToRpm(double rps) {
+        return rps * 60.0;
+    }
+    
+    /**
      * Convert RPM to RPS
      */
     public static double rpmToRps(double rpm) {
         return rpm / 60.0;
     }
+    
+    /**
+     * Print shot solution with details (RPS output)
+     */
+    
+    // =========================================================================
+    // MAIN - For testing and demonstration
+    // =========================================================================
 }
