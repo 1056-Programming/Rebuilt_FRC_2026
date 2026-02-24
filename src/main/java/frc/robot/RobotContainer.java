@@ -74,25 +74,12 @@ public class RobotContainer {
         configureAuto();
     }
 
-    private void configureBindings() {
-        // driver1.rightTrigger().onTrue(c_shooterCommand.setShooterState(States.ShooterStates.VARIABLE_SHOOT));
-        // driver1.rightTrigger().onFalse(c_shooterCommand.setShooterState(States.ShooterStates.STOP)); 
-
-        // testing controls
-        // driver1.rightTrigger().onTrue(new InstantCommand(() -> s_shooter.setAllShooterSpeed(0.45))); 
-    //    driver1.rightTrigger().onFalse(new InstantCommand(() -> s_shooter.setAllShooterSpeed(0))); 
-        driver1.rightTrigger().onTrue(new InstantCommand(() -> s_shooter.setShooterSetpoint(100)));
-        driver1.rightTrigger().onTrue(new InstantCommand(() -> s_shooter.setBackSetpoint(0)));
-        driver1.rightTrigger().onFalse(new InstantCommand(() -> s_shooter.setShooterSetpoint(0)));
-        driver1.rightTrigger().onFalse(new InstantCommand(() -> s_shooter.setBackSetpoint(0)));
-
-        // driver1.rightTrigger().onTrue(new InstantCommand(() ->
-         s_shooter.setShooterState(ShooterStates.VARIABLE_SHOOT);
-
-        // driver1.rightTrigger().onFalse(new InstantCommand(() -> s_shooter.setAllShooterSpeed(0)));
-        // driver1.rightTrigger().onFalse(new InstantCommand(() -> s_shooter.setBackSpinSpeed(0)));  
-        
-        // driver1.rightTrigger().onTrue(new InstantCommand(() -> s_shooter.setShooterState(ShooterStates.STOP)));
+    private void configureBindings() {        
+        driver1.pov(0).onTrue(c_shooterCommand.setShooterState(States.ShooterStates.FORWARD_SHOOT));
+        driver1.pov(90).onTrue(c_shooterCommand.setShooterState(States.ShooterStates.MAX));
+        driver1.pov(180).onTrue(c_shooterCommand.setShooterState(States.ShooterStates.TEST1));
+        driver1.pov(270).onTrue(c_shooterCommand.setShooterState(States.ShooterStates.TEST2));
+        driver1.pov(-1).onTrue(c_shooterCommand.setShooterState(States.ShooterStates.STOP));
 
         driver1.rightBumper().onTrue(c_indexCommand.setIndexState(IndexStates.INDEX));
         driver1.rightBumper().onFalse(c_indexCommand.setIndexState(IndexStates.STOP));
@@ -100,8 +87,8 @@ public class RobotContainer {
         driver1.leftTrigger().onTrue(c_intakeCommand.setIntakeState(IntakeStates.INTAKE));
         driver1.leftTrigger().onFalse(c_intakeCommand.setIntakeState(IntakeStates.STOP));
 
-        driver1.leftBumper().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.FORWARD));
-        driver1.leftBumper().toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.REVERSE));
+        driver1.leftBumper().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.REVERSE));
+        driver1.leftBumper().toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.STOP));
 
         // driver1.leftBumper().onTrue(c_intakeCommand.setIntakeState(IntakeStates.REVERSE));
         // driver1.leftBumper().onTrue(c_intakeCommand.setIntakeState(IntakeStates.STOP));
