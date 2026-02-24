@@ -74,26 +74,27 @@ public class RobotContainer {
         configureAuto();
     }
 
-    private void configureBindings() {        
+    private void configureBindings() {     
+        // Bind Shooter Commands 
         driver1.pov(0).onTrue(c_shooterCommand.setShooterState(States.ShooterStates.FORWARD_SHOOT));
         driver1.pov(90).onTrue(c_shooterCommand.setShooterState(States.ShooterStates.MAX));
         driver1.pov(180).onTrue(c_shooterCommand.setShooterState(States.ShooterStates.TEST1));
         driver1.pov(270).onTrue(c_shooterCommand.setShooterState(States.ShooterStates.TEST2));
         driver1.pov(-1).onTrue(c_shooterCommand.setShooterState(States.ShooterStates.STOP));
 
-        driver1.rightBumper().onTrue(c_indexCommand.setIndexState(IndexStates.INDEX));
-        driver1.rightBumper().onFalse(c_indexCommand.setIndexState(IndexStates.STOP));
-
+        // Bind Intake Commands
         driver1.leftTrigger().onTrue(c_intakeCommand.setIntakeState(IntakeStates.INTAKE));
         driver1.leftTrigger().onFalse(c_intakeCommand.setIntakeState(IntakeStates.STOP));
 
         driver1.leftBumper().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.REVERSE));
         driver1.leftBumper().toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.STOP));
 
-        // driver1.leftBumper().onTrue(c_intakeCommand.setIntakeState(IntakeStates.REVERSE));
-        // driver1.leftBumper().onTrue(c_intakeCommand.setIntakeState(IntakeStates.STOP));
+        // Bind Indexor Commands
+        driver1.rightBumper().onTrue(c_indexCommand.setIndexState(IndexStates.INDEX));
+        driver1.rightBumper().onFalse(c_indexCommand.setIndexState(IndexStates.STOP))
 
-
+        driver1.leftBumper().toggleOnTrue(c_indexCommand.setIndexState(IndexStates.REVERSE));
+        driver1.leftBumper().toggleOnFalse(c_indexCommand.setIndexState(IndexStates.STOP));
     }
 
     public void setDriverBindings() {
@@ -101,11 +102,12 @@ public class RobotContainer {
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
-            drivetrain.applyRequest(() ->
-                drive.withVelocityX(-driver0.getLeftY() * MaxSpeed * 0.5) // Drive forward with negative Y (forward)
-                    .withVelocityY(-driver0.getLeftX() * MaxSpeed * 0.5) // Drive left with negative X (left)
-                    .withRotationalRate(-driver0.getRightX() * MaxAngularRate * 0.5) // Drive counterclockwise with negative X (left)
-            )
+            // drivetrain.applyRequest(() ->
+            //     drive.withVelocityX(-driver0.getLeftY() * MaxSpeed * 0.5) // Drive forward with negative Y (forward)
+            //         .withVelocityY(-driver0.getLeftX() * MaxSpeed * 0.5) // Drive left with negative X (left)
+            //         .withRotationalRate(-driver0.getRightX() * MaxAngularRate * 0.5) // Drive counterclockwise with negative X (left)
+            // )
+            c_teleop
         );
 
         // Idle while the robot is disabled. This ensures the configured

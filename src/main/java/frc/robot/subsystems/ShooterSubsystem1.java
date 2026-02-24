@@ -181,5 +181,8 @@ public class ShooterSubsystem1 extends SubsystemBase {
         SmartDashboard.putNumber(getName() + " Middle Shooter PID Setpoint", c_middlePID.getSetpoint());
         SmartDashboard.putNumber(getName() + " Left Shooter PID Setpoint", c_leftPID.getSetpoint());
         SmartDashboard.putNumber(getName() + " Back Spin PID Setpoint", c_backSpinPID.getSetpoint());
+
+        // Current Shooter State
+        SmartDashboard.putString(getName() + " Shooter State", s_state.toString());
     }
 }
