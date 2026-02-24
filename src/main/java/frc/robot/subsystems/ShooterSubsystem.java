@@ -59,9 +59,16 @@ public class ShooterSubsystem extends SubsystemBase {
         m_rightShooter = new TalonFX(Constants.Shooter.kRightShootingID);
         m_middleShooter = new TalonFX(Constants.Shooter.kMiddleShootingID);
         m_leftShooter = new TalonFX(Constants.Shooter.kLeftShootingID);
+        
+        // m_rightShooter.disable();
+        // m_middleShooter.disable();
+        // m_leftShooter.disable();
 
         m_leftBackSpin = new SparkFlex(Constants.Shooter.kLeftBackspinID, MotorType.kBrushless);
         m_rightBackSpin = new SparkFlex(Constants.Shooter.kRightBackspinID, MotorType.kBrushless);
+
+        m_leftBackSpin.disable();
+        m_rightBackSpin.disable();
 
         rightPID = new PIDController(Constants.Shooter.kShooterP, Constants.Shooter.kShooterI, Constants.Shooter.kBackD);
         leftPID = new PIDController(Constants.Shooter.kShooterP, Constants.Shooter.kShooterI, Constants.Shooter.kShooterD);

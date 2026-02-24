@@ -60,10 +60,6 @@ public class IntakeSubsystem extends SubsystemBase {
         intakePID.setSetpoint(setPoint);
     }
 
-    public void setPivotSpeed(double speed) {
-        m_pivotIntake.set(speed);
-    }
-
     private void setDashboardData() {
         SmartDashboard.putNumber("Intake Speed", m_intake.get());
         SmartDashboard.putNumber("Pivot Intake Speed", m_pivotIntake.get());
