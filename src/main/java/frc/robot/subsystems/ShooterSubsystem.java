@@ -31,37 +31,24 @@ public class ShooterSubsystem extends SubsystemBase {
     private final SparkFlex m_leftBackSpin;
     private final SparkFlex m_rightBackSpin;
 
-<<<<<<< HEAD
-    // Current shooter state 
-    private ShooterStates s_state; 
-
-    public ShooterSubsystem() {
-=======
     // Shooter PID to maintain cconstants RPS 
-    private final PIDController rightPID;
-    private final PIDController middlePID;
-    private final PIDController leftPID;
+    private final PIDController c_rightPID;
+    private final PIDController c_middlePID;
+    private final PIDController c_leftPID;
+    private final PIDController c_backSpinPID; 
 
-    // Backspin PID to maintain cconstants RPS 
-    private final PIDController backSpinPID;
+    private final boolean useRPS;
 
     // Current shooter state 
     private ShooterStates s_state; 
 
-    private VisionSubsystem s_limeDist; 
+    // Motor speed 
+    private double rightMotorSpeed;
 
-    private PoseEstimate s_poseEstimate; 
 
-    private double bottomLaunchSpeed; 
-    private double shootLaunchSpeed;
-
-    private double rightPIDCalc;
-    private double middlePIDCalc;
-    private double leftPIDCalc; 
 
 
     public ShooterSubsystem(CommandSwerveDrivetrain drivetrain) {
->>>>>>> 247593aab8e295f17e7173707608dbf4c1e94fd8
         m_rightShooter = new TalonFX(Constants.Shooter.kRightShootingID);
         m_middleShooter = new TalonFX(Constants.Shooter.kMiddleShootingID);
         m_leftShooter = new TalonFX(Constants.Shooter.kLeftShootingID);
@@ -69,28 +56,23 @@ public class ShooterSubsystem extends SubsystemBase {
         m_leftBackSpin = new SparkFlex(Constants.Shooter.kLeftBackspinID, MotorType.kBrushless);
         m_rightBackSpin = new SparkFlex(Constants.Shooter.kRightBackspinID, MotorType.kBrushless);
 
-<<<<<<< HEAD
-=======
-        backSpinPID = new PIDController(Constants.Shooter.kBackP, Constants.Shooter.kBackI, Constants.Shooter.kBackD); 
+        // Initalize PID Controllers for constant RPM wih their respective PID Constants 
+        c_rightPID = new PIDController(Constants.Shooter.kShooterP, Constants.Shooter.kShooterI, Constants.Shooter.kShooterD);
+        c_middlePID = new PIDController(Constants.Shooter.kShooterP, Constants.Shooter.kShooterI, Constants.Shooter.kShooterD);
+        c_leftPID = new PIDController(Constants.Shooter.kShooterP, Constants.Shooter.kShooterI, Constants.Shooter.kShooterD);
 
-        s_poseEstimate = new PoseEstimate(); 
+        c_backSpinPID = new PIDController(Constants.Shooter.kBackP, Constants.Shooter.kBackI, Constants.Shooter.kBackD);
 
-        s_limeDist = new VisionSubsystem(drivetrain); // unsure on where and how to get the drivetrain
-
->>>>>>> 247593aab8e295f17e7173707608dbf4c1e94fd8
+        // Optimize BUS usage
         SparkFlexUtils.setSparkFlexBusUsage(m_leftBackSpin, SparkFlexUtils.Usage.kVelocityOnly, IdleMode.kCoast, false, false);
         SparkFlexUtils.setSparkFlexBusUsage(m_rightBackSpin, SparkFlexUtils.Usage.kVelocityOnly, IdleMode.kCoast, false, true);
 
-        bottomLaunchSpeed = 0; 
-        shootLaunchSpeed = 0;
-
-        setShooterSetpoint(0);
-        setBackSetpoint(0);
+        // set usage for RPS PID 
+        // Turn off for testing 
+        useRPS = false; 
 
         // Initalize shooter in STOP position
         setShooterState(ShooterStates.STOP);
-        LimelightHelpers.setPipelineIndex("limelight", 0);
-
     }
 
     @Override
@@ -98,81 +80,46 @@ public class ShooterSubsystem extends SubsystemBase {
         // TODO: Constantly read vision measuremnts and then calculate optimal shooting speed 
         // Only use this when target is visiable
         // Possible to use based on the odomtery reading of the robot 
-<<<<<<< HEAD
-
-=======
         // NEW TODO: Have to calculate the set point for the back spin motors
 
-        // if (s_poseEstimate.tagCount >= 0 
-        //     || s_poseEstimate.rawFiducials[0].ambiguity < Constants.Vision.ambiguityThreshold
-        //     || s_poseEstimate.rawFiducials[0].distToCamera < Constants.Vision.distanceThreshold ) {
-            
-        //     s_distance = s_limeDist.megaTag2(s_poseEstimate); 
-        // }
-
-        m_rightShooter.set(
-            rightPIDCalc = rightPID.calculate(m_rightShooter.getVelocity().getValueAsDouble())
-        );
         
-        m_leftShooter.set(
-            leftPIDCalc = leftPID.calculate(m_leftShooter.getVelocity().getValueAsDouble())
-        );
-
-        m_middleShooter.set(
-            middlePIDCalc = middlePID.calculate(m_middleShooter.getVelocity().getValueAsDouble())
-        );
->>>>>>> 247593aab8e295f17e7173707608dbf4c1e94fd8
 
         // Update dashboard data periodically
         setDashboardData();
     }
 
+    private void setSetpoints(double shootSetpoint, double backSpinSetpoint) {
+        c_rightPID.setSetpoint(shootSetpoint);
+        c_middlePID.setSetpoint(shootSetpoint);
+        c_leftPID.setSetpoint(shootSetpoint);
+
+        c_backSpinPID.setSetpoint(backSpinSetpoint);
+
+    }
+
     // create functions to set all the speed 
-    public void setBackSpinSpeed(double speed) {
+    private void setBackSpinSpeed(double speed) {
         m_leftBackSpin.set(speed);
         m_rightBackSpin.set(speed);
     }   
 
-    public void setAllShooterSpeed(double speed) {
+    private void setShootSpeed(double speed) {
         m_rightShooter.set(speed);
         m_middleShooter.set(speed);
         m_leftShooter.set(speed);
     }
 
-<<<<<<< HEAD
-    private void setShooterState(ShooterStates state) {
-=======
     public void setShooterState(ShooterStates state) {
->>>>>>> 247593aab8e295f17e7173707608dbf4c1e94fd8
         s_state = state; 
 
         // If using variable calculations set motor speed to optimal speed 
         if(state.equals(ShooterStates.VARIABLE_SHOOT)) {
             // TODO insert code to calculate variable shooting speed
-            // SHould be based on Limlight vision calculations and distance to target
-            // double[] optimalShotsResult = CalculateShooterSpeed.calculateOptimalShot(
-            //     s_distance, Constants.CalculateShooter.TARGET_HEIGHT);
-            
-            // setBackSpinSpeed(optimalShotsResult[1]);
-            // setAllShooterSpeed(optimalShotsResult[0]);
-
-            
+            // SHould be based on Limlight vision calculations and distance to target        
             return;
         } 
 
-        // Otherwise use setpoint based motor speeds 
-        setBackSpinSpeed(state.backSpinRPS);
-        setAllShooterSpeed(state.shootingRPS);
-    }
-
-    public void setShooterSetpoint(double desiredRPS) {
-        rightPID.setSetpoint(desiredRPS);
-        middlePID.setSetpoint(desiredRPS);
-        leftPID.setSetpoint(desiredRPS);
-    }
-
-    private void setBackSetpoint(double desiredRPS) {
-        backSpinPID.setSetpoint(desiredRPS);
+        setSetpoints(state.shootingRPS, state.backSpinRPS);
     }
 
     // Set dashboard data for testing and debugging purposes
@@ -185,10 +132,6 @@ public class ShooterSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Right Shooter Motor RPS", m_rightShooter.getVelocity().getValueAsDouble());
         SmartDashboard.putNumber("Middle Shooter Motor RPS", m_middleShooter.getVelocity().getValueAsDouble());
         SmartDashboard.putNumber("Left Shooter Motor RPS", m_leftShooter.getVelocity().getValueAsDouble());
-
-        SmartDashboard.putNumber("Right PID Calculated Val", rightPIDCalc);
-        SmartDashboard.putNumber("Left PID Calculated Val", leftPIDCalc);
-        SmartDashboard.putNumber("Middle PID Calculated Val", middlePIDCalc);
 
         SmartDashboard.putNumber("Right Back Spin Motor Speed", m_rightBackSpin.get());
         SmartDashboard.putNumber("Left Back Spin Speed", m_leftBackSpin.get()); 
