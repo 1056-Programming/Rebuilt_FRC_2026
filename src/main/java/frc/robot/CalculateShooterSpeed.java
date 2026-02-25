@@ -63,6 +63,9 @@ public class CalculateShooterSpeed {
      * @return [launcherRPS, backspinRPS, launchAngle°, velocity, ballBackspinRPS]
      */
     public static double[] calculateOptimalShot(double targetDistanceFeet, double targetHeightFeet) {
+        targetDistanceFeet *= 3.37; 
+        targetHeightFeet *= 3.37;
+
         // Validate input
         if (targetDistanceFeet <= 0 || targetHeightFeet <= 0) {
             return new double[]{0, 0, 0, 0, 0};
@@ -367,7 +370,7 @@ public class CalculateShooterSpeed {
         return rpm / 60.0;
     }
     
-    /**
+    /**uc
      * Print shot solution with details (RPS output)
      */
     

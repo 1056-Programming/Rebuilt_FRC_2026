@@ -66,7 +66,6 @@ public class VisionSubsystem extends SubsystemBase {
         } else if (poseEstimate.tagCount == 1) {
             robotYaw = Utilities.convertGyroReadings(drivetrain.getPigeon2().getYaw().getValueAsDouble());
                     // find angular velocity later 
-
             // gets the horizontal, angular offset of the liemlight relative to the middle of the april tag
             limelight_tx = LimelightHelpers.getTX("limelight-hotrock"); 
             LimelightHelpers.SetRobotOrientation("limelight-hotrock", limelight_tx, 0, 0, 0, 0, 0);     

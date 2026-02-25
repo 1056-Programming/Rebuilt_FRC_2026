@@ -37,7 +37,8 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.ShooterSubsystem1;
+import frc.robot.subsystems.VisionSubsystem;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -57,9 +58,10 @@ public class RobotContainer {
 
     //** Initialize Subsystems **//
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
-    private final ShooterSubsystem s_shooter = new ShooterSubsystem(drivetrain);
+    private final ShooterSubsystem1 s_shooter = new ShooterSubsystem1();
     private final IndexSubsystem s_indexor = new IndexSubsystem();
     private final IntakeSubsystem s_intake = new IntakeSubsystem();
+    private final VisionSubsystem s_VisionSubsystem = new VisionSubsystem(drivetrain);
 
     //** Initialize Commands **//
     private final IndexCommand c_indexCommand = new IndexCommand(s_indexor);
@@ -79,7 +81,7 @@ public class RobotContainer {
         driver1.pov(0).onTrue(c_shooterCommand.setShooterState(States.ShooterStates.FORWARD_SHOOT));
         driver1.pov(90).onTrue(c_shooterCommand.setShooterState(States.ShooterStates.MAX));
         driver1.pov(180).onTrue(c_shooterCommand.setShooterState(States.ShooterStates.TEST1));
-        driver1.pov(270).onTrue(c_shooterCommand.setShooterState(States.ShooterStates.TEST2));
+        driver1.pov(270).onTrue(c_shooterCommand.setShooterState(States.ShooterStates.VARIABLE_SHOOT));
         driver1.pov(-1).onTrue(c_shooterCommand.setShooterState(States.ShooterStates.STOP));
 
         // Bind Intake Commands
@@ -91,7 +93,10 @@ public class RobotContainer {
 
         // Bind Indexor Commands
         driver1.rightBumper().onTrue(c_indexCommand.setIndexState(IndexStates.INDEX));
-        driver1.rightBumper().onFalse(c_indexCommand.setIndexState(IndexStates.STOP))
+        driver1.rightBumper().onFalse(c_indexCommand.setIndexState(IndexStates.STOP));
+
+        driver1.rightBumper().onTrue(new InstantCommand(() -> s_indexor.m_indexing.set(0.25)));
+        driver1.rightBumper().onFalse(new InstantCommand(() -> s_indexor.m_indexing.set(0)));
 
         driver1.leftBumper().toggleOnTrue(c_indexCommand.setIndexState(IndexStates.REVERSE));
         driver1.leftBumper().toggleOnFalse(c_indexCommand.setIndexState(IndexStates.STOP));

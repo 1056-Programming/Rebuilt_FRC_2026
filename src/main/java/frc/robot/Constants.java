@@ -16,7 +16,8 @@ public class Constants {
         // PID Controller
         public static final double ShooterKP = 0.12; // kinda good P is at value 0.1
         public static final double ShooterKI = 0.0;
-        public static final double ShooterKD = 0.0;
+        public static final double ShooterKD = 0.008;
+
 
         public static final double BackSpinKP = 0.005;
         public static final double BackSpinKI = 0;

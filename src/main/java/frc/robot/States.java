@@ -23,7 +23,7 @@ public class States {
     // Positive for both is shoot outward 
     public enum ShooterStates {
         STOP(0, 0),
-        MAX(100, 70),
+        MAX(10, 0),
         FORWARD_SHOOT(60, 30),
         TEST1(0, 50),
         TEST2(70,0),
