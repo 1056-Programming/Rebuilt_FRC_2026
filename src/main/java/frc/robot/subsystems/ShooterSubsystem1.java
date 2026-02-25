@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.lib.util.SparkFlexUtils;
+import frc.robot.CalculateShooterSpeed;
 import frc.robot.Constants;
 import frc.robot.States.ShooterStates;
 
@@ -108,6 +109,14 @@ public class ShooterSubsystem1 extends SubsystemBase {
         s_state = state; 
         if(state.equals(ShooterStates.VARIABLE_SHOOT)) {
             // TODO:
+            double[] optimalShotsResult = CalculateShooterSpeed.calculateOptimalShot(VisionSubsystem.tag_distance, 4);
+            // SmartDashboard.putNumber("Optimal Shoot Values", optimalShotsResult[0]);
+            
+            setShooterSetpoint(optimalShotsResult[0]);
+            setBackSetpoint(optimalShotsResult[1]);
+
+            SmartDashboard.putNumber("Optimal Shooter RPS: ", optimalShotsResult[0]);
+            SmartDashboard.putNumber("Optimal Back Spin RPS: ", optimalShotsResult[1]);
         } 
 
         setPIDSetpoints(state.shootingRPS, state.backSpinRPS);

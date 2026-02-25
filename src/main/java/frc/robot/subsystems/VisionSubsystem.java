@@ -57,7 +57,8 @@ public class VisionSubsystem extends SubsystemBase {
         
     }
 
-    public void megaTag2 (LimelightHelpers.PoseEstimate poseEstimate) {        
+    public void megaTag2 (LimelightHelpers.PoseEstimate poseEstimate) { 
+        
         if(poseEstimate.tagCount == 0  
             || poseEstimate.rawFiducials[0].ambiguity > Constants.Vision.ambiguityThreshold
             || poseEstimate.rawFiducials[0].distToCamera > Constants.Vision.distanceThreshold) {
@@ -68,14 +69,13 @@ public class VisionSubsystem extends SubsystemBase {
 
             // gets the horizontal, angular offset of the liemlight relative to the middle of the april tag
             limelight_tx = LimelightHelpers.getTX("limelight-hotrock"); 
-            limelight_tx+=robotYaw; 
-            LimelightHelpers.SetRobotOrientation("limelight-hotrock", limelight_tx, 0, 0, 0, 0, 0);
-            LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-hotrock");
-            
+            LimelightHelpers.SetRobotOrientation("limelight-hotrock", limelight_tx, 0, 0, 0, 0, 0);     
+
             drivetrain.setVisionMeasurementStdDevs(calculateStdDevs(poseEstimate.rawFiducials[0].distToCamera));
             drivetrain.addVisionMeasurement(
                     poseEstimate.pose, 
-                    poseEstimate.timestampSeconds
+                    poseEstimate.timestampSeconds,
+                    calculateStdDevs(poseEstimate.rawFiducials[0].distToCamera)
             );
             
             tag_distance = poseEstimate.rawFiducials[0].distToCamera;
