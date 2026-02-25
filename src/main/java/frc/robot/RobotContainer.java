@@ -37,7 +37,7 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.ShooterSubsystem1;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 
 public class RobotContainer {
@@ -58,10 +58,10 @@ public class RobotContainer {
 
     //** Initialize Subsystems **//
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
-    private final ShooterSubsystem1 s_shooter = new ShooterSubsystem1();
+    private final ShooterSubsystem s_shooter = new ShooterSubsystem();
     private final IndexSubsystem s_indexor = new IndexSubsystem();
     private final IntakeSubsystem s_intake = new IntakeSubsystem();
-    private final VisionSubsystem s_VisionSubsystem = new VisionSubsystem(drivetrain);
+    private final VisionSubsystem s_VisionSubsystem = new VisionSubsystem(drivetrain,"limelight-hotrock");
 
     //** Initialize Commands **//
     private final IndexCommand c_indexCommand = new IndexCommand(s_indexor);

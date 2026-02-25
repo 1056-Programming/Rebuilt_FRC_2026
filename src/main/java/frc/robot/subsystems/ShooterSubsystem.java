@@ -15,7 +15,7 @@ import frc.robot.CalculateShooterSpeed;
 import frc.robot.Constants;
 import frc.robot.States.ShooterStates;
 
-public class ShooterSubsystem1 extends SubsystemBase {
+public class ShooterSubsystem extends SubsystemBase {
     // Different motors for each channel on the robot 
     private final TalonFX m_rightShooter;
     private final TalonFX m_middleShooter;
@@ -47,7 +47,7 @@ public class ShooterSubsystem1 extends SubsystemBase {
     private double leftMotorSpeed;
     private double backSpinSpeed;
 
-    public ShooterSubsystem1() {
+    public ShooterSubsystem() {
         // Initialize Kraken Motors 
         m_rightShooter = new TalonFX(Constants.Shooter.kRightShootingID);
         m_middleShooter = new TalonFX(Constants.Shooter.kMiddleShootingID);
@@ -116,9 +116,8 @@ public class ShooterSubsystem1 extends SubsystemBase {
         if(state.equals(ShooterStates.VARIABLE_SHOOT)) {
             // TODO:
             double[] optimalShotsResult = CalculateShooterSpeed.calculateOptimalShot(VisionSubsystem.tag_distance, 4);
-            // SmartDashboard.putNumber("Optimal Shoot Values", optimalShotsResult[0]);
             
-            setPIDSetpoints(optimalShotsResult[0], 40);
+            setPIDSetpoints(optimalShotsResult[0], optimalShotsResult[1]);
 
             SmartDashboard.putNumber("Optimal Shooter RPS: ", optimalShotsResult[0]);
             SmartDashboard.putNumber("Optimal Back Spin RPS: ", -optimalShotsResult[1]);
