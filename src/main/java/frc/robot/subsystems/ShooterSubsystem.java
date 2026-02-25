@@ -118,9 +118,8 @@ public class ShooterSubsystem extends SubsystemBase {
         if(state.equals(ShooterStates.VARIABLE_SHOOT)) {
             // TODO:
             double[] optimalShotsResult = CalculateShooterSpeed.calculateOptimalShot(VisionSubsystem.tag_distance, 4);
-            // SmartDashboard.putNumber("Optimal Shoot Values", optimalShotsResult[0]);
             
-            setPIDSetpoints(optimalShotsResult[0], 40);
+            setPIDSetpoints(optimalShotsResult[0], optimalShotsResult[1]);
 
             SmartDashboard.putNumber("Optimal Shooter RPS: ", optimalShotsResult[0]);
             SmartDashboard.putNumber("Optimal Back Spin RPS: ", -optimalShotsResult[1]);
