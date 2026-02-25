@@ -14,7 +14,7 @@ import frc.lib.util.SparkFlexUtils;
 import frc.robot.Constants;
 import frc.robot.States.ShooterStates;
 
-public class ShooterSubsystem extends SubsystemBase {
+public class ShooterSubsystem1 extends SubsystemBase {
     // Different motors for each channel on the robot 
     private final TalonFX m_rightShooter;
     private final TalonFX m_middleShooter;
@@ -46,7 +46,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private double leftMotorSpeed;
     private double backSpinSpeed;
 
-    public ShooterSubsystem() {
+    public ShooterSubsystem1() {
         // Initialize Kraken Motors 
         m_rightShooter = new TalonFX(Constants.Shooter.kRightShootingID);
         m_middleShooter = new TalonFX(Constants.Shooter.kMiddleShootingID);

@@ -17,7 +17,7 @@ import frc.lib.util.SparkMaxUtils;
 import frc.robot.Constants;
 import frc.robot.States.IntakeStates;
 
-public class IntakeSubsystem1 extends SubsystemBase {
+public class IntakeSubsystem extends SubsystemBase {
     // Spark Flex controlling ball intake
     private final SparkFlex m_intake;
 
@@ -39,7 +39,7 @@ public class IntakeSubsystem1 extends SubsystemBase {
     // Calculated PID Speed for pivot
     private double pivotSpeed;
 
-    public IntakeSubsystem1() {
+    public IntakeSubsystem() {
         // Initialize Spark Flex and Spark Max motors
         m_intake = new SparkFlex(Constants.Intake.kIntakeID, MotorType.kBrushless);
         m_pivot = new SparkMax(Constants.Intake.kPivotID, MotorType.kBrushless);
