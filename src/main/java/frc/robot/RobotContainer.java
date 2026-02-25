@@ -10,6 +10,7 @@ import org.ejml.equation.VariableType;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.FollowPathCommand;
@@ -17,6 +18,7 @@ import com.pathplanner.lib.commands.FollowPathCommand;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -24,20 +26,24 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+
 import frc.robot.Constants.Intake;
+
 import frc.robot.States.IndexStates;
 import frc.robot.States.IntakeStates;
 import frc.robot.States.ShooterStates;
+
 import frc.robot.commands.IndexCommand;
-import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.SwerveTeleop;
+import frc.robot.commands.IntakeCommand;
+
 import frc.robot.generated.TunerConstants;
 
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.ShooterSubsystem1;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 
 public class RobotContainer {
@@ -58,15 +64,15 @@ public class RobotContainer {
 
     //** Initialize Subsystems **//
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
-    private final ShooterSubsystem1 s_shooter = new ShooterSubsystem1();
+    private final ShooterSubsystem s_shooter = new ShooterSubsystem();
     private final IndexSubsystem s_indexor = new IndexSubsystem();
     private final IntakeSubsystem s_intake = new IntakeSubsystem();
     private final VisionSubsystem s_VisionSubsystem = new VisionSubsystem(drivetrain);
 
     //** Initialize Commands **//
+    private final ShooterCommand c_shooterCommand = new ShooterCommand(s_shooter);
     private final IndexCommand c_indexCommand = new IndexCommand(s_indexor);
-    private final IntakeCommand c_intakeCommand = new IntakeCommand(s_intake); 
-    private final ShooterCommand c_shooterCommand = new ShooterCommand(s_shooter); 
+    private final IntakeCommand c_intakeCommand = new IntakeCommand(s_intake);
     private final SwerveTeleop c_teleop = new SwerveTeleop(drivetrain, driver0);   
     private SendableChooser<Command> m_chooser;
 
@@ -94,9 +100,6 @@ public class RobotContainer {
         // Bind Indexor Commands
         driver1.rightBumper().onTrue(c_indexCommand.setIndexState(IndexStates.INDEX));
         driver1.rightBumper().onFalse(c_indexCommand.setIndexState(IndexStates.STOP));
-
-        driver1.rightBumper().onTrue(new InstantCommand(() -> s_indexor.m_indexing.set(0.25)));
-        driver1.rightBumper().onFalse(new InstantCommand(() -> s_indexor.m_indexing.set(0)));
 
         driver1.leftBumper().toggleOnTrue(c_indexCommand.setIndexState(IndexStates.REVERSE));
         driver1.leftBumper().toggleOnFalse(c_indexCommand.setIndexState(IndexStates.STOP));

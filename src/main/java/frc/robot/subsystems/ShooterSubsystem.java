@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
@@ -15,7 +16,7 @@ import frc.robot.CalculateShooterSpeed;
 import frc.robot.Constants;
 import frc.robot.States.ShooterStates;
 
-public class ShooterSubsystem1 extends SubsystemBase {
+public class ShooterSubsystem extends SubsystemBase {
     // Different motors for each channel on the robot 
     private final TalonFX m_rightShooter;
     private final TalonFX m_middleShooter;
@@ -41,13 +42,14 @@ public class ShooterSubsystem1 extends SubsystemBase {
     // Current shooter state
     private ShooterStates s_state;
 
+
     // Current Motor Speeds
     private double rightMotorSpeed;
     private double middleMotorSpeed;
     private double leftMotorSpeed;
     private double backSpinSpeed;
 
-    public ShooterSubsystem1() {
+    public ShooterSubsystem() {
         // Initialize Kraken Motors 
         m_rightShooter = new TalonFX(Constants.Shooter.kRightShootingID);
         m_middleShooter = new TalonFX(Constants.Shooter.kMiddleShootingID);
@@ -159,7 +161,7 @@ public class ShooterSubsystem1 extends SubsystemBase {
     private void applyShooterMotorSpeeds(double rightSpeed, double middleSpeed, double leftSpeed) {
         //m_rightShooter.set(rightSpeed);
         //m_middleShooter.set(middleSpeed);
-        m_leftShooter.set(leftSpeed);
+        m_leftShooter.set(0.5);
         m_leftBackSpin.set(backSpinSpeed);
         m_rightBackSpin.set(backSpinSpeed);
     }

@@ -12,7 +12,7 @@ import frc.lib.util.SparkMaxUtils;
 import frc.robot.Constants;
 import frc.robot.States.IndexStates;
 
-public class IndexSubsystem extends SubsystemBase{
+public class IndexSubsystem extends SubsystemBase {
     // Intialize motors on the indexing subsystem
     // Conveyor is the front PVC that feeds into the indexor
     // Indexor feeds the balls into shooter 
@@ -24,7 +24,7 @@ public class IndexSubsystem extends SubsystemBase{
     public IndexSubsystem(){
         m_conveyor = new SparkMax(Constants.Indexor.kConveyorID, MotorType.kBrushless) ;
         m_indexing = new SparkMax(Constants.Indexor.kIndexorID, MotorType.kBrushless);
-
+        
         // Optimize BUS usage 
         SparkMaxUtils.setSparkMaxBusUsage(m_conveyor, SparkMaxUtils.Usage.kMinimal, IdleMode.kCoast, false, true);
         SparkMaxUtils.setSparkMaxBusUsage(m_indexing, SparkMaxUtils.Usage.kMinimal, IdleMode.kCoast, false, false);
