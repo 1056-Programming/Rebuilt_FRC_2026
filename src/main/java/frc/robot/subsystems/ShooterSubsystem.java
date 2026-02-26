@@ -106,10 +106,6 @@ public class ShooterSubsystem extends SubsystemBase {
             applyShooterMotorSpeeds(0, 0, 0);
         } else {
             applyShooterMotorSpeeds(rightMotorSpeed, middleMotorSpeed, leftMotorSpeed);
-            // else{ applyShooterMotorSpeeds(
-            //     (optimalShotsResult[0] - m_rightShooter.getVelocity().getValueAsDouble())/5, //note: can be divided by any number, just serves as a dampener
-            //     (optimalShotsResult[0] - m_middleShooter.getVelocity().getValueAsDouble())/5,
-            //     (optimalShotsResult[0] - m_leftShooter.getVelocity().getValueAsDouble())/5);}
         }
 
         // If backspin setpoint is 0, set backspin motor speeds to 0 
