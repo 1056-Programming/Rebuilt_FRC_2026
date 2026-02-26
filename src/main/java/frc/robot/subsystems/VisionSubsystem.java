@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import com.pathplanner.lib.config.RobotConfig;
+
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.numbers.N1;
@@ -15,28 +17,53 @@ public class VisionSubsystem extends SubsystemBase {
     private final CommandSwerveDrivetrain drivetrain; 
     private final boolean useMegaTag2;
     private LimelightHelpers.PoseEstimate s_poseEstimate; 
+    private String limelightName; 
     
     private double limelight_tx; 
     private double robotYaw;
     public static double tag_distance; 
 
-    public VisionSubsystem(CommandSwerveDrivetrain drivetrain){
+    public VisionSubsystem(CommandSwerveDrivetrain drivetrain, String limelightName){
         this.drivetrain = drivetrain;
         this.useMegaTag2 = false; // Set to true to use MegaTag2, false for AprilTag 
+        this.limelightName = limelightName; 
 
         this.robotYaw = 0; 
 
-        LimelightHelpers.setPipelineIndex("limelight-hotrock", 0);
+        LimelightHelpers.setPipelineIndex(limelightName, 0);
     }
 
     @Override
     public void periodic() {
-        s_poseEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-hotrock");  
+        s_poseEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName);  
         megaTag2(s_poseEstimate);
+        setSmartDashboard();
+    }
 
+    public void megaTag2 (LimelightHelpers.PoseEstimate poseEstimate) { 
+        
+        if(poseEstimate.tagCount == 0  
+            || poseEstimate.rawFiducials[0].ambiguity > Constants.Vision.ambiguityThreshold
+            || poseEstimate.rawFiducials[0].distToCamera > Constants.Vision.distanceThreshold) {
+            return;
+        } else if (poseEstimate.tagCount == 1) {
+            robotYaw = Utilities.convertGyroReadings(drivetrain.getPigeon2().getYaw().getValueAsDouble());
+            tag_distance = poseEstimate.rawFiducials[0].distToCamera;
+                    // find angular velocity later 
+            LimelightHelpers.SetRobotOrientation(limelightName, robotYaw, 0, 0, 0, 0, 0);     
 
-        SmartDashboard.putNumber("Number of AprilTags", s_poseEstimate.tagCount);
-        SmartDashboard.putNumber("Yaw of Robot", robotYaw);
+            drivetrain.setVisionMeasurementStdDevs(calculateStdDevs(tag_distance));
+            drivetrain.addVisionMeasurement(
+                    poseEstimate.pose, 
+                    poseEstimate.timestampSeconds,
+                    calculateStdDevs(tag_distance)
+            );
+        }
+         
+    }
+
+    public double getTagYaw() {
+        return LimelightHelpers.getTX(limelightName); 
     }
 
     private void megaTag1(PoseEstimate poseEstimate) {
@@ -51,36 +78,8 @@ public class VisionSubsystem extends SubsystemBase {
                 poseEstimate.timestampSeconds,
                 calculateStdDevs(poseEstimate.rawFiducials[0].distToCamera)
                 );
-            SmartDashboard.putNumber("Limelight Distance", poseEstimate.rawFiducials[0].distToCamera);
         }
 
-        
-    }
-
-    public void megaTag2 (LimelightHelpers.PoseEstimate poseEstimate) { 
-        
-        if(poseEstimate.tagCount == 0  
-            || poseEstimate.rawFiducials[0].ambiguity > Constants.Vision.ambiguityThreshold
-            || poseEstimate.rawFiducials[0].distToCamera > Constants.Vision.distanceThreshold) {
-            return;
-        } else if (poseEstimate.tagCount == 1) {
-            robotYaw = Utilities.convertGyroReadings(drivetrain.getPigeon2().getYaw().getValueAsDouble());
-                    // find angular velocity later 
-            // gets the horizontal, angular offset of the liemlight relative to the middle of the april tag
-            limelight_tx = LimelightHelpers.getTX("limelight-hotrock"); 
-            LimelightHelpers.SetRobotOrientation("limelight-hotrock", limelight_tx, 0, 0, 0, 0, 0);     
-
-            drivetrain.setVisionMeasurementStdDevs(calculateStdDevs(poseEstimate.rawFiducials[0].distToCamera));
-            drivetrain.addVisionMeasurement(
-                    poseEstimate.pose, 
-                    poseEstimate.timestampSeconds,
-                    calculateStdDevs(poseEstimate.rawFiducials[0].distToCamera)
-            );
-            
-            tag_distance = poseEstimate.rawFiducials[0].distToCamera;
-            SmartDashboard.putNumber("Limelight Distance", tag_distance);
-        }
-         
     }
 
     private Matrix<N3, N1> calculateStdDevs(double distance) {
@@ -96,6 +95,17 @@ public class VisionSubsystem extends SubsystemBase {
 
         // 4. Return the matrix for the Pose Estimator
         return VecBuilder.fill(calculatedTrans, calculatedTrans, calculatedRot);
+    }
+
+    private void setSmartDashboard() {
+
+        // Get the yaw of the robot and the yaw from tag
+        SmartDashboard.putNumber(limelightName+" Yaw from Tag", getTagYaw());
+        SmartDashboard.putNumber("Yaw of Robot", robotYaw);
+
+        // Get the number of apritags and the distance from the closest one
+        SmartDashboard.putNumber(limelightName+" Number of AprilTags", s_poseEstimate.tagCount);
+        SmartDashboard.putNumber(limelightName+" Distance", tag_distance);
     }
 
 

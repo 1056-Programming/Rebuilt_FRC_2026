@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
@@ -40,6 +41,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     // Current shooter state
     private ShooterStates s_state;
+
 
     // Current Motor Speeds
     private double rightMotorSpeed;
@@ -120,10 +122,14 @@ public class ShooterSubsystem extends SubsystemBase {
         s_state = state; 
         if(state.equals(ShooterStates.VARIABLE_SHOOT)) {
             // TODO:
+<<<<<<< HEAD
             optimalShotsResult = CalculateShooterSpeed.calculateOptimalShot(VisionSubsystem.tag_distance, 4);
             // SmartDashboard.putNumber("Optimal Shoot Values", optimalShotsResult[0]);
+=======
+            double[] optimalShotsResult = CalculateShooterSpeed.calculateOptimalShot(VisionSubsystem.tag_distance, 4);
+>>>>>>> fafb0001551f466a65a01c9d2a1dd5fe84b25969
             
-            setPIDSetpoints(optimalShotsResult[0], 40);
+            setPIDSetpoints(optimalShotsResult[0], optimalShotsResult[1]);
 
             SmartDashboard.putNumber("Optimal Shooter RPS: ", optimalShotsResult[0]);
             SmartDashboard.putNumber("Optimal Back Spin RPS: ", -optimalShotsResult[1]);
@@ -164,7 +170,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private void applyShooterMotorSpeeds(double rightSpeed, double middleSpeed, double leftSpeed) {
         //m_rightShooter.set(rightSpeed);
         //m_middleShooter.set(middleSpeed);
-        m_leftShooter.set(leftSpeed);
+        m_leftShooter.set(0.5);
         m_leftBackSpin.set(backSpinSpeed);
         m_rightBackSpin.set(backSpinSpeed);
     }

@@ -9,6 +9,18 @@
           "data": {
             "pathName": "PP1"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "PP2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "PP3"
+          }
         }
       ]
     }

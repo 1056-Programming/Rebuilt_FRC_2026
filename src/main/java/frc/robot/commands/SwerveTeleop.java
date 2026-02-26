@@ -31,8 +31,8 @@ public class SwerveTeleop extends Command {
     private final double deadband = 0.1;
 
     // Set slew limiters for Translation
-    private final SlewRateLimiter xSlewLimiter = new SlewRateLimiter(Constants.kTranslationLimiter);
-    private final SlewRateLimiter ySlewLimiter = new SlewRateLimiter(Constants.kTranslationLimiter);
+    private final SlewRateLimiter xSlewLimiter = new SlewRateLimiter(0.5, -1, 0);
+    private final SlewRateLimiter ySlewLimiter = new SlewRateLimiter(0.5, -1, 0);
 
     // Setting up bindings for necessary control of the swerve drive platform 
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -42,7 +42,6 @@ public class SwerveTeleop extends Command {
 
     private double xInput, yInput, rInput; 
     private double xSpeed, ySpeed, rSpeed;
-    private double prevXInput, prevYInput, prevRInput;
 
     public SwerveTeleop(CommandSwerveDrivetrain drivetrain, CommandXboxController controller) {
         // Initialize drivetrain and controller
@@ -58,11 +57,6 @@ public class SwerveTeleop extends Command {
         xSpeed = 0;
         ySpeed = 0;
         rSpeed = 0;
-
-        // Initalize previous Inputs to 0
-        prevXInput = 0;
-        prevYInput = 0;
-        prevRInput = 0;
 
         // Set requiremnts for the drivetrain subsystem to ensure no conflicts with other commands
         addRequirements(drivetrain);
@@ -81,11 +75,6 @@ public class SwerveTeleop extends Command {
         drivetrain.applyRequest(() -> drive.withVelocityX(ySpeed)
             .withVelocityY(xSpeed)
             .withRotationalRate(rSpeed)).execute();
-        
-        // Set previous inputs for SlewAcceleration
-        prevXInput = xInput;
-        prevYInput = yInput;
-        prevRInput = rInput;
     }
     
     // Apply a polynomial acceleration curve to the joystick inputs for smoother control
@@ -98,19 +87,11 @@ public class SwerveTeleop extends Command {
     // Incermentally increase speed with a slew rate limiter, 
     // but allow for quick decleration by not limiting negative changes in input
     private void setSlewAcceleration() {
-        if(Math.abs(xInput) < Math.abs(prevXInput)) {
-            xSpeed = prevXInput;
-        } else {
-            xSpeed = xSlewLimiter.calculate(xInput);
-        }
+        xSpeed = xSlewLimiter.calculate(xInput) * MaxAngularRate;
+        ySpeed = ySlewLimiter.calculate(yInput) * MaxAngularRate;
 
-        if(Math.abs(yInput) < Math.abs(prevYInput)) {
-            ySpeed = prevYInput;
-        } else {
-            ySpeed = ySlewLimiter.calculate(yInput);
-        }
-
-        rSpeed = rInput * MaxAngularRate; // No slew rate limiter for rotation to allow for quick turns
+        // No slew rate limiter for rotation to allow for quick turns
+        rSpeed = Utilities.polynomialAccleration(rInput) * MaxAngularRate;
     }
 
     private void setDashboardData() {
