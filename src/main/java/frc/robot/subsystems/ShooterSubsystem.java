@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.lang.management.OperatingSystemMXBean;
+
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkFlex;
@@ -49,6 +51,10 @@ public class ShooterSubsystem extends SubsystemBase {
     private double leftMotorSpeed;
     private double backSpinSpeed;
 
+    //Boolean usePIDonShooter; // CHANGE ME
+    public double[] optimalShotsResult;
+
+
     public ShooterSubsystem() {
         // Initialize Kraken Motors 
         m_rightShooter = new TalonFX(Constants.Shooter.kRightShootingID);
@@ -83,13 +89,13 @@ public class ShooterSubsystem extends SubsystemBase {
         s_state = ShooterStates.STOP;
         setShooterState(s_state);
 
+
         // Disable Subsystem if set to true 
         disable = false; 
         if(disable) {
             disableSubsystem();
         }
     }
-    Boolean usePIDonShooter = true; // CHANGE ME
     @Override
     public void periodic() { 
         calculatePIDSpeed();
@@ -99,12 +105,11 @@ public class ShooterSubsystem extends SubsystemBase {
         if(c_rightPID.getSetpoint() == 0 || c_middlePID.getSetpoint() == 0 || c_leftPID.getSetpoint() == 0) {
             applyShooterMotorSpeeds(0, 0, 0);
         } else {
-            
-            if (usePIDonShooter) { applyShooterMotorSpeeds(rightMotorSpeed, middleMotorSpeed, leftMotorSpeed);}
-            else{ applyShooterMotorSpeeds(
-                (optimalShotsResult[0] - m_rightShooter.getVelocity().getValueAsDouble())/5, //note: can be divided by any number, just serves as a dampener
-                (optimalShotsResult[0] - m_middleShooter.getVelocity().getValueAsDouble())/5,
-                (optimalShotsResult[0] - m_leftShooter.getVelocity().getValueAsDouble())/5);}
+            applyShooterMotorSpeeds(rightMotorSpeed, middleMotorSpeed, leftMotorSpeed);
+            // else{ applyShooterMotorSpeeds(
+            //     (optimalShotsResult[0] - m_rightShooter.getVelocity().getValueAsDouble())/5, //note: can be divided by any number, just serves as a dampener
+            //     (optimalShotsResult[0] - m_middleShooter.getVelocity().getValueAsDouble())/5,
+            //     (optimalShotsResult[0] - m_leftShooter.getVelocity().getValueAsDouble())/5);}
         }
 
         // If backspin setpoint is 0, set backspin motor speeds to 0 
@@ -117,18 +122,16 @@ public class ShooterSubsystem extends SubsystemBase {
 
         setDashboardData();
     }
-    public double[] optimalShotsResult;
     public void setShooterState(ShooterStates state) {
         s_state = state; 
         if(state.equals(ShooterStates.VARIABLE_SHOOT)) {
             // TODO:
-<<<<<<< HEAD
-            optimalShotsResult = CalculateShooterSpeed.calculateOptimalShot(VisionSubsystem.tag_distance, 4);
-            // SmartDashboard.putNumber("Optimal Shoot Values", optimalShotsResult[0]);
-=======
-            double[] optimalShotsResult = CalculateShooterSpeed.calculateOptimalShot(VisionSubsystem.tag_distance, 4);
->>>>>>> fafb0001551f466a65a01c9d2a1dd5fe84b25969
-            
+            optimalShotsResult = CalculateShooterSpeed.calculateOptimalShot(2, 4);
+            //optimalShotsResult = CalculateShooterSpeed.calculateOptimalShot(VisionSubsystem.tag_distance, 4);
+
+            optimalShotsResult[0] = Math.round(optimalShotsResult[0]*100)/100;
+            optimalShotsResult[1] = Math.round(optimalShotsResult[1]*100)/100;
+
             setPIDSetpoints(optimalShotsResult[0], optimalShotsResult[1]);
 
             SmartDashboard.putNumber("Optimal Shooter RPS: ", optimalShotsResult[0]);
@@ -170,7 +173,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private void applyShooterMotorSpeeds(double rightSpeed, double middleSpeed, double leftSpeed) {
         //m_rightShooter.set(rightSpeed);
         //m_middleShooter.set(middleSpeed);
-        m_leftShooter.set(0.5);
+        m_leftShooter.set(leftSpeed);
         m_leftBackSpin.set(backSpinSpeed);
         m_rightBackSpin.set(backSpinSpeed);
     }
