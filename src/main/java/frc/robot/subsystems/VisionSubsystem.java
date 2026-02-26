@@ -4,6 +4,7 @@ import com.pathplanner.lib.config.RobotConfig;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -22,6 +23,8 @@ public class VisionSubsystem extends SubsystemBase {
     private double limelight_tx; 
     private double robotYaw;
     public static double tag_distance; 
+
+    public static SwerveDrivePoseEstimator swerveDrivePoseEstimator; 
 
     public VisionSubsystem(CommandSwerveDrivetrain drivetrain, String limelightName){
         this.drivetrain = drivetrain;
@@ -59,27 +62,11 @@ public class VisionSubsystem extends SubsystemBase {
                     calculateStdDevs(tag_distance)
             );
         }
-         
+        
     }
 
     public double getTagYaw() {
         return LimelightHelpers.getTX(limelightName); 
-    }
-
-    private void megaTag1(PoseEstimate poseEstimate) {
-        // No vaild april tags detected or pose estimate too unreliable 
-        if(poseEstimate.tagCount == 0  
-            || poseEstimate.rawFiducials[0].ambiguity > Constants.Vision.ambiguityThreshold
-            || poseEstimate.rawFiducials[0].distToCamera > Constants.Vision.distanceThreshold) {
-            return;
-        } else if (poseEstimate.tagCount >= 1) {
-            drivetrain.addVisionMeasurement(
-                poseEstimate.pose, 
-                poseEstimate.timestampSeconds,
-                calculateStdDevs(poseEstimate.rawFiducials[0].distToCamera)
-                );
-        }
-
     }
 
     private Matrix<N3, N1> calculateStdDevs(double distance) {
