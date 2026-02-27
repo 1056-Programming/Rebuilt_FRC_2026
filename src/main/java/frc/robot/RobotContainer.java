@@ -91,13 +91,13 @@ public class RobotContainer {
         driver1.pov(-1).onTrue(c_shooterCommand.setShooterState(States.ShooterStates.STOP));
 
         // Bind Intake Commands
-        driver1.leftTrigger().onTrue(c_intakeCommand.setIntakeState(IntakeStates.INTAKE));
-        driver1.leftTrigger().onFalse(c_intakeCommand.setIntakeState(IntakeStates.STOP));
+        // driver1.leftTrigger().onTrue(c_intakeCommand.setIntakeState(IntakeStates.INTAKE));
+        // driver1.leftTrigger().onFalse(c_intakeCommand.setIntakeState(IntakeStates.STOP));
 
-        driver1.leftBumper().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.REVERSE));
-        driver1.leftBumper().toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.STOP));
+        // driver1.leftBumper().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.REVERSE));
+        // driver1.leftBumper().toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.STOP));
 
-        // Bind Indexor Commands
+        // // Bind Indexor Commands
         driver1.rightBumper().onTrue(c_indexCommand.setIndexState(IndexStates.INDEX));
         driver1.rightBumper().onFalse(c_indexCommand.setIndexState(IndexStates.STOP));
 

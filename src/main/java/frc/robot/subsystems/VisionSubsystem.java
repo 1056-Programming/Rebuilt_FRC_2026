@@ -18,10 +18,10 @@ import frc.robot.LimelightHelpers.PoseEstimate;
 public class VisionSubsystem extends SubsystemBase {
     private final CommandSwerveDrivetrain drivetrain; 
     private final boolean useMegaTag2;
-    private LimelightHelpers.PoseEstimate s_poseEstimate; 
-    private String limelightName; 
+    private static LimelightHelpers.PoseEstimate s_poseEstimate; 
+    private static String limelightName; 
     
-    private double robotYaw;
+    private static double robotYaw;
     public static double tag_distance; 
     public static int leastAmbiguity;
 
@@ -40,7 +40,6 @@ public class VisionSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         s_poseEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName);  
-        leastAmbiguity = (int)getLeastAmbiguity(); 
         megaTag2();
         setSmartDashboard();
     }
@@ -48,46 +47,51 @@ public class VisionSubsystem extends SubsystemBase {
     public void megaTag2 () { 
         
         if(s_poseEstimate.tagCount == 0  
-            || getTagAmbiguity(leastAmbiguity) > Constants.Vision.ambiguityThreshold
+            || getTagAmbiguity(0) > Constants.Vision.ambiguityThreshold
             || getTagDistance() > Constants.Vision.distanceThreshold) {
             return;
         } else if (s_poseEstimate.tagCount == 1) {
             robotYaw = Utilities.convertGyroReadings(drivetrain.getPigeon2().getYaw().getValueAsDouble());
+            tag_distance = s_poseEstimate.rawFiducials[0].distToCamera;
+
             LimelightHelpers.SetRobotOrientation(limelightName, robotYaw, 0, 0, 0, 0, 0);     
 
-            drivetrain.setVisionMeasurementStdDevs(calculateStdDevs(getTagDistance()));
-            drivetrain.addVisionMeasurement(
-                    s_poseEstimate.pose, 
-                    s_poseEstimate.timestampSeconds,
-                    calculateStdDevs(tag_distance)
-            );
+            // drivetrain.setVisionMeasurementStdDevs(calculateStdDevs(getTagDistance()));
+            // drivetrain.addVisionMeasurement(
+            //         s_poseEstimate.pose, 
+            //         s_poseEstimate.timestampSeconds,
+            //         calculateStdDevs(tag_distance)
+            // );
         }
         
     }
 
-    public double getTagYaw() {
+    public static double getTagYaw() {
         return LimelightHelpers.getTX(limelightName); 
     }
 
-    public double getTagDistance(){
-        return s_poseEstimate.rawFiducials[0].distToCamera;
+    public static double getTagDistance(){
+        if(s_poseEstimate.tagCount != 0) {
+            return s_poseEstimate.rawFiducials[0].distToCamera;
+        }
+        return 0; 
     }
 
-    public double getTagAmbiguity(int limelightIndex) {
+    public static double getTagAmbiguity(int limelightIndex) {
         return s_poseEstimate.rawFiducials[limelightIndex].ambiguity; 
     }
 
-    public double getLeastAmbiguity() {
-        double[] max = {getTagAmbiguity(0),0};
+    // public static int getLeastAmbiguity() {
+    //     double[] max = {getTagAmbiguity(0),0};
 
-        for (int i=1;i<s_poseEstimate.tagCount;i++){
-            if (getTagAmbiguity(i) > max[0]) {
-                max[0] = getTagAmbiguity(i);
-                max[1] = i; 
-            }
-        }
-        return max[1]; 
-    }
+    //     for (int i=1;i<s_poseEstimate.tagCount;i++){
+    //         if (getTagAmbiguity(i) > max[0]) {
+    //             max[0] = getTagAmbiguity(i);
+    //             max[1] = i; 
+    //         }
+    //     }
+    //     return (int)max[1]; 
+    // }
 
     private Matrix<N3, N1> calculateStdDevs(double distance) {
         // 1. Define your base trust (error in meters/radians when very close)
