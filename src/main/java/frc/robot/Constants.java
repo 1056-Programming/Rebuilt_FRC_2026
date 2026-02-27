@@ -47,12 +47,18 @@ public class Constants {
     
     }
 
-    public class Vision{
+    public class Vision {
         // Vision threshold: 
         public static final double ambiguityThreshold = 0.5;
 
         // Vision distance to camera threshold: 
         public static final double distanceThreshold = 5; 
+    }
+
+    public class Swerve {
+        public static final double kPositiveSlew = 0.5;
+        public static final double kNegativeSlew = -1;
+        public static final double kStart = 0; 
     }
 
 }

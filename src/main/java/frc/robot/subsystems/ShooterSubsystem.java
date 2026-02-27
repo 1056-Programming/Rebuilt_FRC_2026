@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkFlex;
@@ -8,10 +9,12 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.lib.util.SparkFlexUtils;
+import frc.lib.util.TalonFxUtils;
 import frc.robot.CalculateShooterSpeed;
 import frc.robot.Constants;
 import frc.robot.States.ShooterStates;
@@ -55,6 +58,8 @@ public class ShooterSubsystem extends SubsystemBase {
         m_middleShooter = new TalonFX(Constants.Shooter.kMiddleShootingID);
         m_leftShooter = new TalonFX(Constants.Shooter.kLeftShootingID);
 
+        TalonFxUtils.configureSlot0(m_leftShooter, 0.07,0,0,0,0.12);
+
         // Initialize SparkFlex Motors
         m_leftBackSpin = new SparkFlex(Constants.Shooter.kLeftBackspinID, MotorType.kBrushless);
         m_rightBackSpin = new SparkFlex(Constants.Shooter.kRightBackspinID, MotorType.kBrushless);
@@ -92,15 +97,16 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() { 
+        setVelocitySetpoints(s_state.shootingRPS, s_state.backSpinRPS);
         calculatePIDSpeed();
         
-        // If shooter setpoint is 0, set shooter motor speeds to 0 
-        // to prevent unnecessary motor wear and conserve battery life
-        if(c_rightPID.getSetpoint() == 0 || c_middlePID.getSetpoint() == 0 || c_leftPID.getSetpoint() == 0) {
-            applyShooterMotorSpeeds(0, 0, 0);
-        } else {
-            applyShooterMotorSpeeds(rightMotorSpeed, middleMotorSpeed, leftMotorSpeed);
-        }
+        // // If shooter setpoint is 0, set shooter motor speeds to 0 
+        // // to prevent unnecessary motor wear and conserve battery life
+        // if(c_rightPID.getSetpoint() == 0 || c_middlePID.getSetpoint() == 0 || c_leftPID.getSetpoint() == 0) {
+        //     applyShooterMotorSpeeds(0, 0, 0);
+        // } else {
+        // applyShooterMotorSpeeds(rightMotorSpeed, middleMotorSpeed, leftMotorSpeed);
+        // }
 
         // If backspin setpoint is 0, set backspin motor speeds to 0 
         // to prevent unnecessary motor wear and conserve battery life
@@ -127,12 +133,19 @@ public class ShooterSubsystem extends SubsystemBase {
             return;
         } 
 
-        setPIDSetpoints(state.shootingRPS, state.backSpinRPS);
+        setVelocitySetpoints(state.shootingRPS, state.backSpinRPS);
     }
 
     public String getName() {
         return "Shooter Subsystem";
     }
+
+    // 
+    private void setVelocitySetpoints(double desiredShooterRPS, double desiredBackSpinRPS) {
+        c_backSpinPID.setSetpoint(desiredBackSpinRPS);
+        m_leftShooter.setControl(new VelocityVoltage(desiredShooterRPS));   
+    }
+
 
     // Calculate PID outputs for shooter and backspin motors to maintain constant RPS
     private void calculatePIDSpeed() {
@@ -153,6 +166,7 @@ public class ShooterSubsystem extends SubsystemBase {
         c_rightPID.setSetpoint(desiredShooterRPS);
         c_middlePID.setSetpoint(desiredShooterRPS);
         c_leftPID.setSetpoint(desiredShooterRPS);
+        m_leftShooter.setControl(new VelocityVoltage(desiredShooterRPS));
         c_backSpinPID.setSetpoint(desiredBackSpinRPS);    
     }
 

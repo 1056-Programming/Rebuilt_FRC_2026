@@ -10,6 +10,7 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.fasterxml.jackson.databind.util.LRUMap;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -31,8 +32,11 @@ public class SwerveTeleop extends Command {
     private final double deadband = 0.1;
 
     // Set slew limiters for Translation
-    private final SlewRateLimiter xSlewLimiter = new SlewRateLimiter(0.5, -1, 0);
-    private final SlewRateLimiter ySlewLimiter = new SlewRateLimiter(0.5, -1, 0);
+    private final SlewRateLimiter xSlewLimiter;
+    private final SlewRateLimiter ySlewLimiter;
+
+    // PID for auto tag yawing
+   // private final PIDController c_yawPID; 
 
     // Setting up bindings for necessary control of the swerve drive platform 
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -47,6 +51,10 @@ public class SwerveTeleop extends Command {
         // Initialize drivetrain and controller
         this.drivetrain = drivetrain; 
         this.controller = controller;
+
+        xSlewLimiter = new SlewRateLimiter(Constants.Swerve.kPositiveSlew, Constants.Swerve.kNegativeSlew, 0);
+        ySlewLimiter = new SlewRateLimiter(Constants.Swerve.kPositiveSlew, Constants.Swerve.kNegativeSlew, 0);
+
 
         // Intialize controller inputs to 0
         xInput = 0; 
@@ -92,6 +100,10 @@ public class SwerveTeleop extends Command {
 
         // No slew rate limiter for rotation to allow for quick turns
         rSpeed = Utilities.polynomialAccleration(rInput) * MaxAngularRate;
+    }
+
+    private void autoYaw(double desiredYaw) {
+        
     }
 
     private void setDashboardData() {

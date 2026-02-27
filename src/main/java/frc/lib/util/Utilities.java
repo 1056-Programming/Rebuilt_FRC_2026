@@ -28,4 +28,8 @@ public class Utilities {
         }
 
     }
+
+    public static double clampTalonVoltage(double voltage) {
+        return Math.min(12, Math.max(-12, voltage));
+    }
 }
