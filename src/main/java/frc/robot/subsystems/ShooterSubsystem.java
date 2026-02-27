@@ -65,7 +65,7 @@ public class ShooterSubsystem extends SubsystemBase {
         m_middleShooter = new TalonFX(Constants.Shooter.kMiddleShootingID);
         m_leftShooter = new TalonFX(Constants.Shooter.kLeftShootingID);
 
-        TalonFxUtils.configureSlot0(m_leftShooter, 0.07,0,0,0,0.12);
+        TalonFxUtils.configureSlot0(m_leftShooter, 0.04,0,0,0,0.13);
 
         // Initialize SparkFlex Motors
         m_leftBackSpin = new SparkFlex(Constants.Shooter.kLeftBackspinID, MotorType.kBrushless);
@@ -105,7 +105,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
     @Override
     public void periodic() { 
-        setVelocitySetpoints(s_state.shootingRPS, s_state.backSpinRPS);
+        //setVelocitySetpoints(s_state.shootingRPS, s_state.backSpinRPS);
         calculatePIDSpeed();
         
         // // If shooter setpoint is 0, set shooter motor speeds to 0 
@@ -130,13 +130,13 @@ public class ShooterSubsystem extends SubsystemBase {
         s_state = state; 
         if(state.equals(ShooterStates.VARIABLE_SHOOT)) {
             // TODO:
-            optimalShotsResult = CalculateShooterSpeed.calculateOptimalShot(VisionSubsystem.getTagDistance(), 4);
+            optimalShotsResult = CalculateShooterSpeed.calculateOptimalShot(VisionSubsystem.getTagDistance(), 6);
             //optimalShotsResult = CalculateShooterSpeed.calculateOptimalShot(VisionSubsystem.tag_distance, 4);
 
             // optimalShotsResult[0] = Math.round(optimalShotsResult[0]*100)/100;
             // optimalShotsResult[1] = Math.round(optimalShotsResult[1]*100)/100;
 
-            setPIDSetpoints(optimalShotsResult[0], optimalShotsResult[1]);
+            setVelocitySetpoints(optimalShotsResult[0], optimalShotsResult[1]);
 
             SmartDashboard.putNumber("Optimal Shooter RPS: ", optimalShotsResult[0]);
             SmartDashboard.putNumber("Optimal Back Spin RPS: ", -optimalShotsResult[1]);
@@ -153,8 +153,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
     // 
     private void setVelocitySetpoints(double desiredShooterRPS, double desiredBackSpinRPS) {
-        c_backSpinPID.setSetpoint(desiredBackSpinRPS);
-        m_leftShooter.setControl(new VelocityVoltage(desiredShooterRPS));   
+        c_backSpinPID.setSetpoint(-desiredBackSpinRPS);
+        m_leftShooter.setControl(new VelocityVoltage(-desiredShooterRPS));   
     }
 
 
@@ -194,7 +194,7 @@ public class ShooterSubsystem extends SubsystemBase {
     // Apply motor speeds to backspin motors
     private void applyBackSpinMotorSpeeds(double backSpinSpeed) {
         // m_leftBackSpin.set(backSpinSpeed);
-        m_rightBackSpin.set(backSpinSpeed);
+        m_rightBackSpin.set(-backSpinSpeed);
     }
 
     // Fully disable subsystem for testing purposes

@@ -37,7 +37,7 @@ public class SwerveTeleop extends Command {
     private final SlewRateLimiter ySlewLimiter;
 
     // PID for auto tag yawing
-   // private final PIDController c_yawPID; 
+    private final PIDController c_yawPID; 
 
     // Setting up bindings for necessary control of the swerve drive platform 
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -66,6 +66,8 @@ public class SwerveTeleop extends Command {
         xSpeed = 0;
         ySpeed = 0;
         rSpeed = 0;
+
+        c_yawPID = new PIDController(0,0,0);
 
         // Set requiremnts for the drivetrain subsystem to ensure no conflicts with other commands
         addRequirements(drivetrain);
@@ -103,7 +105,8 @@ public class SwerveTeleop extends Command {
         rSpeed = Utilities.polynomialAccleration(rInput) * MaxAngularRate;
     }
 
-    private void autoYaw(double desiredYaw) {
+    private void autoYaw(boolean Enable) {
+        c_yawPID.setSetpoint(0);
         
     }
 
