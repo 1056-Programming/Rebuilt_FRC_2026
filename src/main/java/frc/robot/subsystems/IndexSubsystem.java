@@ -46,7 +46,7 @@ public class IndexSubsystem extends SubsystemBase {
         
         // Set motor speeds according to the values in Index
         m_indexing.set(state.indexerSpeed);
-        // m_conveyor.set(state.conveyorSpeed);
+        m_conveyor.set(state.conveyorSpeed);
     }
 
     // Set dashboard data for testing and debugging purposes

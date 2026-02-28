@@ -45,6 +45,9 @@ public class VisionSubsystem extends SubsystemBase {
     }
 
     public void megaTag2 () { 
+        if(s_poseEstimate == null) {
+            return;
+        }
         
         if(s_poseEstimate.tagCount == 0  
             || getTagAmbiguity(0) > Constants.Vision.ambiguityThreshold
@@ -62,8 +65,10 @@ public class VisionSubsystem extends SubsystemBase {
             //         s_poseEstimate.timestampSeconds,
             //         calculateStdDevs(tag_distance)
             // );
-        }
-        
+
+            drivetrain.addVisionMeasurement(s_poseEstimate.pose, s_poseEstimate.timestampSeconds);
+            System.out.println("ntoaehuntsaoehutnsaoeutnoaeu");
+        }            
     }
 
     public static double getTagYaw() {
@@ -109,7 +114,6 @@ public class VisionSubsystem extends SubsystemBase {
     }
 
     private void setSmartDashboard() {
-
         // Get the yaw of the robot and the yaw from tag
         SmartDashboard.putNumber(limelightName+" Yaw from Tag", getTagYaw());
         SmartDashboard.putNumber("Yaw of Robot", robotYaw);

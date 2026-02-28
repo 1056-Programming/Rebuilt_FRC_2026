@@ -15,6 +15,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.FollowPathCommand;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -76,7 +77,9 @@ public class RobotContainer {
     private final SwerveTeleop c_teleop = new SwerveTeleop(drivetrain, driver0);   
     private SendableChooser<Command> m_chooser;
 
+
     public RobotContainer() {
+        drivetrain.resetPose(new Pose2d(3.7, 4.2, new Rotation2d()));
         configureBindings();
         setDriverBindings();
         configureAuto();

@@ -13,6 +13,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
@@ -21,20 +22,15 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.Constants;
 import frc.lib.util.Utilities;
 
-
 // Ensure smooth acceleration with rapid decleration 
 public class SwerveTeleop extends Command {
-    private final CommandSwerveDrivetrain drivetrain; 
+    private final CommandSwerveDrivetrain drivetrain;
     private final CommandXboxController controller;
 
     // Set max speeds for swerve driving
     private final double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
     private final double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond);
     private final double deadband = 0.1;
-
-    // Set slew limiters for Translation
-    private final SlewRateLimiter xSlewLimiter;
-    private final SlewRateLimiter ySlewLimiter;
 
     // PID for auto tag yawing
     private final PIDController c_yawPID; 
@@ -52,10 +48,6 @@ public class SwerveTeleop extends Command {
         // Initialize drivetrain and controller
         this.drivetrain = drivetrain; 
         this.controller = controller;
-
-        xSlewLimiter = new SlewRateLimiter(Constants.Swerve.kPositiveSlew, Constants.Swerve.kNegativeSlew, 0);
-        ySlewLimiter = new SlewRateLimiter(Constants.Swerve.kPositiveSlew, Constants.Swerve.kNegativeSlew, 0);
-
 
         // Intialize controller inputs to 0
         xInput = 0; 
@@ -81,33 +73,26 @@ public class SwerveTeleop extends Command {
         rInput = -controller.getRightX();
 
         setPolynomialAcceleration();
-        //setSlewAcceleration();
 
         drivetrain.applyRequest(() -> drive.withVelocityX(ySpeed)
             .withVelocityY(xSpeed)
             .withRotationalRate(rSpeed)).execute();
+        SmartDashboard.putNumber("ten big sigmas in abar", Utilities.processYaw(drivetrain.getPigeon2().getYaw().getValueAsDouble()));
+        SmartDashboard.putNumber("9 67", drivetrain.getState().Pose.getRotation().getDegrees());
+            SmartDashboard.putNumber("sigma buttt nga x",drivetrain.getState().Pose.getMeasureX().baseUnitMagnitude());
+            SmartDashboard.putNumber("sigma buttt nga y",drivetrain.getState().Pose.getMeasureY().baseUnitMagnitude());
+            SmartDashboard.putNumber("sigma buttt nga z",drivetrain.getState().Pose.getRotation().getDegrees());
     }
     
     // Apply a polynomial acceleration curve to the joystick inputs for smoother control
     private void setPolynomialAcceleration() {
-        xSpeed = Utilities.polynomialAccleration(yInput) * MaxSpeed;
-        ySpeed = Utilities.polynomialAccleration(xInput) * MaxSpeed;
-        rSpeed = Utilities.polynomialAccleration(rInput) * MaxAngularRate; 
-    }
-
-    // Incermentally increase speed with a slew rate limiter, 
-    // but allow for quick decleration by not limiting negative changes in input
-    private void setSlewAcceleration() {
-        xSpeed = xSlewLimiter.calculate(xInput) * MaxAngularRate;
-        ySpeed = ySlewLimiter.calculate(yInput) * MaxAngularRate;
-
-        // No slew rate limiter for rotation to allow for quick turns
-        rSpeed = Utilities.polynomialAccleration(rInput) * MaxAngularRate;
+        xSpeed = Utilities.polynomialAccleration(yInput) * MaxSpeed * 0;
+        ySpeed = Utilities.polynomialAccleration(xInput) * MaxSpeed * 0.2;
+        rSpeed = Utilities.polynomialAccleration(rInput) * MaxAngularRate * 0.7 ; 
     }
 
     private void autoYaw(boolean Enable) {
         c_yawPID.setSetpoint(0);
-        
     }
 
     private void setDashboardData() {
