@@ -64,14 +64,14 @@ public class Constants {
         public static final double kNegativeSlew = -1;
         public static final double kStart = 0; 
 
-        public static final double kTranslationP;
-        public static final double kTranslationI;
-        public static final double kTranslationD;
+        // public static final double kTranslationP;
+        // public static final double kTranslationI;
+        // public static final double kTranslationD;
 
         
-        public static final double kRotationP;
-        public static final double kRotationI;
-        public static final double kRotationD;
+        // public static final double kRotationP;
+        // public static final double kRotationI;
+        // public static final double kRotationD;
     }
 
 }
