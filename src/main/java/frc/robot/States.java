@@ -27,7 +27,10 @@ public class States {
         FORWARD_SHOOT(60, 30),
         TEST1(0, 50),
         TEST2(70,0),
-        VARIABLE_SHOOT(0, 0);
+        VARIABLE_SHOOT(0, 0),
+
+        // SETTING THE STATES FOR DIFFERENT DISTANCES
+        DISTANCE_1M(0,0);
         
         public final double backSpinRPS;
         public final double shootingRPS;
@@ -46,7 +49,9 @@ public class States {
     public enum IntakeStates {
         STOP(0, 0),
         INTAKE(1, 0),
-        REVERSE(-1,0);
+        REVERSE(-1,0),
+        UP(0,1),
+        DOWN(0,-1);
 
         public final double intakeSpeed;
         public final double pivotAngle;

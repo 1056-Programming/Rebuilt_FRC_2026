@@ -87,25 +87,45 @@ public class RobotContainer {
 
     private void configureBindings() {     
         // Bind Shooter Commands 
-        driver1.pov(0).onTrue(c_shooterCommand.setShooterState(States.ShooterStates.FORWARD_SHOOT));
-        driver1.pov(90).onTrue(c_shooterCommand.setShooterState(States.ShooterStates.MAX));
-        driver1.pov(180).onTrue(c_shooterCommand.setShooterState(States.ShooterStates.TEST1));
-        driver1.pov(270).onTrue(c_shooterCommand.setShooterState(States.ShooterStates.VARIABLE_SHOOT));
-        driver1.pov(-1).onTrue(c_shooterCommand.setShooterState(States.ShooterStates.STOP));
+        // driver1.pov(0).onTrue(c_shooterCommand.setShooterState(States.ShooterStates.FORWARD_SHOOT));
+        // driver1.pov(90).onTrue(c_shooterCommand.setShooterState(States.ShooterStates.MAX));
+        // driver1.pov(180).onTrue(c_shooterCommand.setShooterState(States.ShooterStates.TEST1));
+        // driver1.pov(270).onTrue(c_shooterCommand.setShooterState(States.ShooterStates.VARIABLE_SHOOT));
+        // driver1.pov(-1).onTrue(c_shooterCommand.setShooterState(States.ShooterStates.STOP));
 
+        driver1.y().onTrue(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS+=5, s_shooter.desiredBackSpinRPS)));
+        driver1.y().onFalse(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS, s_shooter.desiredBackSpinRPS)));
+
+        driver1.a().onTrue(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS, s_shooter.desiredBackSpinRPS+=5)));
+        driver1.a().onFalse(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS, s_shooter.desiredBackSpinRPS)));
+
+        // driver1.b().onTrue(c_shooterCommand.setShooterState(States.ShooterStates.STOP)); 
+        
         // Bind Intake Commands
-        // driver1.leftTrigger().onTrue(c_intakeCommand.setIntakeState(IntakeStates.INTAKE));
-        // driver1.leftTrigger().onFalse(c_intakeCommand.setIntakeState(IntakeStates.STOP));
+        driver1.x().whileTrue(new InstantCommand(() -> s_intake.m_pivot.set(0.3)));
+        driver1.x().onFalse(new InstantCommand(() -> s_intake.m_pivot.set(0)));
 
-        // driver1.leftBumper().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.REVERSE));
-        // driver1.leftBumper().toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.STOP));
+        driver1.b().whileTrue(new InstantCommand(() -> s_intake.m_pivot.set(-0.3)));
+        driver1.b().onFalse(new InstantCommand(() -> s_intake.m_pivot.set(0)));        
+
+        // driver1.pov(270).onTrue(c_intakeCommand.setIntakeState(IntakeStates.DOWN));
+        
+
+        // driver1.pov(0).onTrue(c_intakeCommand.setIntakeState(IntakeStates.UP)); 
+        // driver1.pov(270).onTrue(c_intakeCommand.setIntakeState(IntakeStates.DOWN));
+
+        driver1.leftTrigger().onTrue(c_intakeCommand.setIntakeState(IntakeStates.INTAKE));
+        driver1.leftTrigger().onFalse(c_intakeCommand.setIntakeState(IntakeStates.STOP));
+
+        driver1.leftBumper().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.REVERSE));
+        driver1.leftBumper().toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.STOP));
 
         // // Bind Indexor Commands
-        driver1.rightBumper().onTrue(c_indexCommand.setIndexState(IndexStates.INDEX));
-        driver1.rightBumper().onFalse(c_indexCommand.setIndexState(IndexStates.STOP));
+        // driver1.rightBumper().onTrue(c_indexCommand.setIndexState(IndexStates.INDEX));
+        // driver1.rightBumper().onFalse(c_indexCommand.setIndexState(IndexStates.STOP));
 
-        driver1.leftBumper().toggleOnTrue(c_indexCommand.setIndexState(IndexStates.REVERSE));
-        driver1.leftBumper().toggleOnFalse(c_indexCommand.setIndexState(IndexStates.STOP));
+        // driver1.leftBumper().toggleOnTrue(c_indexCommand.setIndexState(IndexStates.REVERSE));
+        // driver1.leftBumper().toggleOnFalse(c_indexCommand.setIndexState(IndexStates.STOP));
     }
 
     public void setDriverBindings() {

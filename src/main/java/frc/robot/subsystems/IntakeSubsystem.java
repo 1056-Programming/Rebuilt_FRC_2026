@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.Utils;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -7,6 +8,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -22,7 +24,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private final SparkFlex m_intake;
 
     // Spark Max controlling pivot of intake
-    private final SparkMax m_pivot; 
+    public final SparkMax m_pivot; 
 
     // Absolute Encorder to track pivot angle
     // private final DutyCycleEncoder pivotAbsoluteEncoder;
@@ -71,12 +73,15 @@ public class IntakeSubsystem extends SubsystemBase {
         setDashboardData();
     }
 
-
     public void setIntakeState(IntakeStates state) {
         i_state = state;
         
         c_pivotPID.setSetpoint(state.pivotAngle);
         m_intake.set(state.intakeSpeed);
+    }
+
+    public void moveIntake(double speed) {
+        m_pivot.set(speed); 
     }
 
     public String getName() {
@@ -92,6 +97,8 @@ public class IntakeSubsystem extends SubsystemBase {
         SmartDashboard.putNumber(getName() + " Motor Speed", pivotSpeed);
         SmartDashboard.putNumber(getName() + " Pivot Angle", 0);
         SmartDashboard.putNumber(getName() + " Pivot Setpoint", c_pivotPID.getSetpoint());
+
+        SmartDashboard.putNumber(getName() + " Intake Piviot Angle", Units.rotationsToDegrees(m_intake.getEncoder().getPosition()));
 
         SmartDashboard.putNumber(getName() + " Intake Speed", m_intake.get());
 
