@@ -24,7 +24,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private final SparkFlex m_intake;
 
     // Spark Max controlling pivot of intake
-    private final SparkMax m_pivot; 
+    public final SparkMax m_pivot; 
 
     // Absolute Encorder to track pivot angle
     // private final DutyCycleEncoder pivotAbsoluteEncoder;
