@@ -32,8 +32,8 @@ public class States {
         // SETTING THE STATES FOR DIFFERENT DISTANCES
         DISTANCE_1M(0,0);
         
-        public final double backSpinRPS;
-        public final double shootingRPS;
+        public double backSpinRPS;
+        public double shootingRPS;
 
         ShooterStates (double backSpinRPS, double shootingRPS) {
             this.backSpinRPS = backSpinRPS;
@@ -50,8 +50,8 @@ public class States {
         STOP(0, 0),
         INTAKE(1, 0),
         REVERSE(-1,0),
-        UP(0,1),
-        DOWN(0,-1);
+        UP(0,0),
+        DOWN(0,0);
 
         public final double intakeSpeed;
         public final double pivotAngle;

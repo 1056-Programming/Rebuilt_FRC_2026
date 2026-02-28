@@ -45,7 +45,7 @@ public class Constants {
         public static final int kPivotID = 31;
 
         // PID values
-        public static final double kIntakeP = 0.01;
+        public static final double kIntakeP = 0.005;
         public static final double kIntakeI = 0;
         public static final double kIntakeD = 0;
     

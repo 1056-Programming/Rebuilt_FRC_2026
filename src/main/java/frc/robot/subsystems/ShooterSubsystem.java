@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -27,26 +28,19 @@ public class ShooterSubsystem extends SubsystemBase {
     private final TalonFX m_leftShooter; 
 
     // One backspin motor for all channels 
-    // private final SparkFlex m_leftBackSpin;
-    private final SparkFlex m_rightBackSpin;
+    private final SparkFlex m_backSpin;
 
     // Get backspin motor encoders for constant RPS control
-    // private final RelativeEncoder e_leftBackSpin;
-    private final RelativeEncoder e_rightBackSpin;
+    private final RelativeEncoder e_backSpin;
 
-    // PID controllers to maintain constant RPS
-    private final PIDController c_rightPID;
-    private final PIDController c_middlePID;
-    private final PIDController c_leftPID;
-    private final PIDController c_backSpinPID;
-    private final SimpleMotorFeedforward c_Feedforward;
+    // PID controllers to maintain backspin RPS
+    private final SparkClosedLoopController c_backSpinPID;
 
     // Enable or disable subsystem
     private final boolean disable; 
 
     // Current shooter state
     private ShooterStates s_state;
-
 
     // Current Motor Speeds
     private double rightMotorSpeed;
@@ -67,29 +61,23 @@ public class ShooterSubsystem extends SubsystemBase {
         m_middleShooter = new TalonFX(Constants.Shooter.kMiddleShootingID);
         m_leftShooter = new TalonFX(Constants.Shooter.kLeftShootingID);
 
-        TalonFxUtils.configureSlot0(m_leftShooter, 0.04,0,0,0,0.13);
+        // Configure Kraken RPS PID controllers
+        TalonFxUtils.configureSlot0(m_leftShooter, 0.04, 0, 0, 0, 0.13);
+        TalonFxUtils.configureSlot0(m_middleShooter, 0.04, 0, 0, 0, 0.13);
+        TalonFxUtils.configureSlot0(m_rightShooter, 0.04, 0, 0, 0, 0.13);
 
         // Initialize SparkFlex Motors
-        m_rightBackSpin = new SparkFlex(Constants.Shooter.kRightBackspinID, MotorType.kBrushless);
+        m_backSpin = new SparkFlex(Constants.Shooter.kbackSpinID, MotorType.kBrushless);
 
         // Get encoders for backspin motors
-        e_rightBackSpin = m_rightBackSpin.getEncoder();
-        c_Feedforward = new SimpleMotorFeedforward(Constants.Shooter.ShooterKS, Constants.Shooter.ShooterKV, Constants.Shooter.ShooterKA);
+        e_backSpin = m_backSpin.getEncoder();
 
         // Optimize CAN BUS usage
-        SparkFlexUtils.setSparkFlexBusUsage(m_rightBackSpin, SparkFlexUtils.Usage.kVelocityOnly, IdleMode.kCoast, false, false);
+        SparkFlexUtils.setSparkFlexBusUsage(m_backSpin, SparkFlexUtils.Usage.kVelocityOnly, IdleMode.kCoast, false, false);
 
         // Initialize PID Controllers
-        c_rightPID = new PIDController(Constants.Shooter.ShooterKP, Constants.Shooter.ShooterKI, Constants.Shooter.ShooterKD);
-        c_middlePID = new PIDController(Constants.Shooter.ShooterKP, Constants.Shooter.ShooterKI, Constants.Shooter.ShooterKD);
-        c_leftPID = new PIDController(Constants.Shooter.ShooterKP, Constants.Shooter.ShooterKI, Constants.Shooter.ShooterKD);
-        c_backSpinPID = new PIDController(Constants.Shooter.BackSpinKP, Constants.Shooter.BackSpinKI, Constants.Shooter.BackSpinKD); 
-        
-        // Set PID Tolerance
-        c_rightPID.setTolerance(0);
-        c_middlePID.setTolerance(0);
-        c_leftPID.setTolerance(0.5);
-        c_backSpinPID.setTolerance(0.05);
+        c_backSpinPID = m_backSpin.getClosedLoopController();
+        c_backSpinPID.setP(0);
 
         // Initialize shooter state to STOP 
         s_state = ShooterStates.STOP;
@@ -97,7 +85,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
         desiredShooterRPS = 0;
         desiredBackSpinRPS = 0; 
-
 
         // Disable Subsystem if set to true 
         disable = false; 
@@ -159,7 +146,12 @@ public class ShooterSubsystem extends SubsystemBase {
         this.desiredBackSpinRPS = desiredBackSpinRPS; 
 
         c_backSpinPID.setSetpoint(-desiredBackSpinRPS);
+        c_backSpinPI
+
+        // Set control for desired shooter RPS
         m_leftShooter.setControl(new VelocityVoltage(-desiredShooterRPS));
+        m_middleShooter.setControl(new VelocityVoltage(-desiredShooterRPS));
+        m_rightShooter.setControl(new VelocityVolage(-desiredShooterRPS));
     }
 
 
@@ -173,7 +165,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     // Average RPS of both backspin motors
     private double getBackSpinRPS() {
-        return e_rightBackSpin.getVelocity() / 60 ;
+        return e_backSpin.getVelocity() / 60 ;
     }
 
     // Set PID setpoints for shooter and backspin motors
@@ -191,12 +183,12 @@ public class ShooterSubsystem extends SubsystemBase {
         //m_rightShooter.set(rightSpeed);
         //m_middleShooter.set(middleSpeed);
         m_leftShooter.set(leftSpeed);
-        m_rightBackSpin.set(backSpinSpeed);
+        m_backSpin.set(backSpinSpeed);
     }
 
     // Apply motor speeds to backspin motors
     private void applyBackSpinMotorSpeeds(double backSpinSpeed) {
-        m_rightBackSpin.set(-backSpinSpeed);
+        m_backSpin.set(-backSpinSpeed);
     }
 
     // Fully disable subsystem for testing purposes
@@ -204,7 +196,7 @@ public class ShooterSubsystem extends SubsystemBase {
         m_rightShooter.disable();
         m_middleShooter.disable();
         m_leftShooter.disable();
-        m_rightBackSpin.disable();
+        m_backSpin.disable();
     }
 
     // Set dashboard data for testing and debugging purposes
