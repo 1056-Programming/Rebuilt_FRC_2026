@@ -114,7 +114,7 @@ public class ShooterSubsystem extends SubsystemBase {
     @Override
     public void periodic() { 
         //setVelocitySetpoints(s_state.shootingRPS, s_state.backSpinRPS);
-        calculatePIDSpeed();
+        // calculatePIDSpeed();
         
         // // If shooter setpoint is 0, set shooter motor speeds to 0 
         // // to prevent unnecessary motor wear and conserve battery life
