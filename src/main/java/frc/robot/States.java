@@ -6,7 +6,7 @@ public class States {
     // Positive in Index in 
     public enum IndexStates {
         STOP(0, 0),
-        INDEX(1, 0.3),
+        INDEX(0.8, 0.25),
         REVERSE(-1.0, -1.0);
 
         public final double indexerSpeed;
@@ -22,22 +22,28 @@ public class States {
     // Both are in Rotations Per Second (RPS) and need to set range
     // Positive for both is shoot outward 
     public enum ShooterStates {
-        STOP(0, 0),
-        MAX(10, 0),
-        FORWARD_SHOOT(60, 30),
-        TEST1(0, 50),
-        TEST2(70,0),
-        VARIABLE_SHOOT(0, 0),
+        STOP(0, 0, 0),
+        MAX(10, 0, 0),
+        FORWARD_SHOOT(60, 30, 0),
+        TEST1(0, 50, 0),
+        TEST2( 70, 0, 0),
+        VARIABLE_SHOOT(0, 0, 0),
 
         // SETTING THE STATES FOR DIFFERENT DISTANCES
-        DISTANCE_1M(0,0);
+        DISTANCE_0_5M(0,0, 0.5),
+        DISTANCE_1M(0,0, 1),
+        DISTANCE_1_5M(0,0, 1.5),
+        DISTANCE_2M(0,0, 2);
+
         
-        public double backSpinRPS;
-        public double shootingRPS;
-        
-        ShooterStates (double backSpinRPS, double shootingRPS) {
+        public final double backSpinRPS;
+        public final double shootingRPS;
+        public final double distance; 
+
+        ShooterStates (double backSpinRPS, double shootingRPS, double distance) {
             this.backSpinRPS = backSpinRPS;
             this.shootingRPS = shootingRPS;
+            this.distance = distance; 
         }
     }
 
@@ -48,12 +54,12 @@ public class States {
     // Positive for intake speed is intaking, positive for pivot angle is pivoting up
     public enum IntakeStates {
         STOP(0, 0),
-        INTAKE(1, 0),
-        REVERSE(-1,0),
+        INTAKE(0.5, 0),
+        REVERSE(-0.5,0),
         UP(0,0),
         DOWN(0,0),
-        MAX(1,-94),
-        MIN(0,-215);
+        MAX(1,0),
+        MIN(0,149);
 
         public final double intakeSpeed;
         public final double pivotAngle;

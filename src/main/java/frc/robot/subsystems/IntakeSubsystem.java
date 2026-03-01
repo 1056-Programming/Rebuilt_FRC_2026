@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.lib.util.SparkFlexUtils;
 import frc.lib.util.SparkMaxUtils;
-
+import frc.lib.util.Utilities;
 import frc.robot.Constants;
 import frc.robot.States.IntakeStates;
 
@@ -40,13 +40,15 @@ public class IntakeSubsystem extends SubsystemBase {
     // Current intake state
     private IntakeStates i_state;
 
+    private double motorSpeed = 0; 
+
     // Calculated PID Speed for pivot
     private double pivotSpeed;
 
     public IntakeSubsystem() {
         // Initialize Spark Flex and Spark Max motors
         m_intake = new SparkFlex(Constants.Intake.kIntakeID, MotorType.kBrushless);
-        m_pivot = new SparkMax(Constants.Intake.kPivotID, MotorType.kBrushless);
+        m_pivot = new SparkMax(31, MotorType.kBrushless);
 
         // Optimize BUS usage
         SparkFlexUtils.setSparkFlexBusUsage(m_intake, SparkFlexUtils.Usage.kMinimal, IdleMode.kCoast, false, true);
@@ -70,11 +72,16 @@ public class IntakeSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // calculcate desired PID Value 
-        pivotSpeed = c_pivotPID.calculate(m_pivot.getAbsoluteEncoder().getPosition());
-        //m_pivot.set(pivotSpeed);
+        // TODO INSERT ENCODER VALUE LATER 
+        // pivotSpeed = c_pivotPID.calculate(0);
+        //m_pivot.set(0.1);
+        
+        // implement this when desired angle is found 
+        //c_pivotPID.calculate(m_pivot.getAbsoluteEncoder().getPosition());
+        m_pivot.set(motorSpeed);
 
         setDashboardData();
+
     }
 
     public void setIntakeState(IntakeStates state) {
@@ -83,6 +90,10 @@ public class IntakeSubsystem extends SubsystemBase {
         // Set PID setpoint on intake to calculate motor output during periodic
         c_pivotPID.setSetpoint(state.pivotAngle);
         m_intake.set(state.intakeSpeed);
+    }
+
+    public void moveIntake(double speed) {
+        motorSpeed = speed;
     }
 
     public String getName() {
@@ -97,10 +108,10 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private void setDashboardData() {
         SmartDashboard.putNumber(getName() + " Motor Speed", pivotSpeed);
-        SmartDashboard.putNumber(getName() + " Pivot Angle", pivotEncoder.getAbsolutePosition().getValueAsDouble());
+        SmartDashboard.putNumber(getName() + " Pivot Angle", 
+            Utilities.convertYawReadings(
+            Units.rotationsToDegrees(pivotEncoder.getPosition().getValueAsDouble())));
         SmartDashboard.putNumber(getName() + " Pivot Setpoint", c_pivotPID.getSetpoint());
-
-        SmartDashboard.putNumber(getName() + " Intake Piviot Angle", Units.rotationsToDegrees(m_intake.getEncoder().getPosition()));
 
         SmartDashboard.putNumber(getName() + " Intake Speed", m_intake.get());
 
