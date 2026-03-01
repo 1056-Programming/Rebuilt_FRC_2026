@@ -1,7 +1,9 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.Utils;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
@@ -27,7 +29,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public final SparkMax m_pivot; 
 
     // Absolute Encorder to track pivot angle
-    // private final DutyCycleEncoder pivotAbsoluteEncoder;
+    private final CANcoder pivotEncoder;
 
     // PID controller to maintain pivot angle
     private final PIDController c_pivotPID;
@@ -49,6 +51,8 @@ public class IntakeSubsystem extends SubsystemBase {
         // Optimize BUS usage
         SparkFlexUtils.setSparkFlexBusUsage(m_intake, SparkFlexUtils.Usage.kMinimal, IdleMode.kCoast, false, true);
         SparkMaxUtils.setSparkMaxBusUsage(m_pivot, SparkMaxUtils.Usage.kAll, IdleMode.kBrake, false, false);
+
+        pivotEncoder = new CANcoder(23);
 
         // Initialize PID controller for pivot
         c_pivotPID = new PIDController(Constants.Intake.kIntakeP, Constants.Intake.kIntakeI, Constants.Intake.kIntakeD);
@@ -104,5 +108,6 @@ public class IntakeSubsystem extends SubsystemBase {
         SmartDashboard.putNumber(getName() + " Intake Speed", m_intake.get());
 
         SmartDashboard.putString(getName() + " State", i_state.toString());
+        SmartDashboard.putNumber("sigma boy", Units.rotationsToDegrees(pivotEncoder.getPosition().getValueAsDouble()));
     }
 }

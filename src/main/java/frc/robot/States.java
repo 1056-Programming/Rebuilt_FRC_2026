@@ -51,7 +51,9 @@ public class States {
         INTAKE(1, 0),
         REVERSE(-1,0),
         UP(0,0),
-        DOWN(0,0);
+        DOWN(0,0),
+        MAX(1,-94),
+        MIN(0,-215);
 
         public final double intakeSpeed;
         public final double pivotAngle;

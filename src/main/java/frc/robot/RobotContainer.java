@@ -102,14 +102,16 @@ public class RobotContainer {
         // driver1.b().onTrue(c_shooterCommand.setShooterState(States.ShooterStates.STOP)); 
         
         // Bind Intake Commands
-        driver1.x().onTrue(new InstantCommand(() -> s_intake.m_pivot.set(0.3)));
+        driver1.x().onTrue(new InstantCommand(() -> s_intake.m_pivot.set(1)));
         driver1.x().onFalse(new InstantCommand(() -> s_intake.m_pivot.set(0)));
 
-        driver1.b().onTrue(new InstantCommand(() -> s_intake.m_pivot.set(-0.3)));
-        driver1.b().onFalse(new InstantCommand(() -> s_intake.m_pivot.set(0)));        
+        driver1.b().onTrue(new InstantCommand(() -> s_intake.m_pivot.set(-0.6)));
+        driver1.b().onFalse(
+            new InstantCommand(() -> s_intake.m_pivot.set(0)));        
 
         // driver1.pov(270).onTrue(c_intakeCommand.setIntakeState(IntakeStates.DOWN));
         
+
 
         // driver1.pov(0).onTrue(c_intakeCommand.setIntakeState(IntakeStates.UP)); 
         // driver1.pov(270).onTrue(c_intakeCommand.setIntakeState(IntakeStates.DOWN));

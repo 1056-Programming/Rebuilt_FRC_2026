@@ -6,7 +6,7 @@ public class Constants {
     public class Shooter {
         // REV SparkFlex 
         // public static final int kLeftBackspinID = 0;
-        public static final int kRightBackspinID = 34;
+        public static final int kBackSpinID = 34;
         
         // Pheonix Krakens
         public static final int kRightShootingID = 20;

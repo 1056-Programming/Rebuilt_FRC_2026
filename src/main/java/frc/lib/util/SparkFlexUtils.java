@@ -1,5 +1,6 @@
 package frc.lib.util;
 
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.config.SignalsConfig;
@@ -33,6 +34,56 @@ public class SparkFlexUtils {
   public static void setSparkFlexBusUsage(SparkFlex motor, SparkFlexUtils.Usage usage, SparkBaseConfig.IdleMode idleMode, boolean enableFollowing, boolean setInverted) {
     SparkFlexUtils.sparkConfigurationBase configuration = new SparkFlexUtils.sparkConfigurationBase();
     SparkFlexConfig motorConfiguration = new SparkFlexConfig();
+
+    if(enableFollowing) {
+      configuration.setBusVoltageOn();
+      configuration.setOutputCurrentOn();
+      configuration.setMotorTemperatureOn();
+      configuration.setFaultsOn();
+      configuration.setWarningsOn();
+      configuration.setIAccumulationOn();
+      configuration.setLimitsOn();
+      configuration.setAppliedOutputOn();
+      configuration.setOutputCurrentOn();
+    }
+
+    switch (usage) {
+      case kAll:
+        configuration.setAllOn();
+        break;
+      case kAbsolutePositionOnly:
+        configuration.setAbsoluteEncoderOn();
+        break;
+      case kAnalogPositionOnly:
+        configuration.setAnalogOn();
+        break;
+      case kRelativePositionOnly:
+        configuration.setPrimaryEncoderOn();
+        break;
+      case kVelocityOnly:
+        configuration.setPrimaryEncoderOn();
+        break;
+      case kMinimal:
+        break;
+    }
+
+    motorConfiguration.apply(configuration.build());
+    motorConfiguration.inverted(setInverted); 
+    motorConfiguration.idleMode(idleMode);
+    motor.configure(motorConfiguration, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
+  }
+
+  public static void setSparkFlexBusUsage(SparkFlex motor, SparkFlexUtils.Usage usage, 
+    SparkBaseConfig.IdleMode idleMode, boolean enableFollowing, boolean setInverted,
+    double kP, double kI, double kD, double kV) {
+    SparkFlexUtils.sparkConfigurationBase configuration = new SparkFlexUtils.sparkConfigurationBase();
+    SparkFlexConfig motorConfiguration = new SparkFlexConfig();
+
+    motorConfiguration.closedLoop.p(kP, ClosedLoopSlot.kSlot0);
+    motorConfiguration.closedLoop.i(kI, ClosedLoopSlot.kSlot0);
+    motorConfiguration.closedLoop.d(kD, ClosedLoopSlot.kSlot0);
+    motorConfiguration.closedLoop.feedForward.kV(kV, ClosedLoopSlot.kSlot0);
+    motorConfiguration.closedLoop.allowedClosedLoopError(0.02, ClosedLoopSlot.kSlot0);
 
     if(enableFollowing) {
       configuration.setBusVoltageOn();

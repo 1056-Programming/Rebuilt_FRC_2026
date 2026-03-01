@@ -32,4 +32,12 @@ public class Utilities {
     public static double clampTalonVoltage(double voltage) {
         return Math.min(-1, Math.max(1, voltage));
     }
+
+    public static double rpsToRpm(double rps) {
+        return rps * 60;
+    }
+
+    public static double rpmToRps(double rpm) {
+        return rpm / 60;
+    }
 }
