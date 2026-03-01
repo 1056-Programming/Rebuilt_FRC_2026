@@ -70,10 +70,9 @@ public class IntakeSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // TODO INSERT ENCODER VALUE LATER 
-        
-        // implement this when desired angle is found 
-        //c_pivotPID.calculate(m_pivot.getAbsoluteEncoder().getPosition());
+        // calculcate desired PID Value 
+        pivotSpeed = c_pivotPID.calculate(m_pivot.getAbsoluteEncoder().getPosition());
+        //m_pivot.set(pivotSpeed);
 
         setDashboardData();
     }
@@ -81,18 +80,16 @@ public class IntakeSubsystem extends SubsystemBase {
     public void setIntakeState(IntakeStates state) {
         i_state = state;
         
+        // Set PID setpoint on intake to calculate motor output during periodic
         c_pivotPID.setSetpoint(state.pivotAngle);
         m_intake.set(state.intakeSpeed);
-    }
-
-    public void moveIntake(double speed) {
-        m_pivot.set(speed); 
     }
 
     public String getName() {
         return "Intake Subsystem";
     }
 
+    // Disable susbystem if needed
     private void disableSubsystem() {
         m_intake.disable();
         m_pivot.disable();
@@ -100,7 +97,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private void setDashboardData() {
         SmartDashboard.putNumber(getName() + " Motor Speed", pivotSpeed);
-        SmartDashboard.putNumber(getName() + " Pivot Angle", 0);
+        SmartDashboard.putNumber(getName() + " Pivot Angle", pivotEncoder.getAbsolutePosition().getValueAsDouble());
         SmartDashboard.putNumber(getName() + " Pivot Setpoint", c_pivotPID.getSetpoint());
 
         SmartDashboard.putNumber(getName() + " Intake Piviot Angle", Units.rotationsToDegrees(m_intake.getEncoder().getPosition()));
@@ -108,6 +105,5 @@ public class IntakeSubsystem extends SubsystemBase {
         SmartDashboard.putNumber(getName() + " Intake Speed", m_intake.get());
 
         SmartDashboard.putString(getName() + " State", i_state.toString());
-        SmartDashboard.putNumber("sigma boy", Units.rotationsToDegrees(pivotEncoder.getPosition().getValueAsDouble()));
     }
 }

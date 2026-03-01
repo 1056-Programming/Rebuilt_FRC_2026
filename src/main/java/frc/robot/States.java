@@ -34,7 +34,7 @@ public class States {
         
         public double backSpinRPS;
         public double shootingRPS;
-
+        
         ShooterStates (double backSpinRPS, double shootingRPS) {
             this.backSpinRPS = backSpinRPS;
             this.shootingRPS = shootingRPS;
