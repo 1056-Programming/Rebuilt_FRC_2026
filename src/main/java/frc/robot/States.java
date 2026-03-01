@@ -6,7 +6,7 @@ public class States {
     // Positive in Index in 
     public enum IndexStates {
         STOP(0, 0),
-        INDEX(0.25, 0.25),
+        INDEX(1, 0.3),
         REVERSE(-1.0, -1.0);
 
         public final double indexerSpeed;

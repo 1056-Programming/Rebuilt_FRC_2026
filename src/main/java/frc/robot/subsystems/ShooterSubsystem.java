@@ -149,7 +149,7 @@ public class ShooterSubsystem extends SubsystemBase {
         this.desiredShooterRPS = desiredShooterRPS; 
         this.desiredBackSpinRPS = desiredBackSpinRPS; 
 
-        //c_backSpinPID.setSetpoint(Utilities.rpsToRpm(desiredBackSpinRPS), ControlType.kVelocity);
+        c_backSpinPID.setSetpoint(Utilities.rpsToRpm(desiredBackSpinRPS), ControlType.kVelocity);
         // Set control for desired shooter RPS
         m_leftShooter.setControl(new VelocityVoltage(-desiredShooterRPS));
         m_middleShooter.setControl(new VelocityVoltage(-desiredShooterRPS));

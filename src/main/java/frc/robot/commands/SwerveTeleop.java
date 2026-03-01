@@ -84,8 +84,8 @@ public class SwerveTeleop extends Command {
     
     // Apply a polynomial acceleration curve to the joystick inputs for smoother control
     private void setPolynomialAcceleration() {
-        xSpeed = Utilities.polynomialAccleration(yInput) * MaxSpeed * 0;
-        ySpeed = Utilities.polynomialAccleration(xInput) * MaxSpeed * 0.2;
+        xSpeed = Utilities.polynomialAccleration(yInput) * MaxSpeed * 0.3;
+        ySpeed = Utilities.polynomialAccleration(xInput) * MaxSpeed * 0.3;
         rSpeed = Utilities.polynomialAccleration(rInput) * MaxAngularRate * 0.7 ; 
     }
 
