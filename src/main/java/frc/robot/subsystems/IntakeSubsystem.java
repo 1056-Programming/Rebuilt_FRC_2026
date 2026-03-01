@@ -40,13 +40,15 @@ public class IntakeSubsystem extends SubsystemBase {
     // Current intake state
     private IntakeStates i_state;
 
+    private double motorSpeed = 0; 
+
     // Calculated PID Speed for pivot
     private double pivotSpeed;
 
     public IntakeSubsystem() {
         // Initialize Spark Flex and Spark Max motors
         m_intake = new SparkFlex(Constants.Intake.kIntakeID, MotorType.kBrushless);
-        m_pivot = new SparkMax(Constants.Intake.kPivotID, MotorType.kBrushless);
+        m_pivot = new SparkMax(31, MotorType.kBrushless);
 
         // Optimize BUS usage
         SparkFlexUtils.setSparkFlexBusUsage(m_intake, SparkFlexUtils.Usage.kMinimal, IdleMode.kCoast, false, true);
@@ -72,10 +74,11 @@ public class IntakeSubsystem extends SubsystemBase {
     public void periodic() {
         // TODO INSERT ENCODER VALUE LATER 
         // pivotSpeed = c_pivotPID.calculate(0);
-        // m_pivot.set(pivotSpeed);
+        //m_pivot.set(0.1);
         
         // implement this when desired angle is found 
         //c_pivotPID.calculate(m_pivot.getAbsoluteEncoder().getPosition());
+        m_pivot.set(0.1);
 
         setDashboardData();
     }
@@ -88,7 +91,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void moveIntake(double speed) {
-        m_pivot.set(speed); 
+        motorSpeed = speed;
     }
 
     public String getName() {

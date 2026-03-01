@@ -156,7 +156,6 @@ public class ShooterSubsystem extends SubsystemBase {
         s_state = state; 
         if(state.equals(ShooterStates.VARIABLE_SHOOT)) {
             // TODO:
-
             setVelocitySetpoints(ShooterStates.valueOf(stateName).shootingRPS,
                                 ShooterStates.valueOf(stateName).backSpinRPS);
 
