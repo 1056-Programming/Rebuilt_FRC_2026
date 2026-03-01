@@ -67,8 +67,8 @@ public class IntakeSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         // TODO INSERT ENCODER VALUE LATER 
-        pivotSpeed = c_pivotPID.calculate(0);
-        m_pivot.set(pivotSpeed);
+        // pivotSpeed = c_pivotPID.calculate(0);
+        // m_pivot.set(pivotSpeed);
 
         setDashboardData();
     }

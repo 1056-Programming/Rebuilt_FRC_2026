@@ -20,6 +20,11 @@ import frc.lib.util.TalonFxUtils;
 import frc.robot.Constants;
 import frc.robot.States.ShooterStates;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 public class ShooterSubsystem extends SubsystemBase {
     // Different motors for each channel on the robot 
     private final TalonFX m_rightShooter;
@@ -60,6 +65,15 @@ public class ShooterSubsystem extends SubsystemBase {
     //Boolean usePIDonShooter; // CHANGE ME
     public double[] optimalShotsResult;
 
+    // Iterator and the HashMap for the checking the distance
+    private double limelight_distance; 
+    private String[] stateNames = Arrays.stream(ShooterStates.values())
+                                                .map(ShooterStates::name)
+                                                .toArray(String[]::new);
+    private double[] stateDistance = {ShooterStates.DISTANCE_0_5M.distance,
+                                    ShooterStates.DISTANCE_1M.distance,
+                                    ShooterStates.DISTANCE_1_5M.distance,
+                                    ShooterStates.DISTANCE_2M.distance};
 
     public ShooterSubsystem() {
         // Initialize Kraken Motors 
@@ -98,7 +112,6 @@ public class ShooterSubsystem extends SubsystemBase {
         desiredShooterRPS = 0;
         desiredBackSpinRPS = 0; 
 
-
         // Disable Subsystem if set to true 
         disable = false; 
         if(disable) {
@@ -108,6 +121,7 @@ public class ShooterSubsystem extends SubsystemBase {
     @Override
     public void periodic() { 
         //setVelocitySetpoints(s_state.shootingRPS, s_state.backSpinRPS);
+        limelight_distance = VisionSubsystem.tag_distance;
         calculatePIDSpeed();
         
         // // If shooter setpoint is 0, set shooter motor speeds to 0 
@@ -128,20 +142,32 @@ public class ShooterSubsystem extends SubsystemBase {
 
         setDashboardData();
     }
+
+    public String checkShooterRange() {
+        double smallestDif = Math.abs(limelight_distance - stateDistance[0]);
+        double currentDif; 
+        int closest = 0; 
+
+        for (int i=0; i<stateDistance.length; i++) {
+            currentDif = Math.abs(limelight_distance - stateDistance[i]);
+
+            if (smallestDif < currentDif) {
+                smallestDif = currentDif;
+                closest = i; 
+            }
+         }
+
+         return stateNames[closest]; 
+    }
+
     public void setShooterState(ShooterStates state) {
+        String stateName = checkShooterRange();
         s_state = state; 
         if(state.equals(ShooterStates.VARIABLE_SHOOT)) {
             // TODO:
-            // optimalShotsResult = CalculateShooterSpeed.calculateOptimalShot(VisionSubsystem.getTagDistance(), 6);
-            // //optimalShotsResult = CalculateShooterSpeed.calculateOptimalShot(VisionSubsystem.tag_distance, 4);
 
-            // // optimalShotsResult[0] = Math.round(optimalShotsResult[0]*100)/100;
-            // // optimalShotsResult[1] = Math.round(optimalShotsResult[1]*100)/100;
-
-            // setVelocitySetpoints(optimalShotsResult[0], optimalShotsResult[1]);
-
-            // SmartDashboard.putNumber("Optimal Shooter RPS: ", optimalShotsResult[0]);
-            // SmartDashboard.putNumber("Optimal Back Spin RPS: ", -optimalShotsResult[1]);
+            setVelocitySetpoints(ShooterStates.valueOf(stateName).shootingRPS,
+                                ShooterStates.valueOf(stateName).backSpinRPS);
 
             return;
         } 

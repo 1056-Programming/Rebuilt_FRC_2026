@@ -52,6 +52,7 @@ public class VisionSubsystem extends SubsystemBase {
         if(s_poseEstimate.tagCount == 0  
             || getTagAmbiguity(0) > Constants.Vision.ambiguityThreshold
             || getTagDistance() > Constants.Vision.distanceThreshold) {
+            tag_distance = 0;
             return;
         } else if (s_poseEstimate.tagCount == 1) {
             robotYaw = Utilities.convertGyroReadings(drivetrain.getPigeon2().getYaw().getValueAsDouble());
