@@ -8,6 +8,7 @@ import java.util.ResourceBundle.Control;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.fasterxml.jackson.databind.util.LRUMap;
+import com.pathplanner.lib.util.DriveFeedforwards;
 import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
@@ -77,17 +78,14 @@ public class SwerveTeleop extends Command {
         drivetrain.applyRequest(() -> drive.withVelocityX(ySpeed)
             .withVelocityY(xSpeed)
             .withRotationalRate(rSpeed)).execute();
-        SmartDashboard.putNumber("ten big sigmas in abar", Utilities.processYaw(drivetrain.getPigeon2().getYaw().getValueAsDouble()));
-        SmartDashboard.putNumber("9 67", drivetrain.getState().Pose.getRotation().getDegrees());
-            SmartDashboard.putNumber("sigma buttt nga x",drivetrain.getState().Pose.getMeasureX().baseUnitMagnitude());
-            SmartDashboard.putNumber("sigma buttt nga y",drivetrain.getState().Pose.getMeasureY().baseUnitMagnitude());
-            SmartDashboard.putNumber("sigma buttt nga z",drivetrain.getState().Pose.getRotation().getDegrees());
+
+        setDashboardData();
     }
     
     // Apply a polynomial acceleration curve to the joystick inputs for smoother control
     private void setPolynomialAcceleration() {
-        xSpeed = Utilities.polynomialAccleration(yInput) * MaxSpeed * 0;
-        ySpeed = Utilities.polynomialAccleration(xInput) * MaxSpeed * 0.2;
+        xSpeed = Utilities.polynomialAccleration(yInput) * MaxSpeed * 0.3;
+        ySpeed = Utilities.polynomialAccleration(xInput) * MaxSpeed * 0.3;
         rSpeed = Utilities.polynomialAccleration(rInput) * MaxAngularRate * 0.7 ; 
     }
 
@@ -96,6 +94,11 @@ public class SwerveTeleop extends Command {
     }
 
     private void setDashboardData() {
-        // TODO add data to dashboard for testing and debugging purposes
+        SmartDashboard.putNumber(drivetrain.getName() + " pidgeon 2", Utilities.processYaw(drivetrain.getPigeon2().getYaw().getValueAsDouble()));
+        SmartDashboard.putNumber(drivetrain.getName() + " state x pos", drivetrain.getState().Pose.getMeasureX().baseUnitMagnitude());
+        SmartDashboard.putNumber(drivetrain.getName() + " state y pos", drivetrain.getState().Pose.getMeasureY().baseUnitMagnitude());
+        SmartDashboard.putNumber(drivetrain.getName() + " state rot pos", drivetrain.getState().Pose.getRotation().getDegrees());
+        SmartDashboard.putNumber(drivetrain.getName() + " yaw diff", 
+            drivetrain.getPigeon2().getYaw().getValueAsDouble() - Utilities.processYaw(drivetrain.getState().Pose.getRotation().getDegrees()));
     }
 }

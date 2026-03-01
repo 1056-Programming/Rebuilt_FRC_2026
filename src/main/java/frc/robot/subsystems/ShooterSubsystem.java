@@ -1,10 +1,14 @@
 package frc.robot.subsystems;
 
+import java.util.zip.ZipEntry;
+
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
@@ -16,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.lib.util.SparkFlexUtils;
 import frc.lib.util.TalonFxUtils;
+import frc.lib.util.Utilities;
 // import frc.robot.CalculateShooterSpeed;
 import frc.robot.Constants;
 import frc.robot.States.ShooterStates;
@@ -32,26 +37,19 @@ public class ShooterSubsystem extends SubsystemBase {
     private final TalonFX m_leftShooter; 
 
     // One backspin motor for all channels 
-    // private final SparkFlex m_leftBackSpin;
-    private final SparkFlex m_rightBackSpin;
+    private final SparkFlex m_backSpin;
 
     // Get backspin motor encoders for constant RPS control
-    // private final RelativeEncoder e_leftBackSpin;
-    private final RelativeEncoder e_rightBackSpin;
+    private final RelativeEncoder e_backSpin;
 
-    // PID controllers to maintain constant RPS
-    private final PIDController c_rightPID;
-    private final PIDController c_middlePID;
-    private final PIDController c_leftPID;
-    private final PIDController c_backSpinPID;
-    private final SimpleMotorFeedforward c_Feedforward;
+    // PID controllers to maintain backspin RPS
+    private final SparkClosedLoopController c_backSpinPID;
 
     // Enable or disable subsystem
     private final boolean disable; 
 
     // Current shooter state
     private ShooterStates s_state;
-
 
     // Current Motor Speeds
     private double rightMotorSpeed;
@@ -81,29 +79,24 @@ public class ShooterSubsystem extends SubsystemBase {
         m_middleShooter = new TalonFX(Constants.Shooter.kMiddleShootingID);
         m_leftShooter = new TalonFX(Constants.Shooter.kLeftShootingID);
 
-        TalonFxUtils.configureSlot0(m_leftShooter, 0.04,0,0,0,0.13);
+        // Configure Kraken RPS PID controllers
+        TalonFxUtils.configureSlot0(m_leftShooter, 0.04, 0, 0, 0, 0.13);
+        TalonFxUtils.configureSlot0(m_middleShooter, 0.04, 0, 0, 0, 0.13);
+        TalonFxUtils.configureSlot0(m_rightShooter, 0.04, 0, 0, 0, 0.13);
 
         // Initialize SparkFlex Motors
-        m_rightBackSpin = new SparkFlex(Constants.Shooter.kRightBackspinID, MotorType.kBrushless);
+        m_backSpin = new SparkFlex(Constants.Shooter.kBackSpinID, MotorType.kBrushless);
 
         // Get encoders for backspin motors
-        e_rightBackSpin = m_rightBackSpin.getEncoder();
-        c_Feedforward = new SimpleMotorFeedforward(Constants.Shooter.ShooterKS, Constants.Shooter.ShooterKV, Constants.Shooter.ShooterKA);
+        e_backSpin = m_backSpin.getEncoder();
 
         // Optimize CAN BUS usage
-        SparkFlexUtils.setSparkFlexBusUsage(m_rightBackSpin, SparkFlexUtils.Usage.kVelocityOnly, IdleMode.kCoast, false, false);
-
+        SparkFlexUtils.setSparkFlexBusUsage(m_backSpin, SparkFlexUtils.Usage.kVelocityOnly, IdleMode.kCoast, 
+            false, true,
+            0,0,0,0.000149537);
         // Initialize PID Controllers
-        c_rightPID = new PIDController(Constants.Shooter.ShooterKP, Constants.Shooter.ShooterKI, Constants.Shooter.ShooterKD);
-        c_middlePID = new PIDController(Constants.Shooter.ShooterKP, Constants.Shooter.ShooterKI, Constants.Shooter.ShooterKD);
-        c_leftPID = new PIDController(Constants.Shooter.ShooterKP, Constants.Shooter.ShooterKI, Constants.Shooter.ShooterKD);
-        c_backSpinPID = new PIDController(Constants.Shooter.BackSpinKP, Constants.Shooter.BackSpinKI, Constants.Shooter.BackSpinKD); 
-        
-        // Set PID Tolerance
-        c_rightPID.setTolerance(0);
-        c_middlePID.setTolerance(0);
-        c_leftPID.setTolerance(0.5);
-        c_backSpinPID.setTolerance(0.05);
+        c_backSpinPID = m_backSpin.getClosedLoopController();
+
 
         // Initialize shooter state to STOP 
         s_state = ShooterStates.STOP;
@@ -121,7 +114,6 @@ public class ShooterSubsystem extends SubsystemBase {
     @Override
     public void periodic() { 
         //setVelocitySetpoints(s_state.shootingRPS, s_state.backSpinRPS);
-        limelight_distance = VisionSubsystem.tag_distance;
         calculatePIDSpeed();
         
         // // If shooter setpoint is 0, set shooter motor speeds to 0 
@@ -134,12 +126,11 @@ public class ShooterSubsystem extends SubsystemBase {
 
         // If backspin setpoint is 0, set backspin motor speeds to 0 
         // to prevent unnecessary motor wear and conserve battery life
-        if(c_backSpinPID.getSetpoint() == 0) {
-            applyBackSpinMotorSpeeds(0);
-        } else {
-            applyBackSpinMotorSpeeds(backSpinSpeed);
-        }
-
+        // if(c_backSpinPID.getSetpoint() == 0) {
+        //     applyBackSpinMotorSpeeds(0);
+        // } else {
+        //     applyBackSpinMotorSpeeds(backSpinSpeed);
+        // }
         setDashboardData();
     }
 
@@ -184,53 +175,55 @@ public class ShooterSubsystem extends SubsystemBase {
         this.desiredShooterRPS = desiredShooterRPS; 
         this.desiredBackSpinRPS = desiredBackSpinRPS; 
 
-        c_backSpinPID.setSetpoint(-desiredBackSpinRPS);
+        c_backSpinPID.setSetpoint(Utilities.rpsToRpm(desiredBackSpinRPS), ControlType.kVelocity);
+        // Set control for desired shooter RPS
         m_leftShooter.setControl(new VelocityVoltage(-desiredShooterRPS));
-    }
-
-
-    // Calculate PID outputs for shooter and backspin motors to maintain constant RPS
-    private void calculatePIDSpeed() {
-        rightMotorSpeed = c_rightPID.calculate(m_rightShooter.getVelocity().getValueAsDouble());
-        middleMotorSpeed = c_middlePID.calculate(m_middleShooter.getVelocity().getValueAsDouble());
-        leftMotorSpeed = c_leftPID.calculate(m_leftShooter.getVelocity().getValueAsDouble()) + c_Feedforward.calculate(desiredShooterRPS); 
-        backSpinSpeed = c_backSpinPID.calculate(getBackSpinRPS()); 
+        m_middleShooter.setControl(new VelocityVoltage(-desiredShooterRPS));
+        m_rightShooter.setControl(new VelocityVoltage(-desiredShooterRPS));
     }
 
     // Average RPS of both backspin motors
     private double getBackSpinRPS() {
-        return e_rightBackSpin.getVelocity() / 60 ;
+        return e_backSpin.getVelocity() / 60;
     }
 
-    // Set PID setpoints for shooter and backspin motors
-    private void setPIDSetpoints(double desiredShooterRPS, double desiredBackSpinRPS) {
-        this.desiredShooterRPS = desiredShooterRPS; 
-        c_rightPID.setSetpoint(desiredShooterRPS);
-        c_middlePID.setSetpoint(desiredShooterRPS);
-        c_leftPID.setSetpoint(desiredShooterRPS);
-        m_leftShooter.setControl(new VelocityVoltage(desiredShooterRPS));
-        c_backSpinPID.setSetpoint(desiredBackSpinRPS);    
-    }
+    // // Calculate PID outputs for shooter and backspin motors to maintain constant RPS
+    // private void calculatePIDSpeed() {
+    //     rightMotorSpeed = c_rightPID.calculate(m_rightShooter.getVelocity().getValueAsDouble());
+    //     middleMotorSpeed = c_middlePID.calculate(m_middleShooter.getVelocity().getValueAsDouble());
+    //     leftMotorSpeed = c_leftPID.calculate(m_leftShooter.getVelocity().getValueAsDouble()) + c_Feedforward.calculate(desiredShooterRPS); 
+    //     backSpinSpeed = c_backSpinPID.calculate(getBackSpinRPS()); 
+    // }
+
+    // // Set PID setpoints for shooter and backspin motors
+    // private void setPIDSetpoints(double desiredShooterRPS, double desiredBackSpinRPS) {
+    //     this.desiredShooterRPS = desiredShooterRPS; 
+    //     c_rightPID.setSetpoint(desiredShooterRPS);
+    //     c_middlePID.setSetpoint(desiredShooterRPS);
+    //     c_leftPID.setSetpoint(desiredShooterRPS);
+    //     m_leftShooter.setControl(new VelocityVoltage(desiredShooterRPS));
+    //     c_backSpinPID.setSetpoint(desiredBackSpinRPS);    
+    // }
 
     // Apply motor speeds to all shooters
-    private void applyShooterMotorSpeeds(double rightSpeed, double middleSpeed, double leftSpeed) {
-        //m_rightShooter.set(rightSpeed);
-        //m_middleShooter.set(middleSpeed);
-        m_leftShooter.set(leftSpeed);
-        m_rightBackSpin.set(backSpinSpeed);
-    }
+    // private void applyShooterMotorSpeeds(double rightSpeed, double middleSpeed, double leftSpeed) {
+    //     //m_rightShooter.set(rightSpeed);
+    //     //m_middleShooter.set(middleSpeed);
+    //     m_leftShooter.set(leftSpeed);
+    //     m_backSpin.set(backSpinSpeed);
+    // }
 
     // Apply motor speeds to backspin motors
-    private void applyBackSpinMotorSpeeds(double backSpinSpeed) {
-        m_rightBackSpin.set(-backSpinSpeed);
-    }
+    // private void applyBackSpinMotorSpeeds(double backSpinSpeed) {
+    //     m_backSpin.set(-backSpinSpeed);
+    // }
 
     // Fully disable subsystem for testing purposes
     private void disableSubsystem() {
         m_rightShooter.disable();
         m_middleShooter.disable();
         m_leftShooter.disable();
-        m_rightBackSpin.disable();
+        m_backSpin.disable();
     }
 
     // Set dashboard data for testing and debugging purposes
@@ -248,10 +241,8 @@ public class ShooterSubsystem extends SubsystemBase {
         SmartDashboard.putNumber(getName() + " Back Spin RPS", getBackSpinRPS());
 
         // PID Setpoint Values
-        SmartDashboard.putNumber(getName() + " Right Shooter PID Setpoint", c_rightPID.getSetpoint());
-        SmartDashboard.putNumber(getName() + " Middle Shooter PID Setpoint", c_middlePID.getSetpoint());
-        SmartDashboard.putNumber(getName() + " Left Shooter PID Setpoint", c_leftPID.getSetpoint());
-        SmartDashboard.putNumber(getName() + " Back Spin PID Setpoint", c_backSpinPID.getSetpoint());
+        SmartDashboard.putNumber(getName() + " shooter PID setpoints", this.desiredShooterRPS);
+        SmartDashboard.putNumber(getName() + " Back Spin PID Setpoint", this.desiredBackSpinRPS);
 
         // Current Shooter State
         SmartDashboard.putString(getName() + " Shooter State", s_state.toString());

@@ -6,7 +6,7 @@ public class Constants {
     public class Shooter {
         // REV SparkFlex 
         // public static final int kLeftBackspinID = 0;
-        public static final int kRightBackspinID = 34;
+        public static final int kBackSpinID = 34;
         
         // Pheonix Krakens
         public static final int kRightShootingID = 20;
@@ -45,7 +45,7 @@ public class Constants {
         public static final int kPivotID = 31;
 
         // PID values
-        public static final double kIntakeP = 0.01;
+        public static final double kIntakeP = 0.005;
         public static final double kIntakeI = 0;
         public static final double kIntakeD = 0;
     
@@ -63,6 +63,15 @@ public class Constants {
         public static final double kPositiveSlew = 0.5;
         public static final double kNegativeSlew = -1;
         public static final double kStart = 0; 
+
+        // public static final double kTranslationP;
+        // public static final double kTranslationI;
+        // public static final double kTranslationD;
+
+        
+        // public static final double kRotationP;
+        // public static final double kRotationI;
+        // public static final double kRotationD;
     }
 
 }
