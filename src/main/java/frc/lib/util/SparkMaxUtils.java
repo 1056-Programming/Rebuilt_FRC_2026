@@ -1,6 +1,7 @@
 package frc.lib.util;
 
 import com.revrobotics.spark.ClosedLoopSlot;
+import com.revrobotics.spark.FeedbackSensor;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkMax;
@@ -88,6 +89,59 @@ public class SparkMaxUtils {
     motorConfiguration.closedLoop.feedForward.kV(kV, ClosedLoopSlot.kSlot0);
     motorConfiguration.closedLoop.allowedClosedLoopError(0.02, ClosedLoopSlot.kSlot0);
 
+
+    if(enableFollowing) {
+      configuration.setBusVoltageOn();
+      configuration.setOutputCurrentOn();
+      configuration.setMotorTemperatureOn();
+      configuration.setFaultsOn();
+      configuration.setWarningsOn();
+      configuration.setIAccumulationOn();
+      configuration.setLimitsOn();
+      configuration.setAppliedOutputOn();
+      configuration.setOutputCurrentOn();
+    }
+
+    switch (usage) {
+      case kAll:
+        configuration.setAllOn();
+        break;
+      case kAbsolutePositionOnly:
+        configuration.setAbsoluteEncoderOn();
+        break;
+      case kAnalogPositionOnly:
+        configuration.setAnalogOn();
+        break;
+      case kRelativePositionOnly:
+        configuration.setPrimaryEncoderOn();
+        break;
+      case kVelocityOnly:
+        configuration.setPrimaryEncoderOn();
+        break;
+      case kMinimal:
+        break;
+    }
+
+    motorConfiguration.apply(configuration.build());
+    motorConfiguration.inverted(setInverted); 
+    motorConfiguration.idleMode(idleMode);
+    motor.configure(motorConfiguration, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters);
+  }
+
+   public static void setSparkMaxBusUsage(SparkMax motor, SparkMaxUtils.Usage usage, 
+    SparkBaseConfig.IdleMode idleMode, boolean enableFollowing, boolean setInverted,
+    double kP, double kI, double kD, double kV,
+    FeedbackSensor sensor) {
+
+    SparkMaxUtils.sparkConfigurationBase configuration = new SparkMaxUtils.sparkConfigurationBase();
+    SparkMaxConfig motorConfiguration = new SparkMaxConfig();
+
+    motorConfiguration.closedLoop.p(kP, ClosedLoopSlot.kSlot0);
+    motorConfiguration.closedLoop.i(kI, ClosedLoopSlot.kSlot0);
+    motorConfiguration.closedLoop.d(kD, ClosedLoopSlot.kSlot0);
+    motorConfiguration.closedLoop.feedForward.kV(kV, ClosedLoopSlot.kSlot0);
+    motorConfiguration.closedLoop.allowedClosedLoopError(0.02, ClosedLoopSlot.kSlot0);
+    motorConfiguration.closedLoop.feedbackSensor(sensor);
 
     if(enableFollowing) {
       configuration.setBusVoltageOn();

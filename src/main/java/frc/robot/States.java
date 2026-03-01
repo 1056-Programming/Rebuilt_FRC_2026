@@ -54,14 +54,15 @@ public class States {
     // Pivot is in angles need to set range
     // Positive for intake speed is intaking, positive for pivot angle is pivoting up
     public enum IntakeStates {
-        STOP(0, 0),
-        INTAKE(0.3
-        , 0),
-        REVERSE(-0.5,0),
-        UP(0,0),
-        DOWN(0,0),
+        STOP(0, -135),
+        INTAKE(0.3, -202),
+        REVERSE(-0.5,-135),
+        UP(0,-135),
+        DOWN(0,-135),
         MAX(1,-94),
-        MIN(0,-215);
+        MIN(0,-215),
+        HOME(0,-135),
+        ugua(0,-170);
 
         public final double intakeSpeed;
         public final double pivotAngle;

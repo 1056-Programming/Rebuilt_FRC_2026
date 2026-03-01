@@ -94,7 +94,6 @@ public class ShooterSubsystem extends SubsystemBase {
         // Initialize PID Controllers
         c_backSpinPID = m_backSpin.getClosedLoopController();
 
-
         // Initialize shooter state to STOP 
         s_state = ShooterStates.STOP;
         setShooterState(s_state);

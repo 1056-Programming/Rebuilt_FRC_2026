@@ -1,9 +1,12 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.Utils;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
+import com.pathplanner.lib.events.CancelCommandEvent;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
@@ -45,6 +48,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private double motorSpeed = 0; 
 
+    private double setpoint; 
+
     // Calculated PID Speed for pivot
     private double pivotSpeed;
 
@@ -52,26 +57,25 @@ public class IntakeSubsystem extends SubsystemBase {
         // Initialize Spark Flex and Spark Max motors
         m_intake = new SparkFlex(Constants.Intake.kIntakeID, MotorType.kBrushless);
         m_pivot = new SparkMax(31, MotorType.kBrushless);
+        pivotEncoder = new CANcoder(23);
+        CANcoderConfiguration sigma = new CANcoderConfiguration();
+
+
 
         // Optimize BUS usage
         SparkFlexUtils.setSparkFlexBusUsage(m_intake, SparkFlexUtils.Usage.kMinimal, IdleMode.kCoast, false, true);
-        SparkMaxUtils.setSparkMaxBusUsage(m_pivot, SparkMaxUtils.Usage.kAll, 
-            IdleMode.kBrake, false, false,
-            0, 0, 0, 0.333);
-
-
-
-
-        pivotEncoder = new CANcoder(23);
+        SparkMaxUtils.setSparkMaxBusUsage(m_pivot, SparkMaxUtils.Usage.kAll, IdleMode.kBrake, false, false);
+              //  0, 0, 0, 0.333, pivotEncoder);
 
         // Initialize PID controller for pivot
-         c_pivotPID = new PIDController(Constants.Intake.kIntakeP, Constants.Intake.kIntakeI, Constants.Intake.kIntakeD);
-
-        m_pivot.getClosedLoopController();
+        c_pivotPID = new PIDController(0.078,0,0);
+        c_pivotPID.setSetpoint(-150);
 
         // Start intake in STOP position
         i_state = IntakeStates.STOP;
         setIntakeState(i_state);
+
+        c_pivotPID.setSetpoint(-150);
 
         // Disable Subsystem if set to true 
         disable = false;
@@ -87,19 +91,22 @@ public class IntakeSubsystem extends SubsystemBase {
         //m_pivot.set(0.1);
         
         // implement this when desired angle is found 
-        //c_pivotPID.calculate(m_pivot.getAbsoluteEncoder().getPosition());
-        //m_pivot.set(motorSpeed);
+        // m_pivot.set(
+        //     c_pivotPID.calculate(Units.m_pivot.getAbsoluteEncoder().getPosition()));
+        // m_pivot.set(c_pivotPID.calculate(
+        //     Units.rotationsToDegrees(pivotEncoder.getPosition().getValueAsDouble())));
+        m_pivot.set(motorSpeed);
 
-        // if (pivotEncoder.getPosition().getValueAsDouble() > States.IntakeStates.MIN.pivotAngle) {
-        //     c_pi
-        // }
 
-        c_pivotPID.setSetpoint(-150, ControlType.kPosition);
-
-        SmartDashboard.putNumber("siga", pivotEncoder.getVelocity().getValueAsDouble());
+        SmartDashboard.putNumber("siga", c_pivotPID.calculate(
+            Units.rotationsToDegrees(pivotEncoder.getPosition().getValueAsDouble())));
 
         setDashboardData();
 
+    }
+
+    public void setSetpoint(double setpoint) {
+        c_pivotPID.setSetpoint(setpoint);
     }
 
     public void setIntakeState(IntakeStates state) {
@@ -126,9 +133,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private void setDashboardData() {
         SmartDashboard.putNumber(getName() + " Motor Speed", pivotSpeed);
-        SmartDashboard.putNumber(getName() + " Pivot Angle", 
-            Utilities.convertYawReadings(
-            Units.rotationsToDegrees(pivotEncoder.getPosition().getValueAsDouble())));
+        SmartDashboard.putNumber(getName() + " Pivot Angle", Units.rotationsToDegrees(pivotEncoder.getAbsolutePosition().getValueAsDouble()));
         SmartDashboard.putNumber(getName() + " Pivot Setpoint", c_pivotPID.getSetpoint());
 
         SmartDashboard.putNumber(getName() + " Intake Speed", m_intake.get());
@@ -136,3 +141,4 @@ public class IntakeSubsystem extends SubsystemBase {
         SmartDashboard.putString(getName() + " State", i_state.toString());
     }
 }
+// //
