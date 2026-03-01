@@ -7,6 +7,7 @@ import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -19,6 +20,8 @@ import frc.lib.util.SparkFlexUtils;
 import frc.lib.util.SparkMaxUtils;
 import frc.lib.util.Utilities;
 import frc.robot.Constants;
+import frc.robot.States;
+import frc.robot.Constants.Intake;
 import frc.robot.States.IntakeStates;
 
 public class IntakeSubsystem extends SubsystemBase {
@@ -52,12 +55,19 @@ public class IntakeSubsystem extends SubsystemBase {
 
         // Optimize BUS usage
         SparkFlexUtils.setSparkFlexBusUsage(m_intake, SparkFlexUtils.Usage.kMinimal, IdleMode.kCoast, false, true);
-        SparkMaxUtils.setSparkMaxBusUsage(m_pivot, SparkMaxUtils.Usage.kAll, IdleMode.kBrake, false, false);
+        SparkMaxUtils.setSparkMaxBusUsage(m_pivot, SparkMaxUtils.Usage.kAll, 
+            IdleMode.kBrake, false, false,
+            0, 0, 0, 0.333);
+
+
+
 
         pivotEncoder = new CANcoder(23);
 
         // Initialize PID controller for pivot
-        c_pivotPID = new PIDController(Constants.Intake.kIntakeP, Constants.Intake.kIntakeI, Constants.Intake.kIntakeD);
+         c_pivotPID = new PIDController(Constants.Intake.kIntakeP, Constants.Intake.kIntakeI, Constants.Intake.kIntakeD);
+
+        m_pivot.getClosedLoopController();
 
         // Start intake in STOP position
         i_state = IntakeStates.STOP;
@@ -78,7 +88,15 @@ public class IntakeSubsystem extends SubsystemBase {
         
         // implement this when desired angle is found 
         //c_pivotPID.calculate(m_pivot.getAbsoluteEncoder().getPosition());
-        m_pivot.set(motorSpeed);
+        //m_pivot.set(motorSpeed);
+
+        // if (pivotEncoder.getPosition().getValueAsDouble() > States.IntakeStates.MIN.pivotAngle) {
+        //     c_pi
+        // }
+
+        c_pivotPID.setSetpoint(-150, ControlType.kPosition);
+
+        SmartDashboard.putNumber("siga", pivotEncoder.getVelocity().getValueAsDouble());
 
         setDashboardData();
 

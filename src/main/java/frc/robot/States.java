@@ -32,8 +32,9 @@ public class States {
         // SETTING THE STATES FOR DIFFERENT DISTANCES
         DISTANCE_0_5M(0,0, 0.5),
         DISTANCE_1M(0,0, 1),
-        DISTANCE_1_5M(0,0, 1.5),
-        DISTANCE_2M(0,0, 2);
+        DISTANCE_1_5M(30, 40, 1.5),
+        DISTANCE_2M(40,40, 2);
+
 
         
         public final double backSpinRPS;
@@ -54,14 +55,13 @@ public class States {
     // Positive for intake speed is intaking, positive for pivot angle is pivoting up
     public enum IntakeStates {
         STOP(0, 0),
-        INTAKE(0.5, -211.5),
+        INTAKE(0.3
+        , 0),
         REVERSE(-0.5,0),
         UP(0,0),
         DOWN(0,0),
-        MAX(1,0),
-        MIN(0,-215),
-        HOME(0,-98),
-        GIGAHOME(0, -179);
+        MAX(1,-94),
+        MIN(0,-215);
 
         public final double intakeSpeed;
         public final double pivotAngle;

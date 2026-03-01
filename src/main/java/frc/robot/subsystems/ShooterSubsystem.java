@@ -26,9 +26,6 @@ import frc.robot.Constants;
 import frc.robot.States.ShooterStates;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 public class ShooterSubsystem extends SubsystemBase {
     // Different motors for each channel on the robot 
@@ -80,9 +77,9 @@ public class ShooterSubsystem extends SubsystemBase {
         m_leftShooter = new TalonFX(Constants.Shooter.kLeftShootingID);
 
         // Configure Kraken RPS PID controllers
-        TalonFxUtils.configureSlot0(m_leftShooter, 0.04, 0, 0, 0, 0.13);
-        TalonFxUtils.configureSlot0(m_middleShooter, 0.04, 0, 0, 0, 0.13);
-        TalonFxUtils.configureSlot0(m_rightShooter, 0.04, 0, 0, 0, 0.13);
+        TalonFxUtils.configureSlot0(m_leftShooter, 0.05, 0, 0, 0, 0.13);
+        TalonFxUtils.configureSlot0(m_middleShooter, 0.05, 0, 0, 0, 0.13);
+        TalonFxUtils.configureSlot0(m_rightShooter, 0.05, 0, 0, 0, 0.13);
 
         // Initialize SparkFlex Motors
         m_backSpin = new SparkFlex(Constants.Shooter.kBackSpinID, MotorType.kBrushless);
@@ -110,6 +107,10 @@ public class ShooterSubsystem extends SubsystemBase {
         if(disable) {
             disableSubsystem();
         }
+
+
+    
+
     }
     @Override
     public void periodic() { 

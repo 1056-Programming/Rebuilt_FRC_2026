@@ -102,6 +102,10 @@ public class RobotContainer {
 
         // driver1.b().onTrue(c_shooterCommand.setShooterState(States.ShooterStates.STOP)); 
         
+        driver1.pov(90).onTrue(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS*0, s_shooter.desiredBackSpinRPS*0)));
+        driver1.pov(90).onTrue(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS, s_shooter.desiredBackSpinRPS)));
+
+
         // Bind Intake Piviot Controls (for determining optimal angle)
         driver1.x().whileTrue(new InstantCommand(() -> s_intake.moveIntake(0.2)));
         driver1.x().onFalse(new InstantCommand(() -> s_intake.moveIntake(0)));
