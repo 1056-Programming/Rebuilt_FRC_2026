@@ -2,6 +2,10 @@ package frc.robot.subsystems;
 
 import java.util.zip.ZipEntry;
 
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.configs.VoltageConfigs;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.RelativeEncoder;
@@ -68,6 +72,8 @@ public class ShooterSubsystem extends SubsystemBase {
                                     "DISTANCE_2M"};
     private double[] stateDistance;
 
+    private TalonFXConfiguration setConfigs;
+
     public ShooterSubsystem() {
         // Initialize Kraken Motors 
         m_rightShooter = new TalonFX(Constants.Shooter.kRightShootingID);
@@ -75,9 +81,9 @@ public class ShooterSubsystem extends SubsystemBase {
         m_leftShooter = new TalonFX(Constants.Shooter.kLeftShootingID);
 
         // Configure Kraken RPS PID controllers
-        TalonFxUtils.configureSlot0(m_leftShooter, 0.05, 0, 0, 0, 0.13);
-        TalonFxUtils.configureSlot0(m_middleShooter, 0.05, 0, 0, 0, 0.13);
-        TalonFxUtils.configureSlot0(m_rightShooter, 0.05, 0, 0, 0, 0.13);
+        TalonFxUtils.configureSlot0(m_leftShooter, 0.045, 0, 0, 0, 0.13);
+        TalonFxUtils.configureSlot0(m_middleShooter, 0.45, 0, 0, 0, 0.13);
+        TalonFxUtils.configureSlot0(m_rightShooter, 0.45, 0, 0, 0, 0.13);
 
         // Initialize SparkFlex Motors
         m_backSpin = new SparkFlex(Constants.Shooter.kBackSpinID, MotorType.kBrushless);
@@ -88,7 +94,7 @@ public class ShooterSubsystem extends SubsystemBase {
         // Optimize CAN BUS usage
         SparkFlexUtils.setSparkFlexBusUsage(m_backSpin, SparkFlexUtils.Usage.kVelocityOnly, IdleMode.kCoast, 
             false, true,
-            0,0,0,0.000149537);
+            0.0001,0,0,0.000149537);
         // Initialize PID Controllers
         c_backSpinPID = m_backSpin.getClosedLoopController();
 
@@ -98,6 +104,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
         desiredShooterRPS = 0;
         desiredBackSpinRPS = 0; 
+
+        // setShooterConfigs(); 
         // Disable Subsystem if set to true 
 
         disable = false; 
@@ -136,20 +144,6 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public double[] checkShooterRange() {
-        // double smallestDif = Math.abs(limelight_distance - stateDistance[0]);
-        // double currentDif; 
-        // int closest = 0; 
-
-        // for (int i=0; i<stateDistance.length; i++) {
-        //     currentDif = Math.abs(limelight_distance - stateDistance[i]);
-
-        //     if (smallestDif < currentDif) {
-        //         smallestDif = currentDif;
-        //         closest = i; 
-        //     }
-        //  }
-
-        //  return stateNames[closest]; 
         
         if (limelight_distance <= 0.25) {
             return new double[] {
@@ -272,6 +266,18 @@ public class ShooterSubsystem extends SubsystemBase {
         m_leftShooter.disable();
         m_backSpin.disable();
     }
+
+    // private void setShooterConfigs() {
+    //     setConfigs = new TalonFXConfiguration(); 
+    //     setConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
+    //     setConfigs.CurrentLimits.SupplyCurrentLimit = 80; 
+    //     setConfigs.OpenLoopRamps.VoltageOpenLoopRampPeriod = 0.25;
+
+    //     m_leftShooter.getConfigurator().apply(setConfigs); 
+    //     m_middleShooter.getConfigurator().apply(setConfigs);
+    //     m_rightShooter.getConfigurator().apply(setConfigs); 
+
+    // }
 
     // Set dashboard data for testing and debugging purposes
     private void setDashboardData() {
