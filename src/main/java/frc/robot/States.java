@@ -30,8 +30,8 @@ public class States {
         VARIABLE_SHOOT(0, 0, 0),
 
         // SETTING THE STATES FOR DIFFERENT DISTANCES
-        DISTANCE_0_5M(0,0, 0.5),
-        DISTANCE_1M(0,0, 1),
+        DISTANCE_0_5M(34,21, 0.5),
+        DISTANCE_1M(32,40, 1),
         DISTANCE_1_5M(30, 40, 1.5),
         DISTANCE_2M(40,40, 2);
 

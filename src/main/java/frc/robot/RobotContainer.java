@@ -96,13 +96,18 @@ public class RobotContainer {
         // driver1.pov(-1).onTrue(c_shooterCommand.setShooterState(States.ShooterStates.STOP));
 
         // Bind shooter controls
-        driver1.y().onTrue(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS+=5, s_shooter.desiredBackSpinRPS)));
+        driver1.y().onTrue(new InstantCommand(() -> s_shooter.setVelocitySetpoints(5, 5)));
         driver1.y().onFalse(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS, s_shooter.desiredBackSpinRPS)));
 
-        driver1.a().onTrue(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS, s_shooter.desiredBackSpinRPS+=5)));
-        driver1.a().onFalse(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS, s_shooter.desiredBackSpinRPS)));
+        // driver1.a().onTrue(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS, s_shooter.desiredBackSpinRPS+=1)));
+        // driver1.a().onFalse(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS, s_shooter.desiredBackSpinRPS)));
+        
+        // driver1.rightTrigger().onTrue(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS-=1, s_shooter.desiredBackSpinRPS)));
+        // driver1.rightTrigger().onFalse(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS, s_shooter.desiredBackSpinRPS)));
 
-        // driver1.b().onTrue(c_shooterCommand.setShooterState(States.ShooterStates.STOP)); 
+
+        // driver1.rightTrigger().onTrue(c_shooterCommand.setShooterState(States.ShooterStates.VARIABLE_SHOOT));
+        // driver1.rightTrigger().onFalse(c_shooterCommand.setShooterState(States.ShooterStates.STOP)); 
         
         driver1.pov(90).onTrue(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS*0, s_shooter.desiredBackSpinRPS*0)));
         driver1.pov(90).onTrue(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS, s_shooter.desiredBackSpinRPS)));

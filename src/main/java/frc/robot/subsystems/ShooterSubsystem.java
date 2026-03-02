@@ -62,13 +62,11 @@ public class ShooterSubsystem extends SubsystemBase {
 
     // Iterator and the HashMap for the checking the distance
     private double limelight_distance; 
-    private String[] stateNames = Arrays.stream(ShooterStates.values())
-                                                .map(ShooterStates::name)
-                                                .toArray(String[]::new);
-    private double[] stateDistance = {ShooterStates.DISTANCE_0_5M.distance,
-                                    ShooterStates.DISTANCE_1M.distance,
-                                    ShooterStates.DISTANCE_1_5M.distance,
-                                    ShooterStates.DISTANCE_2M.distance};
+    private String[] stateNames = {"DISTANCE_0_5M",
+                                    "DISTANCE_1M",
+                                    "DISTANCE_1_5M",
+                                    "DISTANCE_2M"};
+    private double[] stateDistance;
 
     public ShooterSubsystem() {
         // Initialize Kraken Motors 
@@ -100,8 +98,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
         desiredShooterRPS = 0;
         desiredBackSpinRPS = 0; 
-
         // Disable Subsystem if set to true 
+
         disable = false; 
         if(disable) {
             disableSubsystem();
@@ -131,33 +129,83 @@ public class ShooterSubsystem extends SubsystemBase {
         // } else {
         //     applyBackSpinMotorSpeeds(backSpinSpeed);
         // }
+
+        limelight_distance = VisionSubsystem.tag_distance;
+        
         setDashboardData();
     }
 
-    public String checkShooterRange() {
-        double smallestDif = Math.abs(limelight_distance - stateDistance[0]);
-        double currentDif; 
-        int closest = 0; 
+    public double[] checkShooterRange() {
+        // double smallestDif = Math.abs(limelight_distance - stateDistance[0]);
+        // double currentDif; 
+        // int closest = 0; 
 
-        for (int i=0; i<stateDistance.length; i++) {
-            currentDif = Math.abs(limelight_distance - stateDistance[i]);
+        // for (int i=0; i<stateDistance.length; i++) {
+        //     currentDif = Math.abs(limelight_distance - stateDistance[i]);
 
-            if (smallestDif < currentDif) {
-                smallestDif = currentDif;
-                closest = i; 
-            }
-         }
+        //     if (smallestDif < currentDif) {
+        //         smallestDif = currentDif;
+        //         closest = i; 
+        //     }
+        //  }
 
-         return stateNames[closest]; 
+        //  return stateNames[closest]; 
+        
+        if (limelight_distance <= 0.25) {
+            return new double[] {
+                ShooterStates.DISTANCE_0_5M.shootingRPS,
+                ShooterStates.DISTANCE_0_5M.backSpinRPS
+            };
+        } else if (limelight_distance <= 0.5 
+                    && limelight_distance > 0.25) {
+            return new double[] {
+                ShooterStates.DISTANCE_1M.shootingRPS,
+                ShooterStates.DISTANCE_1M.backSpinRPS
+            };
+        } else if (limelight_distance <= 0.75 
+        && limelight_distance > 0.5) {
+            return new double[] {
+                ShooterStates.DISTANCE_1M.shootingRPS,
+                ShooterStates.DISTANCE_1M.backSpinRPS
+            };
+        } else if (limelight_distance <= 1 
+        && limelight_distance > 0.75) {
+            return new double[] {
+                ShooterStates.DISTANCE_1_5M.shootingRPS,
+                ShooterStates.DISTANCE_1_5M.backSpinRPS
+            };
+        } else if (limelight_distance <= 1.25 
+        && limelight_distance > 1) {
+            return new double[] {
+                ShooterStates.DISTANCE_1_5M.shootingRPS,
+                ShooterStates.DISTANCE_1_5M.backSpinRPS
+            };
+        } else if (limelight_distance <= 1.5
+        && limelight_distance > 1.25) {
+            return new double[] {
+                ShooterStates.DISTANCE_2M.shootingRPS,
+                ShooterStates.DISTANCE_2M.backSpinRPS
+            };
+        } else if (limelight_distance <= 1.75
+        && limelight_distance > 1.5) {
+            return new double[] {
+                ShooterStates.DISTANCE_2M.shootingRPS,
+                ShooterStates.DISTANCE_2M.backSpinRPS
+            };
+        } 
+
+        return new double[] {
+            ShooterStates.FORWARD_SHOOT.shootingRPS, 
+            ShooterStates.FORWARD_SHOOT.backSpinRPS
+        };
     }
 
     public void setShooterState(ShooterStates state) {
-        String stateName = checkShooterRange();
+        stateDistance = checkShooterRange();
         s_state = state; 
         if(state.equals(ShooterStates.VARIABLE_SHOOT)) {
             // TODO:
-            setVelocitySetpoints(ShooterStates.valueOf(stateName).shootingRPS,
-                                ShooterStates.valueOf(stateName).backSpinRPS);
+            setVelocitySetpoints(stateDistance[0],stateDistance[1]);
 
             return;
         } 
@@ -245,5 +293,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
         // Current Shooter State
         SmartDashboard.putString(getName() + " Shooter State", s_state.toString());
+                                                                                         
+
     }
 }
