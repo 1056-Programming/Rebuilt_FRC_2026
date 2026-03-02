@@ -15,6 +15,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.internal.DriverStationModeThread;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -42,6 +43,8 @@ public class ShooterSubsystem extends SubsystemBase {
     // PID controllers to maintain backspin RPS
     private final SparkClosedLoopController c_backSpinPID;
 
+    private final CommandSwerveDrivetrain drivetrain; 
+
     // Enable or disable subsystem
     private final boolean disable; 
 
@@ -68,7 +71,7 @@ public class ShooterSubsystem extends SubsystemBase {
                                     "DISTANCE_2M"};
     private double[] stateDistance;
 
-    public ShooterSubsystem() {
+    public ShooterSubsystem(CommandSwerveDrivetrain drivetrain) {
         // Initialize Kraken Motors 
         m_rightShooter = new TalonFX(Constants.Shooter.kRightShootingID);
         m_middleShooter = new TalonFX(Constants.Shooter.kMiddleShootingID);
@@ -84,6 +87,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
         // Get encoders for backspin motors
         e_backSpin = m_backSpin.getEncoder();
+
+        this.drivetrain = drivetrain;
 
         // Optimize CAN BUS usage
         SparkFlexUtils.setSparkFlexBusUsage(m_backSpin, SparkFlexUtils.Usage.kVelocityOnly, IdleMode.kCoast, 
@@ -201,12 +206,15 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void setShooterState(ShooterStates state) {
-        stateDistance = checkShooterRange();
+        //stateDistance = checkShooterRange();
         s_state = state; 
         if(state.equals(ShooterStates.VARIABLE_SHOOT)) {
             // TODO:
-            setVelocitySetpoints(stateDistance[0],stateDistance[1]);
-
+           // setVelocitySetpoints(stateDistance[0],stateDistance[1]);
+            var sigma = drivetrain.getState().Pose;
+            var distance = Utilities.calculateDistanceToCenterPiece(sigma.getX(), sigma.getY());
+            //var distance = limelight_distance;
+            setVelocitySetpoints(Utilities.calculateShooterSpeed(distance), Utilities.calculcateBackSpinSpeed(distance));
             return;
         } 
 

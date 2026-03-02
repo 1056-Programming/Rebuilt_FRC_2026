@@ -55,7 +55,7 @@ public class Utilities {
     }
 
     public static double calculateDistanceToCenterPiece(double x, double y) {
-        return Math.pow((Math.pow(x,2) + Math.pow(y,2)), 0.5);
+        return Math.pow((Math.pow(4.6 - x,2) + Math.pow(4- y,2)), 0.5);
     }
 
     public static double calculcateBackSpinSpeed(double distance) {

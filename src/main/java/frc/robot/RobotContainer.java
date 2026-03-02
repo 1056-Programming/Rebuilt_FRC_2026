@@ -66,7 +66,7 @@ public class RobotContainer {
 
     //** Initialize Subsystems **//
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
-    private final ShooterSubsystem s_shooter = new ShooterSubsystem();
+    private final ShooterSubsystem s_shooter = new ShooterSubsystem(drivetrain);
     private final IndexSubsystem s_indexor = new IndexSubsystem();
     private final IntakeSubsystem s_intake = new IntakeSubsystem();
     private final VisionSubsystem s_VisionSubsystem = new VisionSubsystem(drivetrain,"limelight-hotrock");
@@ -92,7 +92,7 @@ public class RobotContainer {
         // driver1.pov(0).onTrue(c_shooterCommand.setShooterState(States.ShooterStates.FORWARD_SHOOT));
         // driver1.pov(90).onTrue(c_shooterCommand.setShooterState(States.ShooterStates.MAX));
         // driver1.pov(180).onTrue(c_shooterCommand.setShooterState(States.ShooterStates.TEST1));
-        // driver1.pov(270).onTrue(c_shooterCommand.setShooterState(States.ShooterStates.VARIABLE_SHOOT));
+        driver1.pov(270).onTrue(c_shooterCommand.setShooterState(States.ShooterStates.VARIABLE_SHOOT));
         // driver1.pov(-1).onTrue(c_shooterCommand.setShooterState(States.ShooterStates.STOP));
 
         // Bind shooter controls
