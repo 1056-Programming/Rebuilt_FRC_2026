@@ -37,6 +37,7 @@ import frc.robot.States.ShooterStates;
 import frc.robot.commands.IndexCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.SwerveTeleop;
+import frc.robot.commands.YawTeleop;
 import frc.robot.commands.IntakeCommand;
 
 import frc.robot.generated.TunerConstants;
@@ -75,6 +76,7 @@ public class RobotContainer {
     private final IndexCommand c_indexCommand = new IndexCommand(s_indexor);
     private final IntakeCommand c_intakeCommand = new IntakeCommand(s_intake);
     private final SwerveTeleop c_teleop = new SwerveTeleop(drivetrain, driver0);   
+    private final YawTeleop c_yawTeleop = new YawTeleop(drivetrain, driver0);
     private SendableChooser<Command> m_chooser;
 
 

@@ -44,10 +44,12 @@ public class SwerveTeleop extends Command {
 
     private double xInput, yInput, rInput; 
     private double xSpeed, ySpeed, rSpeed;
+    PIDController pid = new PIDController(0.07, 0, 0);  // Rotation
 
     public SwerveTeleop(CommandSwerveDrivetrain drivetrain, CommandXboxController controller) {
         // Initialize drivetrain and controller
         this.drivetrain = drivetrain; 
+        drivetrain.getPigeon2().setYaw(0);
         this.controller = controller;
 
         // Intialize controller inputs to 0
@@ -55,10 +57,13 @@ public class SwerveTeleop extends Command {
         yInput = 0;
         rInput = 0; 
 
+
         // Intiatlize swerve speeds to 0 
         xSpeed = 0;
         ySpeed = 0;
         rSpeed = 0;
+
+        pid.enableContinuousInput(0, 360);
 
         c_yawPID = new PIDController(0,0,0);
 
@@ -71,21 +76,30 @@ public class SwerveTeleop extends Command {
         // Set contoller speeds 
         xInput = controller.getLeftY();
         yInput = controller.getLeftX();
-        rInput = -controller.getRightX();
+        //rInput = -controller.getRightX();
+        var sigma = drivetrain.getState().Pose;
+        
+        pid.setSetpoint(Utilities.calculateYawToCenterPiece(sigma.getX(), sigma.getY()));
 
         setPolynomialAcceleration();
 
+        // drivetrain.applyRequest(() -> drive.withVelocityX(ySpeed)
+        //     .withVelocityY(xSpeed)
+        //     .withRotationalRate(pid.calculate(Utilities.processYaw(drivetrain.getPigeon2().getYaw().getValueAsDouble()))))
+        //     .execute();
+
         drivetrain.applyRequest(() -> drive.withVelocityX(ySpeed)
             .withVelocityY(xSpeed)
-            .withRotationalRate(rSpeed)).execute();
+            .withRotationalRate(rSpeed))
+            .execute();
 
         setDashboardData();
     }
     
     // Apply a polynomial acceleration curve to the joystick inputs for smoother control
     private void setPolynomialAcceleration() {
-        xSpeed = Utilities.polynomialAccleration(yInput) * MaxSpeed * 0.3;
-        ySpeed = Utilities.polynomialAccleration(xInput) * MaxSpeed * 0.3;
+        xSpeed = Utilities.polynomialAccleration(yInput) * MaxSpeed * 0.7;
+        ySpeed = Utilities.polynomialAccleration(xInput) * MaxSpeed * 0.7;
         rSpeed = Utilities.polynomialAccleration(rInput) * MaxAngularRate * 0.7 ; 
     }
 
