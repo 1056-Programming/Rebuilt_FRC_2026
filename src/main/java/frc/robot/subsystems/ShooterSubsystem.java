@@ -62,9 +62,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
     // Iterator and the HashMap for the checking the distance
     private double limelight_distance; 
-    private String[] stateNames = Arrays.stream(ShooterStates.values())
-                                                .map(ShooterStates::name)
-                                                .toArray(String[]::new);
+    private String[] stateNames = {"DISTANCE_0_5M",
+                                    "DISTANCE_1M",
+                                    "DISTANCE_1_5M",
+                                    "DISTANCE_2M"};
     private double[] stateDistance = {ShooterStates.DISTANCE_0_5M.distance,
                                     ShooterStates.DISTANCE_1M.distance,
                                     ShooterStates.DISTANCE_1_5M.distance,
@@ -102,6 +103,7 @@ public class ShooterSubsystem extends SubsystemBase {
         desiredBackSpinRPS = 0; 
 
         // Disable Subsystem if set to true 
+
         disable = false; 
         if(disable) {
             disableSubsystem();
