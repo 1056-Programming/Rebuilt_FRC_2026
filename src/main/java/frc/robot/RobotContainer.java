@@ -88,7 +88,9 @@ public class RobotContainer {
     }
 
     private void configureBindings() {     
-        
+        setIntakeBindings();
+        setIndexorBindings();
+        setShooterBindings();
     }
 
     public void setIntakeBindings() {

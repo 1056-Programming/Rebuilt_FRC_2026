@@ -225,13 +225,31 @@ public class ShooterSubsystem extends SubsystemBase {
                 ShooterStates.DISTANCE_0_75M.backSpinRPS
             };
 
+        } else if (distance <= 0.875) {
+            return new double[] {
+                ShooterStates.DISTANCE_0_75M.shootingRPS,
+                ShooterStates.DISTANCE_0_75M.backSpinRPS
+            };
+
         } else if (distance <= 1.0) {
             return new double[] {
                 ShooterStates.DISTANCE_1M.shootingRPS,
                 ShooterStates.DISTANCE_1M.backSpinRPS
             };
 
-        } else if (distance <= 1.25) {
+        } else if (distance <= 1.125) {
+            return new double[] {
+                ShooterStates.DISTANCE_1M.shootingRPS,
+                ShooterStates.DISTANCE_1M.backSpinRPS
+            };
+
+        }else if (distance <= 1.25) {
+            return new double[] {
+                ShooterStates.DISTANCE_1_25M.shootingRPS,
+                ShooterStates.DISTANCE_1_25M.backSpinRPS
+            };
+
+        }else if (distance <= 1.375) {
             return new double[] {
                 ShooterStates.DISTANCE_1_25M.shootingRPS,
                 ShooterStates.DISTANCE_1_25M.backSpinRPS
@@ -243,25 +261,49 @@ public class ShooterSubsystem extends SubsystemBase {
                 ShooterStates.DISTANCE_1_5M.backSpinRPS
             };
 
+        } else if (distance <= 1.625) {
+            return new double[] {
+                ShooterStates.DISTANCE_1_5M.shootingRPS,
+                ShooterStates.DISTANCE_1_5M.backSpinRPS
+            };
+
         } else if (distance <= 1.75) {
+           return new double[] {
+                ShooterStates.DISTANCE_1_75M.shootingRPS,
+                ShooterStates.DISTANCE_1_75M.backSpinRPS
+            };
+
+        } else if (distance <= 1.875) {
             return new double[] {
                 ShooterStates.DISTANCE_1_75M.shootingRPS,
                 ShooterStates.DISTANCE_1_75M.backSpinRPS
             };
 
-        } else if (distance <= 2.0) {
+        }else if (distance <= 2.0) {
             return new double[] {
                 ShooterStates.DISTANCE_2M.shootingRPS,
                 ShooterStates.DISTANCE_2M.backSpinRPS
             };
 
-        } else if (distance <= 2.25) {
+        } else if (distance <= 2.125) {
+            return new double[] {
+                ShooterStates.DISTANCE_2M.shootingRPS,
+                ShooterStates.DISTANCE_2M.backSpinRPS
+            };
+
+        }else if (distance <= 2.25) {
             return new double[] {
                 ShooterStates.DISTANCE_2_25M.shootingRPS,
                 ShooterStates.DISTANCE_2_25M.backSpinRPS
             };
 
-        } else if (distance <= 2.5) {
+        } else if (distance <= 2.375) {
+            return new double[] {
+                ShooterStates.DISTANCE_2_25M.shootingRPS,
+                ShooterStates.DISTANCE_2_25M.backSpinRPS
+            };
+
+        }else if (distance <= 2.5) {
             return new double[] {
                 ShooterStates.DISTANCE_2_5M.shootingRPS,
                 ShooterStates.DISTANCE_2_5M.backSpinRPS
