@@ -54,7 +54,7 @@ public class VisionSubsystem extends SubsystemBase {
             || getTagDistance() > Constants.Vision.distanceThreshold) {
             tag_distance = 0;
             return;
-        } else if (s_poseEstimate.tagCount == 1) {
+        } else if (s_poseEstimate.tagCount > 0) {
             robotYaw = Utilities.convertYawReadings(drivetrain.getPigeon2().getYaw().getValueAsDouble());
             tag_distance = s_poseEstimate.rawFiducials[0].distToCamera;
 
