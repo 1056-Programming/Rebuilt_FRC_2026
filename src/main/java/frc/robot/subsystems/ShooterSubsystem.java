@@ -97,8 +97,9 @@ public class ShooterSubsystem extends SubsystemBase {
         // Initialize SparkFlex Motors and optimize CAN BUS usage
         m_backSpin = new SparkFlex(Constants.Shooter.kBackSpinID, MotorType.kBrushless);
         SparkFlexUtils.setSparkFlexBusUsage(m_backSpin, SparkFlexUtils.Usage.kVelocityOnly, IdleMode.kCoast, 
-            false, true,
-            0.0001,0,0,0.000149537);
+            Constants.Shooter.kBackSpinEnable, Constants.Shooter.kBackSpinInvert,
+            Constants.Shooter.kBackSpinP,Constants.Shooter.kBackSpinI, 
+            Constants.Shooter.kBackSpinD, Constants.Shooter.kBackSpinV);
 
         // Get encoders for backspin motors
         e_backSpin = m_backSpin.getEncoder();

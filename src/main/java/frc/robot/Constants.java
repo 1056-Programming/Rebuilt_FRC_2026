@@ -25,10 +25,15 @@ public class Constants {
         public static final double kShooterS = 0;
         public static final double kShooterV = 0.13;
 
-        // PID constants for backspin motort
-        public static final double BackSpinKP = 0.005;
-        public static final double BackSpinKI = 0;
-        public static final double BackSpinKD = 0;
+        // PID constants for backspin motors
+        public static final double kBackSpinP = 0.0001;
+        public static final double kBackSpinI = 0;
+        public static final double kBackSpinD = 0;
+        public static final double kBackSpinV = 0.000149537;
+        
+        // Configuration for backspin motors
+        public static final boolean kBackSpinEnable = false;
+        public static final boolean kBackSpinInvert = true;
 
         // IDS
         public static final int[] validIDs = {9,10,26,25};
@@ -46,6 +51,9 @@ public class Constants {
 
         // REV SparkMax
         public static final int kPivotID = 31;
+
+        // CTRE Through Bore Encoder 
+        public static final int kEncoderID = 23;
 
         // PID values
         public static final double kIntakeP = 0.005;

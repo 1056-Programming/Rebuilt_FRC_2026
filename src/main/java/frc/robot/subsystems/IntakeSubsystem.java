@@ -1,31 +1,21 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.Utils;
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
-import com.pathplanner.lib.events.CancelCommandEvent;
-import com.revrobotics.AbsoluteEncoder;
-import com.revrobotics.spark.SparkAbsoluteEncoder;
-import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.Unit;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.lib.util.SparkFlexUtils;
 import frc.lib.util.SparkMaxUtils;
-import frc.lib.util.Utilities;
 import frc.robot.Constants;
-import frc.robot.States;
-import frc.robot.Constants.Intake;
 import frc.robot.States.IntakeStates;
 
 public class IntakeSubsystem extends SubsystemBase {
@@ -52,15 +42,15 @@ public class IntakeSubsystem extends SubsystemBase {
     public IntakeSubsystem() {
         // Initialize Spark Flex, Spark Max motors, and Throguh Bore Cancoder
         m_intake = new SparkFlex(Constants.Intake.kIntakeID, MotorType.kBrushless);
-        m_pivot = new SparkMax(31, MotorType.kBrushless);
-        pivotEncoder = new CANcoder(23);
+        m_pivot = new SparkMax(Constants.Intake.kPivotID, MotorType.kBrushless);
+        pivotEncoder = new CANcoder(Constants.Intake.kEncoderID);
 
         // Optimize BUS usage
         SparkFlexUtils.setSparkFlexBusUsage(m_intake, SparkFlexUtils.Usage.kMinimal, IdleMode.kCoast, false, true);
         SparkMaxUtils.setSparkMaxBusUsage(m_pivot, SparkMaxUtils.Usage.kAll, IdleMode.kBrake, false, false);
 
         // Initialize PID controller for pivot
-        c_pivotPID = new PIDController(0.078,0,0);
+        c_pivotPID = new PIDController(Constants.Intake.kIntakeP, Constants.Intake.kIntakeI, Constants.Intake.kIntakeD);
 
         // Start intake in STOP position
         i_state = IntakeStates.STOP;
