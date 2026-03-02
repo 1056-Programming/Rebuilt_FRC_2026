@@ -52,6 +52,9 @@ public class Constants {
     }
 
     public class Vision {
+        public static final String leftLimelightName = "";
+        public static final String rightLimelightName = ""; 
+
         // Vision threshold: 
         public static final double ambiguityThreshold = 0.5;
 

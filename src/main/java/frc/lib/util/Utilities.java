@@ -1,5 +1,10 @@
 package frc.lib.util;
 
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Unit;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+
 public class Utilities {
     public static double polynomialAccleration(double x) {
         return Math.pow(x,3) * 0.795903 + x * 0.203938;
@@ -39,5 +44,25 @@ public class Utilities {
 
     public static double rpmToRps(double rpm) {
         return rpm / 60;
+    }
+
+    public static double calculateYawToCenterPiece(double x, double y) {
+      //  if(DriverStation.getAlliance().get().equals(Alliance.Blue)) {
+            var yaw = Math.atan((4 - y)/(4.6 - x));
+            return Units.radiansToDegrees(yaw);
+        // }
+        // return 0; 
+    }
+
+    public static double calculateDistanceToCenterPiece(double x, double y) {
+        return Math.pow((Math.pow(x,2) + Math.pow(y,2)), 0.5);
+    }
+
+    public static double calculcateBackSpinSpeed(double distance) {
+        return 16 * Math.pow(distance, 3) - 48 * Math.pow(distance, 2) + 40 * distance + 24;
+    }
+
+    public static double calculateShooterSpeed(double distance) {
+        return 40 / (1 + Math.pow(Math.E, -(41.11991 * distance - 20.45987)));
     }
 }
