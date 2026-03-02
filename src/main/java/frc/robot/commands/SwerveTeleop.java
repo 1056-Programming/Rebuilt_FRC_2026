@@ -7,13 +7,8 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 import java.util.ResourceBundle.Control;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
-import com.fasterxml.jackson.databind.util.LRUMap;
-import com.pathplanner.lib.util.DriveFeedforwards;
-import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -28,13 +23,10 @@ public class SwerveTeleop extends Command {
     private final CommandSwerveDrivetrain drivetrain;
     private final CommandXboxController controller;
 
-    // Set max speeds for swerve driving
+    // Set max speeds for swerve driving and deaband
     private final double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
     private final double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond);
-    private final double deadband = 0.1;
-
-    // PID for auto tag yawing
-    private final PIDController c_yawPID; 
+    private final double deadband = Constants.Swerve.kSwerveDeadband;
 
     // Setting up bindings for necessary control of the swerve drive platform 
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -42,14 +34,13 @@ public class SwerveTeleop extends Command {
             .withRotationalDeadband(MaxAngularRate * deadband) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
 
-    private double xInput, yInput, rInput; 
+    // Store inputs and speeds
+    private double xInput, yInput, rInput;   
     private double xSpeed, ySpeed, rSpeed;
-    PIDController pid = new PIDController(0.07, 0, 0);  // Rotation
 
     public SwerveTeleop(CommandSwerveDrivetrain drivetrain, CommandXboxController controller) {
         // Initialize drivetrain and controller
         this.drivetrain = drivetrain; 
-        drivetrain.getPigeon2().setYaw(0);
         this.controller = controller;
 
         // Intialize controller inputs to 0
@@ -57,15 +48,10 @@ public class SwerveTeleop extends Command {
         yInput = 0;
         rInput = 0; 
 
-
         // Intiatlize swerve speeds to 0 
         xSpeed = 0;
         ySpeed = 0;
         rSpeed = 0;
-
-        pid.enableContinuousInput(0, 360);
-
-        c_yawPID = new PIDController(0,0,0);
 
         // Set requiremnts for the drivetrain subsystem to ensure no conflicts with other commands
         addRequirements(drivetrain);
@@ -76,23 +62,18 @@ public class SwerveTeleop extends Command {
         // Set contoller speeds 
         xInput = controller.getLeftY();
         yInput = controller.getLeftX();
-        //rInput = -controller.getRightX();
-        var sigma = drivetrain.getState().Pose;
-        
-        pid.setSetpoint(Utilities.calculateYawToCenterPiece(sigma.getX(), sigma.getY()));
+        rInput = -controller.getRightX();
 
+        // Apply polynomial acceleration
         setPolynomialAcceleration();
 
-        // drivetrain.applyRequest(() -> drive.withVelocityX(ySpeed)
-        //     .withVelocityY(xSpeed)
-        //     .withRotationalRate(pid.calculate(Utilities.processYaw(drivetrain.getPigeon2().getYaw().getValueAsDouble()))))
-        //     .execute();
-
+        // Apply speeds to the swerve drive
         drivetrain.applyRequest(() -> drive.withVelocityX(ySpeed)
             .withVelocityY(xSpeed)
             .withRotationalRate(rSpeed))
             .execute();
 
+        // Display the dashboard data
         setDashboardData();
     }
     
@@ -103,16 +84,22 @@ public class SwerveTeleop extends Command {
         rSpeed = Utilities.polynomialAccleration(rInput) * MaxAngularRate * 0.7 ; 
     }
 
-    private void autoYaw(boolean Enable) {
-        c_yawPID.setSetpoint(0);
-    }
-
+    // Display important information for debugging
     private void setDashboardData() {
+        // Display current odometry positioning of robot
         SmartDashboard.putNumber(drivetrain.getName() + " pidgeon 2", Utilities.processYaw(drivetrain.getPigeon2().getYaw().getValueAsDouble()));
         SmartDashboard.putNumber(drivetrain.getName() + " state x pos", drivetrain.getState().Pose.getMeasureX().baseUnitMagnitude());
         SmartDashboard.putNumber(drivetrain.getName() + " state y pos", drivetrain.getState().Pose.getMeasureY().baseUnitMagnitude());
         SmartDashboard.putNumber(drivetrain.getName() + " state rot pos", drivetrain.getState().Pose.getRotation().getDegrees());
-        SmartDashboard.putNumber(drivetrain.getName() + " yaw diff", 
-            drivetrain.getPigeon2().getYaw().getValueAsDouble() - Utilities.processYaw(drivetrain.getState().Pose.getRotation().getDegrees()));
+        
+         // Controller Inputs
+        SmartDashboard.putNumber(drivetrain.getName() + "xInput", xInput);
+        SmartDashboard.putNumber(drivetrain.getName() + "yInput", yInput);
+        SmartDashboard.putNumber(drivetrain.getName() + "rInput", rInput);
+
+        // Calculated Speeds
+        SmartDashboard.putNumber(drivetrain.getName() + "xSpeed", xSpeed);
+        SmartDashboard.putNumber(drivetrain.getName() + "ySpeed", ySpeed);
+        SmartDashboard.putNumber(drivetrain.getName() + "rSpeed", rSpeed);
     }
 }

@@ -34,10 +34,6 @@ public class Utilities {
 
     }
 
-    public static double clampTalonVoltage(double voltage) {
-        return Math.min(-1, Math.max(1, voltage));
-    }
-
     public static double rpsToRpm(double rps) {
         return rps * 60;
     }
@@ -58,11 +54,48 @@ public class Utilities {
         return Math.pow((Math.pow(4.6 - x,2) + Math.pow(4- y,2)), 0.5);
     }
 
-    public static double calculcateBackSpinSpeed(double distance) {
-        return 16 * Math.pow(distance, 3) - 48 * Math.pow(distance, 2) + 40 * distance + 24;
+
+    public static double calculcateSinsoidalBackSpinSpeed(double distance) {
+        return 4.22357 * Math.sin(1.03079 * distance - 2.76381) + 4.08863;
     }
+
+    public static double calculateLogisticBackSpinSpeed(double distance) {
+        return 6.52329/(1+ Math.pow(Math.E, -(3.08924 * distance - 7.65526)));
+    }
+
+    public static double calculateQuadraticBackSpinSpeed(double distance) {
+        return 1.35152 * Math.pow(distance, 2) - 2.58305 * distance + 1.12609;
+    }
+
+    public static double calculateCubicBackSpinSpeed(double distance) {
+        return -0.488578 * Math.pow(distance, 3) + 4.22318 * Math.pow(distance, 2) - 7.76186 * distance;
+    }
+
+    public static double calculcateQuarticBackSpinSpeed(double distance) {
+        return -0.428904 * Math.pow(distance, 4) + 2.87266 * Math.pow(distance, 3) - 5.10529 * Math.pow(distance, 2) + 2.98684 * distance - 0.36699;
+    }
+
+
+
+    public static double calculateLogisticShooterSpeed(double distance) {
+        return (5.52156 * Math.pow(10,53))/(1 + Math.pow(Math.E, -(0.113506 * distance - 120.20819)));
+    }
+
+    public static double calculateQuadraticShooterSpeed(double distance) {
+        return Math.pow(distance, 2) * 0.883916 + 1.5429 * distance + 36.15291; 
+    }
+
+    public static double calculateLinearShooterSpeed(double distance) {
+        return 4.78545 * distance + 33.73161;
+    }
+
+    public static double calculateQuarticShooterSpeed(double distance) {
+        return 0.656412 * Math.pow(distance, 4) - 6.39979 * Math.pow(distance, 3) + 21.82393 * Math.pow(distance, 2) - 25.12035 * distance + 46.85814;
+    }
+
 
     public static double calculateShooterSpeed(double distance) {
         return 40 / (1 + Math.pow(Math.E, -(41.11991 * distance - 20.45987)));
     }
+
 }
