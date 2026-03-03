@@ -85,12 +85,28 @@ public class RobotContainer {
         configureBindings();
         setDriverBindings();
         configureAuto();
+        testBindings();
     }
 
     private void configureBindings() {     
-        setIntakeBindings();
+        // setIntakeBindings();
         setIndexorBindings();
-        setShooterBindings();
+        // setShooterBindings();
+    
+    }
+
+    public void testBindings() {
+        driver1.y().onTrue(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS+=5, s_shooter.desiredBackSpinRPS)));
+        driver1.y().onFalse(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS, s_shooter.desiredBackSpinRPS)));
+
+        driver1.a().onTrue(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS, s_shooter.desiredBackSpinRPS+=5)));
+        driver1.a().onFalse(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS, s_shooter.desiredBackSpinRPS)));
+        
+        driver1.rightTrigger().onTrue(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS-=1, s_shooter.desiredBackSpinRPS)));
+        driver1.rightTrigger().onFalse(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS, s_shooter.desiredBackSpinRPS)));
+
+        driver1.x().onTrue(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS, s_shooter.desiredBackSpinRPS-=0.2)));
+        driver1.x().onFalse(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS, s_shooter.desiredBackSpinRPS)));
     }
 
     public void setIntakeBindings() {

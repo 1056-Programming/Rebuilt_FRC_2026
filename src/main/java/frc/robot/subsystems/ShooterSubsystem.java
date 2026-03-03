@@ -319,7 +319,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     // Set the desired setpoints for all motors 
     // Will continue to move after this
-    private void setVelocitySetpoints(double desiredShooterRPS, double desiredBackSpinRPS) {
+    public void setVelocitySetpoints(double desiredShooterRPS, double desiredBackSpinRPS) {
         this.desiredShooterRPS = desiredShooterRPS; 
         this.desiredBackSpinRPS = desiredBackSpinRPS; 
 
