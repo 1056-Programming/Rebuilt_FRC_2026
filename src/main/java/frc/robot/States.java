@@ -1,12 +1,16 @@
 package frc.robot;
 
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Unit;
+
 public class States {
     // Indexer states with corresponding indexer and conveyor speeds
     // Both are in motor speed range of -1 to 1
     // Positive in Index in 
     public enum IndexStates {
         STOP(0, 0),
-        INDEX(0.8, 0.25),
+        INDEX(0.25
+        , 0.25),
         REVERSE(-1.0, -1.0);
 
         public final double indexerSpeed;
@@ -40,7 +44,13 @@ public class States {
         DISTANCE_1_75M(2.7, 46.4, 1.75),
         DISTANCE_2M(3.7, 45.6, 2),
         DISTANCE_2_25M(4.7, 46.7, 2.25),
-        DISTANCE_2_5M(5.8, 49.2, 2.5);
+        DISTANCE_2_5M(5.8, 49.2, 2.5),
+        IN120(62.5,30,Units.inchesToMeters(120)),
+        TEST(32, 45,Units.inchesToMeters(89.5)),
+        TEST1(22.5,37.5, Units.inchesToMeters(60)),
+        TEST2(25, 35, Units.inchesToMeters(45)),
+        TEST3(25, 40, Units.inchesToMeters(75)),
+        TEST4(57.5, 27, Units.inchesToMeters(100));
         
         public final double backSpinRPS;
         public final double shootingRPS;
@@ -61,7 +71,7 @@ public class States {
         STOP(0, -135),
 
         // Set the speed of the intak-ing motor and the position of piviot 
-        INTAKE(0.3, -202),
+        INTAKE(0.3, -210),
         OUTAKE(-0.5,-135),
 
         // Set the home values for piviot 

@@ -18,6 +18,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.internal.DriverStationModeThread;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -118,9 +119,13 @@ public class ShooterSubsystem extends SubsystemBase {
         setShooterState(s_state);
 
         desiredShooterRPS = 0;
-        desiredBackSpinRPS = 0; 
+        desiredBackSpinRPS = 0;
+        
+        setConfigs = new TalonFXConfiguration(); 
 
-        setShooterConfigs(100); 
+        // setShooterConfigs(100); 
+
+
 
         // Disable Subsystem if set to true 
         disable = false; 
@@ -139,12 +144,14 @@ public class ShooterSubsystem extends SubsystemBase {
 
         if(state.equals(ShooterStates.VARIABLE_SHOOT)) {
             // TODO: 
-            distance = VisionSubsystem.tag_distance;
-            //distance = Utilities.calculateDistanceToCenterPiece(swerveStateXSupplier.get(), swerveStateYSupplier.get());
+            //distance = Units.metersToInches(VisionSubsystem.tag_distance);
 
-            checkShooterRange(distance);
-            //calculateMotorSpeeds(distance);
 
+           distance = Utilities.calculateDistanceToCenterPiece(swerveStateXSupplier.get(), swerveStateYSupplier.get());
+           distance = Units.metersToInches(distance) + 13; 
+            //checkShooterRange(distance)
+            var sigma = calculateMotorSpeeds(distance);
+            setVelocitySetpoints(sigma[0], sigma[1]);
             return;
         } 
 
@@ -161,6 +168,7 @@ public class ShooterSubsystem extends SubsystemBase {
         // Shooter Equations
         // Logistic Shooter
         // speeds[0] = Utilities.calculateLogisticShooterSpeed(distance);
+        speeds[0] = Utilities.calculateCubicShooterSpeed(distance); 
 
         // Quadratic Shooter
         // speeds[0] = Utilities.calculateQuadraticShooterSpeed(distance);
@@ -182,7 +190,7 @@ public class ShooterSubsystem extends SubsystemBase {
         // speeds[1] = Utilities.calculateQuadraticBackSpinSpeed(distance);
 
         // Cubic Backspin
-        // speeds[1] = Utilities.calculateCubicBackSpinSpeed(distance);
+        speeds[1] = Utilities.calculateCubicBackSpinSpeed(distance);
         
         // Quartic Backspin
         // speeds[1] = Utilities.calculcateQuarticBackSpinSpeed(distance);
@@ -347,7 +355,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
     // Set the max voltage output for the shooter motors (USE WHEN HIGH POWER CONSUMPTION FROM SHOOTERS)
     private void setShooterConfigs(double voltageLimit) {
-        setConfigs = new TalonFXConfiguration(); 
         setConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
         setConfigs.CurrentLimits.SupplyCurrentLimit = voltageLimit; 
         setConfigs.OpenLoopRamps.VoltageOpenLoopRampPeriod = 0.25;
@@ -370,6 +377,8 @@ public class ShooterSubsystem extends SubsystemBase {
         SmartDashboard.putNumber(getName() + " Middle Shooter RPS", m_middleShooter.getVelocity().getValueAsDouble());
         SmartDashboard.putNumber(getName() + " Left Shooter RPS", m_leftShooter.getVelocity().getValueAsDouble());
         SmartDashboard.putNumber(getName() + " Back Spin RPS", getBackSpinRPS());
+                SmartDashboard.putNumber(getName() + " Distance", distance);
+
 
         // PID Setpoint Values
         SmartDashboard.putNumber(getName() + " shooter PID setpoints", this.desiredShooterRPS);

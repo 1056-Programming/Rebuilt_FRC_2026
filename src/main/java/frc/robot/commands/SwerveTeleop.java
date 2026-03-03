@@ -33,8 +33,6 @@ public class SwerveTeleop extends Command {
     private final double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond);
     private final double deadband = Constants.Swerve.kSwerveDeadband;
 
-    private final PIDController c_yawPID; 
-
     // Setting up bindings for necessary control of the swerve drive platform 
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
             .withDeadband(MaxSpeed * deadband) // Add a 10% deadband
@@ -60,8 +58,6 @@ public class SwerveTeleop extends Command {
         ySpeed = 0;
         rSpeed = 0;
 
-        c_yawPID = new PIDController(0, 0, 0);
-
         // Set requiremnts for the drivetrain subsystem to ensure no conflicts with other commands
         addRequirements(drivetrain);
     }
@@ -75,10 +71,7 @@ public class SwerveTeleop extends Command {
 
         // Apply polynomial acceleration
         setPolynomialAcceleration();
-        phatSpeed(); // Apply slew rate limiting to the speeds
-        drivetrain.applyRequest(() -> drive.withVelocityX(ySpeed)
-            .withVelocityY(xSpeed)
-            .withRotationalRate(rSpeed)).execute();
+        //phatSpeed(); // Apply slew rate limiting to the speeds
         // Apply speeds to the swerve drive
         drivetrain.applyRequest(() -> drive.withVelocityX(ySpeed)
             .withVelocityY(xSpeed)
@@ -94,9 +87,6 @@ public class SwerveTeleop extends Command {
         xSpeed = Utilities.polynomialAccleration(yInput) * MaxSpeed * 0.5;
         ySpeed = Utilities.polynomialAccleration(xInput) * MaxSpeed * 0.5;
         rSpeed = Utilities.polynomialAccleration(rInput) * MaxAngularRate * 0.5; 
-        xSpeed = Utilities.polynomialAccleration(yInput) * MaxSpeed * 0.7;
-        ySpeed = Utilities.polynomialAccleration(xInput) * MaxSpeed * 0.7;
-        rSpeed = Utilities.polynomialAccleration(rInput) * MaxAngularRate * 0.7 ; 
     }
     
     // Limit the rate of change of the xSpeed to 0.8 m/s^2
@@ -110,10 +100,7 @@ public class SwerveTeleop extends Command {
         ySpeed = yLimiter.calculate(ySpeed);
         rSpeed = rLimiter.calculate(rSpeed);
     }
-    private void autoYaw(boolean Enable) {
-
-        c_yawPID.setSetpoint(0);
-    }
+ 
     // Display important information for debugging
     private void setDashboardData() {
         // Display current odometry positioning of robot
