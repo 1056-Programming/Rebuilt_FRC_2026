@@ -64,7 +64,8 @@ public class RobotContainer {
 
     //** Initialize Subsystems **//
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
-    private final ShooterSubsystem s_shooter = new ShooterSubsystem(() -> drivetrain.getState().Pose.getX(), () -> drivetrain.getState().Pose.getY());
+    //private final ShooterSubsystem s_shooter = new ShooterSubsystem(() -> drivetrain.getState().Pose.getX(), () -> drivetrain.getState().Pose.getY());
+    private final ShooterSubsystem s_shooter = new ShooterSubsystem(drivetrain);
     private final IndexSubsystem s_indexor = new IndexSubsystem();
     private final IntakeSubsystem s_intake = new IntakeSubsystem();
     private final VisionSubsystem s_VisionSubsystem = new VisionSubsystem(drivetrain,"limelight-hotrock");
@@ -86,13 +87,13 @@ public class RobotContainer {
         configureBindings();
         setDriverBindings();
         configureAuto();
-        // testBindings();
+        testBindings();
     }
 
     private void configureBindings() {     
         setIntakeBindings();
         setIndexorBindings();
-        setShooterBindings();
+        // setShooterBindings();
     
     }
 

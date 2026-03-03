@@ -60,12 +60,12 @@ public class VisionSubsystem extends SubsystemBase {
 
             LimelightHelpers.SetRobotOrientation(limelightName, robotYaw, 0, 0, 0, 0, 0);     
    
-            // drivetrain.setVisionMeasurementStdDevs(calculateStdDevs(getTagDistance()));
-            // drivetrain.addVisionMeasurement(
-            //         s_poseEstimate.pose, 
-            //         s_poseEstimate.timestampSeconds,
-            //         calculateStdDevs(tag_distance)
-            // );
+            drivetrain.setVisionMeasurementStdDevs(calculateStdDevs(getTagDistance()));
+            drivetrain.addVisionMeasurement(
+                    s_poseEstimate.pose, 
+                    s_poseEstimate.timestampSeconds,
+                    calculateStdDevs(tag_distance)
+            );
 
             drivetrain.addVisionMeasurement(s_poseEstimate.pose, s_poseEstimate.timestampSeconds);
             System.out.println("ntoaehuntsaoehutnsaoeutnoaeu");

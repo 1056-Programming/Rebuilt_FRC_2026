@@ -52,8 +52,8 @@ public class ShooterSubsystem extends SubsystemBase {
     private final SparkClosedLoopController c_backSpinPID;
 
     // Suppliers for current x and y of Robot
-    private final Supplier<Double> swerveStateXSupplier;
-    private final Supplier<Double> swerveStateYSupplier;
+    // private final Supplier<Double> swerveStateXSupplier;
+    // private final Supplier<Double> swerveStateYSupplier;
 
     // Enable or disable subsystem
     private final boolean disable; 
@@ -77,8 +77,9 @@ public class ShooterSubsystem extends SubsystemBase {
     private double distance;
 
     private TalonFXConfiguration setConfigs;
+    private final CommandSwerveDrivetrain x;
 
-    public ShooterSubsystem(Supplier<Double> x, Supplier<Double> y) {
+    public ShooterSubsystem(CommandSwerveDrivetrain x) { //Supplier<Double> x, Supplier<Double> y) {
         // Initialize Kraken Motors 
         m_rightShooter = new TalonFX(Constants.Shooter.kRightShootingID);
         m_middleShooter = new TalonFX(Constants.Shooter.kMiddleShootingID);
@@ -111,8 +112,10 @@ public class ShooterSubsystem extends SubsystemBase {
         c_backSpinPID = m_backSpin.getClosedLoopController();
 
         // Intialize Suppliers for the swerve state
-        swerveStateXSupplier = x;
-        swerveStateYSupplier = y; 
+        // swerveStateXSupplier = x;
+        // swerveStateYSupplier = y; 
+
+        this.x = x; 
 
         // Initialize shooter state to STOP 
         s_state = ShooterStates.STOP;
@@ -144,14 +147,15 @@ public class ShooterSubsystem extends SubsystemBase {
 
         if(state.equals(ShooterStates.VARIABLE_SHOOT)) {
             // TODO: 
-            //distance = Units.metersToInches(VisionSubsystem.tag_distance);
+            distance = Units.metersToInches(VisionSubsystem.tag_distance);
 
-
-           distance = Utilities.calculateDistanceToCenterPiece(swerveStateXSupplier.get(), swerveStateYSupplier.get());
-           distance = Units.metersToInches(distance) + 13; 
+        //    distance = Utilities.calculateDistanceToCenterPiece(x.getState().Pose.getX(), x.getState().Pose.getY());
+        //    distance = Units.metersToInches(distance) + 13; 
             //checkShooterRange(distance)
-            var sigma = calculateMotorSpeeds(distance);
+
+            var sigma = calculateMotorSpeeds(distance); 
             setVelocitySetpoints(sigma[0], sigma[1]);
+
             return;
         } 
 

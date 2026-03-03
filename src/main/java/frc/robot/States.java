@@ -9,8 +9,7 @@ public class States {
     // Positive in Index in 
     public enum IndexStates {
         STOP(0, 0),
-        INDEX(0.25
-        , 0.25),
+        INDEX(0.25, 0.25),
         REVERSE(-1.0, -1.0);
 
         public final double indexerSpeed;
@@ -68,14 +67,14 @@ public class States {
     // Pivot is in angles need to set range
     // Positive for intake speed is intaking, positive for pivot angle is pivoting up
     public enum IntakeStates {
-        STOP(0, -135),
+        STOP(0, -180),
 
         // Set the speed of the intak-ing motor and the position of piviot 
         INTAKE(0.3, -210),
-        OUTAKE(-0.5,-135),
+        OUTAKE(-0.5,-140),
 
         // Set the home values for piviot 
-        HOME(0,-135),
+        HOME(0,-180),
         HALF_HOME(0,-170);
 
         public final double intakeSpeed;
