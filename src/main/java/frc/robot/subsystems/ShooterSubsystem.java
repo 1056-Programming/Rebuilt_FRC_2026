@@ -75,6 +75,8 @@ public class ShooterSubsystem extends SubsystemBase {
     // Iterator and the HashMap for the checking the distance
     private double distance;
 
+    private TalonFXConfiguration setConfigs;
+
     public ShooterSubsystem(Supplier<Double> x, Supplier<Double> y) {
         // Initialize Kraken Motors 
         m_rightShooter = new TalonFX(Constants.Shooter.kRightShootingID);
@@ -118,7 +120,7 @@ public class ShooterSubsystem extends SubsystemBase {
         desiredShooterRPS = 0;
         desiredBackSpinRPS = 0; 
 
-        // setShooterConfigs(); 
+        setShooterConfigs(100); 
 
         // Disable Subsystem if set to true 
         disable = false; 
@@ -344,16 +346,16 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     // Set the max voltage output for the shooter motors (USE WHEN HIGH POWER CONSUMPTION FROM SHOOTERS)
-    // private void setShooterConfigs() {
-    //     setConfigs = new TalonFXConfiguration(); 
-    //     setConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
-    //     setConfigs.CurrentLimits.SupplyCurrentLimit = 80; 
-    //     setConfigs.OpenLoopRamps.VoltageOpenLoopRampPeriod = 0.25;
+    private void setShooterConfigs(double voltageLimit) {
+        setConfigs = new TalonFXConfiguration(); 
+        setConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
+        setConfigs.CurrentLimits.SupplyCurrentLimit = voltageLimit; 
+        setConfigs.OpenLoopRamps.VoltageOpenLoopRampPeriod = 0.25;
 
-    //     m_leftShooter.getConfigurator().apply(setConfigs); 
-    //     m_middleShooter.getConfigurator().apply(setConfigs);
-    //     m_rightShooter.getConfigurator().apply(setConfigs); 
-
+        m_leftShooter.getConfigurator().apply(setConfigs); 
+        m_middleShooter.getConfigurator().apply(setConfigs);
+        m_rightShooter.getConfigurator().apply(setConfigs); 
+    }
 
     // Set dashboard data for testing and debugging purposes
     private void setDashboardData() {
