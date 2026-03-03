@@ -68,7 +68,7 @@ public class Utilities {
     }
 
     public static double calculateCubicBackSpinSpeed(double distance) {
-        return -0.488578 * Math.pow(distance, 3) + 4.22318 * Math.pow(distance, 2) - 7.76186 * distance;
+        return -0.000337691 * Math.pow(distance, 3) + 0.0925936 * Math.pow(distance, 2) - 7.40919 * distance + 203.02214;
     }
 
     public static double calculcateQuarticBackSpinSpeed(double distance) {
@@ -93,6 +93,9 @@ public class Utilities {
         return 0.656412 * Math.pow(distance, 4) - 6.39979 * Math.pow(distance, 3) + 21.82393 * Math.pow(distance, 2) - 25.12035 * distance + 46.85814;
     }
 
+    public static double calculateCubicShooterSpeed(double distance) {
+        return 0.000117906 * Math.pow(distance, 3) - 0.03462 * Math.pow(distance, 2) + 3.07143 * distance - 44.92968;
+    }
 
     public static double calculateShooterSpeed(double distance) {
         return 40 / (1 + Math.pow(Math.E, -(41.11991 * distance - 20.45987)));
