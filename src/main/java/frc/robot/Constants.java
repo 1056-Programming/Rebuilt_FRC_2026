@@ -56,7 +56,7 @@ public class Constants {
         public static final int kEncoderID = 23;
 
         // PID values
-        public static final double kIntakeP = 0.005;
+        public static final double kIntakeP = 0.06;
         public static final double kIntakeI = 0;
         public static final double kIntakeD = 0;
     

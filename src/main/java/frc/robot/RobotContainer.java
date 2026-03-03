@@ -88,21 +88,23 @@ public class RobotContainer {
     }
 
     private void configureBindings() {     
-        
+        setIntakeBindings();
+        setIndexorBindings();
+        setShooterBindings();
     }
 
-    public void setIntakeBindings() {
-        driver1.leftTrigger().onTrue(c_intakeCommand.setIntakeState(IntakeStates.INTAKE));
-        driver1.leftTrigger().onFalse(c_intakeCommand.setIntakeState(IntakeStates.STOP));
+    private void setIntakeBindings() {
+        driver1.leftTrigger().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.INTAKE));
+        driver1.leftTrigger().toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.STOP));
 
         driver1.leftBumper().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.OUTAKE));
         driver1.leftBumper().toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.STOP));
 
-        driver1.y().onTrue(c_intakeCommand.setIntakeState(IntakeStates.HOME)); 
-        driver1.y().onFalse(c_intakeCommand.setIntakeState(IntakeStates.STOP));
+        driver1.y().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.HALF_HOME)); 
+        driver1.y().toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.STOP));
     }
 
-    public void setIndexorBindings() {
+    private void setIndexorBindings() {
         driver1.rightBumper().onTrue(c_indexCommand.setIndexState(IndexStates.INDEX));
         driver1.rightBumper().onFalse(c_indexCommand.setIndexState(IndexStates.STOP));
 
@@ -110,7 +112,8 @@ public class RobotContainer {
         driver1.leftBumper().toggleOnFalse(c_indexCommand.setIndexState(IndexStates.STOP));
     } 
 
-    public void setShooterBindings() {
+    private void setShooterBindings() {
+
         driver1.rightTrigger().onTrue(c_shooterCommand.setShooterState(States.ShooterStates.VARIABLE_SHOOT));
         driver1.rightTrigger().onFalse(c_shooterCommand.setShooterState(States.ShooterStates.STOP));
 
@@ -118,9 +121,7 @@ public class RobotContainer {
          
     }
 
-
-
-    public void setDriverBindings() {
+    private void setDriverBindings() {
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         // Drivetrain will execute this command periodically

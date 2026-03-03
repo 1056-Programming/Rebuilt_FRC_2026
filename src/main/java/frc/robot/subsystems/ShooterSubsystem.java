@@ -137,13 +137,13 @@ public class ShooterSubsystem extends SubsystemBase {
 
         if(state.equals(ShooterStates.VARIABLE_SHOOT)) {
             // TODO: 
-            distance = VisionSubsystem.tag_distance;
-            //distance = Utilities.calculateDistanceToCenterPiece(swerveStateXSupplier.get(), swerveStateYSupplier.get());
+            //distance = VisionSubsystem.tag_distance;
+            distance = Utilities.calculateDistanceToCenterPiece(swerveStateXSupplier.get(), swerveStateYSupplier.get());
 
-            checkShooterRange(distance);
-            //calculateMotorSpeeds(distance);
-
-            return;
+           
+            var sigma = calculateMotorSpeeds(distance);//checkShooterRange(distance);calculateMotorSpeeds(distance);
+            setVelocitySetpoints(sigma[0], sigma[1]);
+           return;
         } 
 
         setVelocitySetpoints(state.shootingRPS, state.backSpinRPS);
@@ -158,10 +158,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
         // Shooter Equations
         // Logistic Shooter
-        // speeds[0] = Utilities.calculateLogisticShooterSpeed(distance);
+        //speeds[0] = Utilities.calculateLogisticShooterSpeed(distance);
 
         // Quadratic Shooter
-        // speeds[0] = Utilities.calculateQuadraticShooterSpeed(distance);
+        speeds[0] = Utilities.calculateQuadraticShooterSpeed(distance);
 
         // Linear Shooter
         // speeds[0] = Utilities.calculateLinearShooterSpeed(distance);
@@ -174,7 +174,7 @@ public class ShooterSubsystem extends SubsystemBase {
         // speeds[1] = Utilities.calculcateSinsoidalBackSpinSpeed(distance);
 
         // Logistic Backspin
-        // speeds[1] = Utilities.calculateLogisticBackSpinSpeed(distance);
+        speeds[1] = Utilities.calculateLogisticBackSpinSpeed(distance);
 
         // Quadratic Backspin
         // speeds[1] = Utilities.calculateQuadraticBackSpinSpeed(distance);
@@ -330,6 +330,12 @@ public class ShooterSubsystem extends SubsystemBase {
         // PID Setpoint Values
         SmartDashboard.putNumber(getName() + " shooter PID setpoints", this.desiredShooterRPS);
         SmartDashboard.putNumber(getName() + " Back Spin PID Setpoint", this.desiredBackSpinRPS);
+
+        // Distance to tag
+        SmartDashboard.putNumber(getName() + " Distance to tag", this.desiredBackSpinRPS);
+        SmartDashboard.putNumber(getName() + " Current x", swerveStateXSupplier.get());
+        SmartDashboard.putNumber(getName() + " Current y", swerveStateYSupplier.get());
+
 
         // Current Shooter State
         SmartDashboard.putString(getName() + " Shooter State", s_state.toString());                      

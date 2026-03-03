@@ -61,7 +61,7 @@ public class States {
         STOP(0, -135),
 
         // Set the speed of the intak-ing motor and the position of piviot 
-        INTAKE(0.3, -202),
+        INTAKE(0.3, -210),
         OUTAKE(-0.5,-135),
 
         // Set the home values for piviot 
