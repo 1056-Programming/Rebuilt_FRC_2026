@@ -52,9 +52,10 @@ public class VisionSubsystem extends SubsystemBase {
         if(s_poseEstimate.tagCount == 0  
             || getTagAmbiguity(0) > Constants.Vision.ambiguityThreshold
             || getTagDistance() > Constants.Vision.distanceThreshold) {
+            tag_distance = 0;
             return;
-        } else if (s_poseEstimate.tagCount == 1) {
-            robotYaw = Utilities.convertGyroReadings(drivetrain.getPigeon2().getYaw().getValueAsDouble());
+        } else if (s_poseEstimate.tagCount > 0) {
+            robotYaw = Utilities.convertYawReadings(drivetrain.getPigeon2().getYaw().getValueAsDouble());
             tag_distance = s_poseEstimate.rawFiducials[0].distToCamera;
 
             LimelightHelpers.SetRobotOrientation(limelightName, robotYaw, 0, 0, 0, 0, 0);     

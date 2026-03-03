@@ -12,7 +12,7 @@ public class Utilities {
     }
 
     // convert from -180 to 180 range to raw 360 range
-    public static double convertGyroReadings(double reading) {
+    public static double convertYawReadings(double reading) {
         double processedReading = reading % 360;
         if(processedReading > 180) {
             processedReading = processedReading - 360;

@@ -17,17 +17,17 @@ public class IndexSubsystem extends SubsystemBase {
     // Conveyor is the front PVC that feeds into the indexor
     // Indexor feeds the balls into shooter 
     private final SparkMax m_conveyor;
-    public final SparkMax m_indexing; 
+    public final SparkFlex m_indexing; 
     
     private IndexStates i_state; 
 
     public IndexSubsystem(){
         m_conveyor = new SparkMax(Constants.Indexor.kConveyorID, MotorType.kBrushless) ;
-        m_indexing = new SparkMax(Constants.Indexor.kIndexorID, MotorType.kBrushless);
+        m_indexing = new SparkFlex(Constants.Indexor.kIndexorID, MotorType.kBrushless);
         
         // Optimize BUS usage 
         SparkMaxUtils.setSparkMaxBusUsage(m_conveyor, SparkMaxUtils.Usage.kMinimal, IdleMode.kCoast, false, true);
-        SparkMaxUtils.setSparkMaxBusUsage(m_indexing, SparkMaxUtils.Usage.kMinimal, IdleMode.kCoast, false, false);
+        SparkFlexUtils.setSparkFlexBusUsage(m_indexing, SparkFlexUtils.Usage.kMinimal, IdleMode.kCoast, false, false);
 
         // Start indexor in STOP position
         i_state = IndexStates.STOP;
