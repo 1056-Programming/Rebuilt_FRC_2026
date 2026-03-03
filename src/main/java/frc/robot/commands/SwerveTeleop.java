@@ -7,6 +7,7 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 import java.util.ResourceBundle.Control;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+<<<<<<< HEAD
 import com.fasterxml.jackson.databind.util.LRUMap;
 import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -14,6 +15,10 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.util.sendable.Sendable;
+=======
+import com.ctre.phoenix6.swerve.SwerveRequest;
+
+>>>>>>> 8e209b0e08dc4e80e1b35dd3a5d2deb6139ce91d
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -28,13 +33,10 @@ public class SwerveTeleop extends Command {
     private final CommandSwerveDrivetrain drivetrain;
     private final CommandXboxController controller;
 
-    // Set max speeds for swerve driving
+    // Set max speeds for swerve driving and deaband
     private final double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
     private final double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond);
-    private final double deadband = 0.1;
-
-    // PID for auto tag yawing
-    private final PIDController c_yawPID; 
+    private final double deadband = Constants.Swerve.kSwerveDeadband;
 
     // Setting up bindings for necessary control of the swerve drive platform 
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -42,7 +44,8 @@ public class SwerveTeleop extends Command {
             .withRotationalDeadband(MaxAngularRate * deadband) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
 
-    private double xInput, yInput, rInput; 
+    // Store inputs and speeds
+    private double xInput, yInput, rInput;   
     private double xSpeed, ySpeed, rSpeed;
 
     public SwerveTeleop(CommandSwerveDrivetrain drivetrain, CommandXboxController controller) {
@@ -60,8 +63,6 @@ public class SwerveTeleop extends Command {
         ySpeed = 0;
         rSpeed = 0;
 
-        c_yawPID = new PIDController(0,0,0);
-
         // Set requiremnts for the drivetrain subsystem to ensure no conflicts with other commands
         addRequirements(drivetrain);
     }
@@ -73,18 +74,37 @@ public class SwerveTeleop extends Command {
         yInput = controller.getLeftX();
         rInput = -controller.getRightX();
 
+        // Apply polynomial acceleration
         setPolynomialAcceleration();
+<<<<<<< HEAD
         phatSpeed(); // Apply slew rate limiting to the speeds
         drivetrain.applyRequest(() -> drive.withVelocityX(ySpeed)
             .withVelocityY(xSpeed)
             .withRotationalRate(rSpeed)).execute();
+=======
+
+        // Apply speeds to the swerve drive
+        drivetrain.applyRequest(() -> drive.withVelocityX(ySpeed)
+            .withVelocityY(xSpeed)
+            .withRotationalRate(rSpeed))
+            .execute();
+
+        // Display the dashboard data
+        setDashboardData();
+>>>>>>> 8e209b0e08dc4e80e1b35dd3a5d2deb6139ce91d
     }
     
     // Apply a polynomial acceleration curve to the joystick inputs for smoother control
     private void setPolynomialAcceleration() {
+<<<<<<< HEAD
         xSpeed = Utilities.polynomialAccleration(yInput) * MaxSpeed * 0.5;
         ySpeed = Utilities.polynomialAccleration(xInput) * MaxSpeed * 0.5;
         rSpeed = Utilities.polynomialAccleration(rInput) * MaxAngularRate * 0.5; 
+=======
+        xSpeed = Utilities.polynomialAccleration(yInput) * MaxSpeed * 0.7;
+        ySpeed = Utilities.polynomialAccleration(xInput) * MaxSpeed * 0.7;
+        rSpeed = Utilities.polynomialAccleration(rInput) * MaxAngularRate * 0.7 ; 
+>>>>>>> 8e209b0e08dc4e80e1b35dd3a5d2deb6139ce91d
     }
     
     // Limit the rate of change of the xSpeed to 0.8 m/s^2
@@ -92,6 +112,7 @@ public class SwerveTeleop extends Command {
     private final SlewRateLimiter yLimiter = new SlewRateLimiter(0.8);
     private final SlewRateLimiter rLimiter = new SlewRateLimiter(0.8); 
 
+<<<<<<< HEAD
     //My methods of the code 
     private void phatSpeed() {
     xSpeed = xLimiter.calculate(xSpeed); //Apply slew rate limiting to the xSpeed
@@ -120,5 +141,24 @@ public class SwerveTeleop extends Command {
         SmartDashboard.putData("rLimiter", (Sendable) rLimiter);
         SmartDashboard.putBoolean(getName(), true);
         // TODO add data to dashboard for testing and debugging purposes
+=======
+    // Display important information for debugging
+    private void setDashboardData() {
+        // Display current odometry positioning of robot
+        SmartDashboard.putNumber(drivetrain.getName() + " pidgeon 2", Utilities.processYaw(drivetrain.getPigeon2().getYaw().getValueAsDouble()));
+        SmartDashboard.putNumber(drivetrain.getName() + " state x pos", drivetrain.getState().Pose.getMeasureX().baseUnitMagnitude());
+        SmartDashboard.putNumber(drivetrain.getName() + " state y pos", drivetrain.getState().Pose.getMeasureY().baseUnitMagnitude());
+        SmartDashboard.putNumber(drivetrain.getName() + " state rot pos", drivetrain.getState().Pose.getRotation().getDegrees());
+        
+         // Controller Inputs
+        SmartDashboard.putNumber(drivetrain.getName() + "xInput", xInput);
+        SmartDashboard.putNumber(drivetrain.getName() + "yInput", yInput);
+        SmartDashboard.putNumber(drivetrain.getName() + "rInput", rInput);
+
+        // Calculated Speeds
+        SmartDashboard.putNumber(drivetrain.getName() + "xSpeed", xSpeed);
+        SmartDashboard.putNumber(drivetrain.getName() + "ySpeed", ySpeed);
+        SmartDashboard.putNumber(drivetrain.getName() + "rSpeed", rSpeed);
+>>>>>>> 8e209b0e08dc4e80e1b35dd3a5d2deb6139ce91d
     }
 }
