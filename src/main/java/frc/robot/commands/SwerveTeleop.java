@@ -90,9 +90,9 @@ public class SwerveTeleop extends Command {
     }
     
     // Limit the rate of change of the xSpeed to 0.8 m/s^2
-    private final SlewRateLimiter xLimiter = new SlewRateLimiter(0.8);
-    private final SlewRateLimiter yLimiter = new SlewRateLimiter(0.8);
-    private final SlewRateLimiter rLimiter = new SlewRateLimiter(0.8); 
+    private final SlewRateLimiter xLimiter = new SlewRateLimiter(3);
+    private final SlewRateLimiter yLimiter = new SlewRateLimiter(3);
+    private final SlewRateLimiter rLimiter = new SlewRateLimiter(3); 
 
     //My methods of the code 
     private void phatSpeed() {
