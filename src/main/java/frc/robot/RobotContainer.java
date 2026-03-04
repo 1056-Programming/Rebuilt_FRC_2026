@@ -63,7 +63,8 @@ public class RobotContainer {
 
     //** Initialize Subsystems **//
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
-    private final ShooterSubsystem s_shooter = new ShooterSubsystem(() -> drivetrain.getState().Pose.getX(), () -> drivetrain.getState().Pose.getY());
+   // private final ShooterSubsystem s_shooter = new ShooterSubsystem(() -> drivetrain.getState().Pose.getX(), () -> drivetrain.getState().Pose.getY());
+   private final ShooterSubsystem s_shooter = new ShooterSubsystem(drivetrain);
     private final IndexSubsystem s_indexor = new IndexSubsystem();
     private final IntakeSubsystem s_intake = new IntakeSubsystem();
     private final VisionSubsystem s_VisionSubsystem = new VisionSubsystem(drivetrain,"limelight-hotrock");
@@ -91,6 +92,8 @@ public class RobotContainer {
         setIntakeBindings();
         setIndexorBindings();
         setShooterBindings();
+    //    setTestBindings();
+        
     }
 
     private void setIntakeBindings() {
@@ -144,7 +147,7 @@ public class RobotContainer {
             point.withModuleDirection(new Rotation2d(-driver0.getLeftY(), -driver0.getLeftX()))
         ));
 
-        // Run SysId routines when holding back/start and X/Y.
+        // Run SysId routin zes when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
         driver0.back().and(driver0.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
         driver0.back().and(driver0.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
@@ -155,6 +158,20 @@ public class RobotContainer {
         driver0.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         drivetrain.registerTelemetry(logger::telemeterize);
+    }
+
+    private void setTestBindings() {
+        driver1.y().onTrue(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS+=5, s_shooter.desiredBackSpinRPS)));
+        driver1.y().onFalse(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS, s_shooter.desiredBackSpinRPS)));
+
+        driver1.a().onTrue(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS, s_shooter.desiredBackSpinRPS+=5)));
+        driver1.a().onFalse(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS, s_shooter.desiredBackSpinRPS)));
+        
+        driver1.rightTrigger().onTrue(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS-=2.5, s_shooter.desiredBackSpinRPS)));
+        driver1.rightTrigger().onFalse(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS, s_shooter.desiredBackSpinRPS)));
+
+        driver1.x().onTrue(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS, s_shooter.desiredBackSpinRPS-=2.5)));
+        driver1.x().onFalse(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS, s_shooter.desiredBackSpinRPS)));
     }
 
     private void configureAuto() {

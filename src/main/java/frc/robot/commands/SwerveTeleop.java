@@ -7,8 +7,13 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 import java.util.ResourceBundle.Control;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.fasterxml.jackson.databind.util.LRUMap;
+import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -66,7 +71,7 @@ public class SwerveTeleop extends Command {
 
         // Apply polynomial acceleration
         setPolynomialAcceleration();
-
+        //phatSpeed(); // Apply slew rate limiting to the speeds
         // Apply speeds to the swerve drive
         drivetrain.applyRequest(() -> drive.withVelocityX(ySpeed)
             .withVelocityY(xSpeed)
@@ -79,11 +84,23 @@ public class SwerveTeleop extends Command {
     
     // Apply a polynomial acceleration curve to the joystick inputs for smoother control
     private void setPolynomialAcceleration() {
-        xSpeed = Utilities.polynomialAccleration(yInput) * MaxSpeed * 0.7;
-        ySpeed = Utilities.polynomialAccleration(xInput) * MaxSpeed * 0.7;
-        rSpeed = Utilities.polynomialAccleration(rInput) * MaxAngularRate * 0.7 ; 
+        xSpeed = Utilities.polynomialAccleration(yInput) * MaxSpeed;
+        ySpeed = Utilities.polynomialAccleration(xInput) * MaxSpeed;
+        rSpeed = Utilities.polynomialAccleration(rInput) * MaxAngularRate; 
     }
+    
+    // Limit the rate of change of the xSpeed to 0.8 m/s^2
+    private final SlewRateLimiter xLimiter = new SlewRateLimiter(0.8);
+    private final SlewRateLimiter yLimiter = new SlewRateLimiter(0.8);
+    private final SlewRateLimiter rLimiter = new SlewRateLimiter(0.8); 
 
+    //My methods of the code 
+    private void phatSpeed() {
+        xSpeed = xLimiter.calculate(xSpeed); //Apply slew rate limiting to the xSpeed
+        ySpeed = yLimiter.calculate(ySpeed);
+        rSpeed = rLimiter.calculate(rSpeed);
+    }
+ 
     // Display important information for debugging
     private void setDashboardData() {
         // Display current odometry positioning of robot
