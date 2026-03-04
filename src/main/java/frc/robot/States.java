@@ -75,7 +75,7 @@ public class States {
 
 
         // Set the home values for piviot 
-        HOME(0,-180),
+        HOME(0,-140),
         HALF_HOME(0,-190);
 
         public final double intakeSpeed;
