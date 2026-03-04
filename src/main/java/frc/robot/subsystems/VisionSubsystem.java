@@ -56,7 +56,6 @@ public class VisionSubsystem extends SubsystemBase {
         if(s_poseEstimate.tagCount == 0  
             || getTagAmbiguity(0) > Constants.Vision.ambiguityThreshold
             || getTagDistance() > Constants.Vision.distanceThreshold) {
-            tag_distance = 0;
             return;
         } else if (s_poseEstimate.tagCount > 0) {
             robotYaw = Utilities.convertYawReadings(drivetrain.getPigeon2().getYaw().getValueAsDouble());
@@ -64,12 +63,12 @@ public class VisionSubsystem extends SubsystemBase {
 
             LimelightHelpers.SetRobotOrientation(limelightName, robotYaw, 0, 0, 0, 0, 0);     
    
-            // drivetrain.setVisionMeasurementStdDevs(calculateStdDevs(getTagDistance()));
-            // drivetrain.addVisionMeasurement(
-            //         s_poseEstimate.pose, 
-            //         s_poseEstimate.timestampSeconds,
-            //         calculateStdDevs(tag_distance)
-            // );
+            drivetrain.setVisionMeasurementStdDevs(calculateStdDevs(getTagDistance()));
+            drivetrain.addVisionMeasurement(
+                    s_poseEstimate.pose, 
+                    s_poseEstimate.timestampSeconds,
+                    calculateStdDevs(tag_distance)
+            );
 
             drivetrain.addVisionMeasurement(s_poseEstimate.pose, s_poseEstimate.timestampSeconds);
             System.out.println("ntoaehuntsaoehutnsaoeutnoaeu");

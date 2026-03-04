@@ -7,6 +7,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 
@@ -29,6 +30,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     // PID controller to maintain pivot angle
     private final PIDController c_pivotPID;
+    private final ArmFeedforward c_ArmFeedforward; 
     
     // Current intake state
     private IntakeStates i_state;
@@ -51,6 +53,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
         // Initialize PID controller for pivot
         c_pivotPID = new PIDController(Constants.Intake.kIntakeP, Constants.Intake.kIntakeI, Constants.Intake.kIntakeD);
+        c_ArmFeedforward = new ArmFeedforward(0, 0.015, 0.33);
 
         // Start intake in STOP position
         i_state = IntakeStates.STOP;
@@ -66,7 +69,8 @@ public class IntakeSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         // Set motor speed based on PID calculation
-        pivotSpeed = c_pivotPID.calculate(getPiviotPosition());
+        pivotSpeed = c_pivotPID.calculate(getPiviotPosition()) 
+            + c_ArmFeedforward.calculate(Units.degreesToRadians(getPiviotPosition()), pivotEncoder.getVelocity().getValueAsDouble());
         m_pivot.set(pivotSpeed);
         setDashboardData();
     }

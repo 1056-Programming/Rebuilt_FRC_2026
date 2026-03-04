@@ -19,7 +19,7 @@ public class Constants {
         public static final int kLeftShootingID = 22;
 
         // PID constants for slot 0 on shooter
-        public static final double kShooterP = 0.045;
+        public static final double kShooterP = 0.035;
         public static final double kShooterI = 0;
         public static final double kShooterD = 0; 
         public static final double kShooterS = 0;
@@ -67,7 +67,7 @@ public class Constants {
         public static final String rightLimelightName = ""; 
 
         // Vision threshold: 
-        public static final double ambiguityThreshold = 0.5;
+        public static final double ambiguityThreshold = 0.9;
 
         // Vision distance to camera threshold: 
         public static final double distanceThreshold = 5; 
