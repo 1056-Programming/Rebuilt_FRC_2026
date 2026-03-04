@@ -3,11 +3,14 @@ package frc.robot.subsystems;
 import com.pathplanner.lib.config.RobotConfig;
 
 import java.util.Arrays;
+
+//import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.util.Utilities;
@@ -16,6 +19,7 @@ import frc.robot.LimelightHelpers;
 import frc.robot.LimelightHelpers.PoseEstimate;
 
 public class VisionSubsystem extends SubsystemBase {
+    //private final CameraServer cameraServer;
     private final CommandSwerveDrivetrain drivetrain; 
     private final boolean useMegaTag2;
     private static LimelightHelpers.PoseEstimate s_poseEstimate; 
@@ -68,6 +72,7 @@ public class VisionSubsystem extends SubsystemBase {
 
             drivetrain.addVisionMeasurement(s_poseEstimate.pose, s_poseEstimate.timestampSeconds);
             System.out.println("ntoaehuntsaoehutnsaoeutnoaeu");
+            //CameraServer.startAutomaticCapture();
         }            
     }
 
@@ -121,7 +126,7 @@ public class VisionSubsystem extends SubsystemBase {
         // Get the number of apritags and the distance from the closest one
         SmartDashboard.putNumber(limelightName+" Number of AprilTags", s_poseEstimate.tagCount);
         SmartDashboard.putNumber(limelightName+" Distance", tag_distance);
+        SmartDashboard.putData((Sendable) CameraServer.getVideo());
     }
-
 
 }
