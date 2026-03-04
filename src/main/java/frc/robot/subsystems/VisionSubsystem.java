@@ -4,7 +4,7 @@ import com.pathplanner.lib.config.RobotConfig;
 
 import java.util.Arrays;
 
-import edu.wpi.first.cameraserver.CameraServer;
+//import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -19,7 +19,7 @@ import frc.robot.LimelightHelpers;
 import frc.robot.LimelightHelpers.PoseEstimate;
 
 public class VisionSubsystem extends SubsystemBase {
-    private final CameraServer cameraServer;
+    //private final CameraServer cameraServer;
     private final CommandSwerveDrivetrain drivetrain; 
     private final boolean useMegaTag2;
     private static LimelightHelpers.PoseEstimate s_poseEstimate; 
@@ -72,7 +72,7 @@ public class VisionSubsystem extends SubsystemBase {
 
             drivetrain.addVisionMeasurement(s_poseEstimate.pose, s_poseEstimate.timestampSeconds);
             System.out.println("ntoaehuntsaoehutnsaoeutnoaeu");
-            CameraServer.startAutomaticCapture();
+            //CameraServer.startAutomaticCapture();
         }            
     }
 
