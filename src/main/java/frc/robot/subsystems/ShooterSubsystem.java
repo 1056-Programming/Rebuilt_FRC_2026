@@ -173,9 +173,11 @@ public class ShooterSubsystem extends SubsystemBase {
         // Logistic Shooter
         // speeds[0] = Utilities.calculateLogisticShooterSpeed(distance);
         if(distance > 2.9718) {
-            speeds[0] = Utilities.calculateCubicShooterSpeed(distance); // 0.94267
+            speeds[0] = Utilities.calculateCubicShooterSpeed(distance);
+        } else if (distance < 2 && distance > 1) { 
+           speeds[0] = Utilities.calculateCubicShooterSpeed(distance) * 0.91267;
         } else {
-            speeds[0] = Utilities.calculateCubicShooterSpeed(distance) * 0.94267; // 0.94267
+            speeds[0] = Utilities.calculateCubicBackSpinSpeed(distance) *  0.93267;
         }
         // Quadratic Shooter
         //speeds[0] = Utilities.calculateQuadraticShooterSpeed(distance);
@@ -200,8 +202,10 @@ public class ShooterSubsystem extends SubsystemBase {
             
         if(distance > 2.9718) {
             speeds[1] = Utilities.calculateCubicBackSpinSpeed(distance);
+        } else if (distance < 2 && distance > 1) { 
+            speeds[1] = Utilities.calculateCubicBackSpinSpeed(distance) *  0.91267;
         } else {
-            speeds[1] = Utilities.calculateCubicBackSpinSpeed(distance) *  0.94267;
+            speeds[1] = Utilities.calculateCubicBackSpinSpeed(distance) *  0.93267;
         }
         // Quartic Backspin
         // speeds[1] = Utilities.calculcateQuarticBackSpinSpeed(distance);

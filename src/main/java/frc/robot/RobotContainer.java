@@ -105,7 +105,7 @@ public class RobotContainer {
         driver1.leftBumper().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.OUTAKE));
         driver1.leftBumper().toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.STOP));
 
-        driver1.y().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.HALF_HOME)); 
+        driver1.y().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.HOME)); 
         driver1.y().toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.STOP));
     }
 

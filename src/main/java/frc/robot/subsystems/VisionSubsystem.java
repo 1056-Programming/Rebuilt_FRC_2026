@@ -19,7 +19,7 @@ import frc.robot.LimelightHelpers;
 import frc.robot.LimelightHelpers.PoseEstimate;
 
 public class VisionSubsystem extends SubsystemBase {
-    private final CameraServer cameraServer;
+    // private final CameraServer cameraServer;
     private final CommandSwerveDrivetrain drivetrain; 
     private final boolean useMegaTag2;
     private static LimelightHelpers.PoseEstimate s_poseEstimate; 
