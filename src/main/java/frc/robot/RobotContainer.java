@@ -176,24 +176,27 @@ public class RobotContainer {
     }
 
     private void configureAuto() {
-        NamedCommands.registerCommand("Intake", c_intakeCommand.setIntakeState(IntakeStates.INTAKE));
-        NamedCommands.registerCommand("Shoot", c_shooterCommand.setShooterState(ShooterStates.DISTANCE_1M));
+
+        NamedCommands.registerCommand("Shooting", c_shooterCommand.setShooterState(ShooterStates.DISTANCE_1M));
         NamedCommands.registerCommand("Index", c_indexCommand.setIndexState(IndexStates.INDEX));
-        NamedCommands.registerCommand("Starting Position", c_intakeCommand.setIntakeState(IntakeStates.HOME));
+        NamedCommands.registerCommand("Starting Positions", c_intakeCommand.setIntakeState(IntakeStates.HOME));
         NamedCommands.registerCommand("Pivot Down", c_intakeCommand.setIntakeState(IntakeStates.INTAKE));
         NamedCommands.registerCommand("Intake Stop", c_intakeCommand.setIntakeState(IntakeStates.STOP));
         NamedCommands.registerCommand("Pivot Up", c_intakeCommand.setIntakeState(IntakeStates.HOME));
-
+        NamedCommands.registerCommand("Stop Intake", c_intakeCommand.setIntakeState(IntakeStates.STOP));
 
         m_chooser = AutoBuilder.buildAutoChooser(); //Variable of Different Path of Autonomous
         Command leftAutonomous = new PathPlannerAuto("Left Autonomous");
         Command mainAutonomous = new PathPlannerAuto("Main Autonomous");
         Command middleAutonomous = new PathPlannerAuto("Middle Autonomous");
         Command specialAutonomous = new PathPlannerAuto("Special Autonomous");
-        m_chooser.setDefaultOption("Main Autonomous", mainAutonomous); //Main path of Autonomous
+        Command Test = new PathPlannerAuto("Test"); 
+        m_chooser.setDefaultOption("Test", Test); //Main path of Autonomous
         m_chooser.addOption("Left Autonomous", leftAutonomous); //Altenratives
         m_chooser.addOption("Middle Autonomous", middleAutonomous);
-        m_chooser.addOption("Special Autonomous", specialAutonomous);
+        //m_chooser.addOption("Special Autonomous", specialAutonomous);
+
+
                 SmartDashboard.putData(m_chooser);
                 SmartDashboard.putBoolean("Auto Path Planner", true);
                 SmartDashboard.putBoolean("Autonomous Active", false);
