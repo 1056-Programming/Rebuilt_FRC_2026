@@ -19,7 +19,7 @@ import frc.robot.LimelightHelpers;
 import frc.robot.LimelightHelpers.PoseEstimate;
 
 public class VisionSubsystem extends SubsystemBase {
-    //private final CameraServer cameraServer;
+    // private final CameraServer cameraServer;
     private final CommandSwerveDrivetrain drivetrain; 
     private final boolean useMegaTag2;
     private static LimelightHelpers.PoseEstimate s_poseEstimate; 
@@ -34,7 +34,7 @@ public class VisionSubsystem extends SubsystemBase {
     public VisionSubsystem(CommandSwerveDrivetrain drivetrain, String limelightName){
         this.drivetrain = drivetrain;
         this.useMegaTag2 = false; // Set to true to use MegaTag2, false for AprilTag 
-        this.limelightName = limelightName; 
+        this.limelightName = limelightName;         
 
         this.robotYaw = 0; 
 
