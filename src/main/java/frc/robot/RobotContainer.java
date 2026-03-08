@@ -176,33 +176,41 @@ public class RobotContainer {
         driver1.x().onFalse(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS, s_shooter.desiredBackSpinRPS)));
     }
 
+    // private void configureAuto() {
+        
+    //     NamedCommands.registerCommand("Index", c_indexCommand.setIndexState(IndexStates.INDEX));
+    //     NamedCommands.registerCommand("Starting Positions", c_intakeCommand.setIntakeState(IntakeStates.HOME));
+    //     NamedCommands.registerCommand("Pivot Down", c_intakeCommand.setIntakeState(IntakeStates.INTAKE));
+    //     NamedCommands.registerCommand("Intake Stop", c_intakeCommand.setIntakeState(IntakeStates.STOP));
+    //     NamedCommands.registerCommand("Pivot Up", c_intakeCommand.setIntakeState(IntakeStates.HOME));
+    //     NamedCommands.registerCommand("Stop Intake", c_intakeCommand.setIntakeState(IntakeStates.STOP));
+
+    //     m_chooser = AutoBuilder.buildAutoChooser(); //Variable of Different Path of Autonomous
+    //     Command leftAutonomous = new PathPlannerAuto("Left Autonomous");
+    //     Command mainAutonomous = new PathPlannerAuto("Main Autonomous");
+    //     Command middleAutonomous = new PathPlannerAuto("Middle Autonomous");
+    //     Command specialAutonomous = new PathPlannerAuto("Special Autonomous");
+    //     Command Test = new PathPlannerAuto("Test"); 
+    //     m_chooser.setDefaultOption("Test", Test); //Main path of Autonomous
+    //     m_chooser.addOption("Left Autonomous", leftAutonomous); //Altenratives
+    //     m_chooser.addOption("Middle Autonomous", middleAutonomous);
+    //     //m_chooser.addOption("Special Autonomous", specialAutonomous);
+
+
+    //             SmartDashboard.putData(m_chooser);
+    //             SmartDashboard.putBoolean("Auto Path Planner", true);
+    //             SmartDashboard.putBoolean("Autonomous Active", false);
+        
+    //             // Warmup PathPlanner to avoid Java pauses
+    //             FollowPathCommand.warmupCommand().schedule();
+    // }
+
     private void configureAuto() {
-        
-        NamedCommands.registerCommand("Index", c_indexCommand.setIndexState(IndexStates.INDEX));
-        NamedCommands.registerCommand("Starting Positions", c_intakeCommand.setIntakeState(IntakeStates.HOME));
-        NamedCommands.registerCommand("Pivot Down", c_intakeCommand.setIntakeState(IntakeStates.INTAKE));
-        NamedCommands.registerCommand("Intake Stop", c_intakeCommand.setIntakeState(IntakeStates.STOP));
-        NamedCommands.registerCommand("Pivot Up", c_intakeCommand.setIntakeState(IntakeStates.HOME));
-        NamedCommands.registerCommand("Stop Intake", c_intakeCommand.setIntakeState(IntakeStates.STOP));
-
-        m_chooser = AutoBuilder.buildAutoChooser(); //Variable of Different Path of Autonomous
-        Command leftAutonomous = new PathPlannerAuto("Left Autonomous");
-        Command mainAutonomous = new PathPlannerAuto("Main Autonomous");
-        Command middleAutonomous = new PathPlannerAuto("Middle Autonomous");
-        Command specialAutonomous = new PathPlannerAuto("Special Autonomous");
-        Command Test = new PathPlannerAuto("Test"); 
-        m_chooser.setDefaultOption("Test", Test); //Main path of Autonomous
-        m_chooser.addOption("Left Autonomous", leftAutonomous); //Altenratives
-        m_chooser.addOption("Middle Autonomous", middleAutonomous);
-        //m_chooser.addOption("Special Autonomous", specialAutonomous);
-
-
-                SmartDashboard.putData(m_chooser);
-                SmartDashboard.putBoolean("Auto Path Planner", true);
-                SmartDashboard.putBoolean("Autonomous Active", false);
-        
-                // Warmup PathPlanner to avoid Java pauses
-                FollowPathCommand.warmupCommand().schedule();
+        // Register intake commands into path planner
+        NamedCommands.registerCommand("Intake Balls", c_intakeCommand.setIntakeState(IntakeStates.INTAKE));
+        NamedCommands.registerCommand("Intake Feed Out", c_intakeCommand.setIntakeState(IntakeStates.OUTAKE));
+        NamedCommands.registerCommand("Intake Home", c_intakeCommand.setIntakeState(IntakeStates.HOME));
+        NamedCommands.registerCommand("Intake Start Position", c_intakeCommand.setIntakeState(IntakeStates.setSmartDashboard));
     }
 
     public Command getAutonomousCommand() {
