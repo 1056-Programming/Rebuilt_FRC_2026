@@ -2,8 +2,8 @@ package frc.robot;
 
 public class Constants {
     public class Swerve {
-        public static final double kTranslationLimiter = 0.05;
-        public static final double kSwerveDeadband = 0.05;
+        public static final double kTranslationLimiter = 0.02;
+        public static final double kSwerveDeadband = 0.02;
         public static final double kSwerveP = 0.078;
         public static final double kSwerveI = 0;
         public static final double kSwerveD = 0; 

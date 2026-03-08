@@ -209,134 +209,134 @@ public class ShooterSubsystem extends SubsystemBase {
         return speeds;
     }
 
-    private double[] checkShooterRange(double distance) {
-        if (distance <= 0.125) {
-            return new double[] {
-                ShooterStates.DISTANCE_0M.shootingRPS,
-                ShooterStates.DISTANCE_0M.backSpinRPS
-            };
+    // private double[] checkShooterRange(double distance) {
+    //     if (distance <= 0.125) {
+    //         return new double[] {
+    //             ShooterStates.DISTANCE_0M.shootingRPS,
+    //             ShooterStates.DISTANCE_0M.backSpinRPS
+    //         };
 
-        } else if (distance <= 0.25) {
-            return new double[] {
-                ShooterStates.DISTANCE_0_25M.shootingRPS,
-                ShooterStates.DISTANCE_0_25M.backSpinRPS
-            };
+    //     } else if (distance <= 0.25) {
+    //         return new double[] {
+    //             ShooterStates.DISTANCE_0_25M.shootingRPS,
+    //             ShooterStates.DISTANCE_0_25M.backSpinRPS
+    //         };
 
-        } else if (distance <= 0.375) {
-            return new double[] {
-                ShooterStates.DISTANCE_0_25M.shootingRPS,
-                ShooterStates.DISTANCE_0_25M.backSpinRPS
-            };
+    //     } else if (distance <= 0.375) {
+    //         return new double[] {
+    //             ShooterStates.DISTANCE_0_25M.shootingRPS,
+    //             ShooterStates.DISTANCE_0_25M.backSpinRPS
+    //         };
 
-        } else if (distance <= 0.5) {
-            return new double[] {
-                ShooterStates.DISTANCE_0_5M.shootingRPS,
-                ShooterStates.DISTANCE_0_5M.backSpinRPS
-            };
+    //     } else if (distance <= 0.5) {
+    //         return new double[] {
+    //             ShooterStates.DISTANCE_0_5M.shootingRPS,
+    //             ShooterStates.DISTANCE_0_5M.backSpinRPS
+    //         };
 
-        } else if (distance <= 0.625) {
-            return new double[] {
-                ShooterStates.DISTANCE_0_5M.shootingRPS,
-                ShooterStates.DISTANCE_0_5M.backSpinRPS
-            };
+    //     } else if (distance <= 0.625) {
+    //         return new double[] {
+    //             ShooterStates.DISTANCE_0_5M.shootingRPS,
+    //             ShooterStates.DISTANCE_0_5M.backSpinRPS
+    //         };
 
-        } else if (distance <= 0.75) {
-            return new double[] {
-                ShooterStates.DISTANCE_0_75M.shootingRPS,
-                ShooterStates.DISTANCE_0_75M.backSpinRPS
-            };
+    //     } else if (distance <= 0.75) {
+    //         return new double[] {
+    //             ShooterStates.DISTANCE_0_75M.shootingRPS,
+    //             ShooterStates.DISTANCE_0_75M.backSpinRPS
+    //         };
 
-        } else if (distance <= 0.875) {
-            return new double[] {
-                ShooterStates.DISTANCE_0_75M.shootingRPS,
-                ShooterStates.DISTANCE_0_75M.backSpinRPS
-            };
+    //     } else if (distance <= 0.875) {
+    //         return new double[] {
+    //             ShooterStates.DISTANCE_0_75M.shootingRPS,
+    //             ShooterStates.DISTANCE_0_75M.backSpinRPS
+    //         };
 
-        } else if (distance <= 1.0) {
-            return new double[] {
-                ShooterStates.DISTANCE_1M.shootingRPS,
-                ShooterStates.DISTANCE_1M.backSpinRPS
-            };
+    //     } else if (distance <= 1.0) {
+    //         return new double[] {
+    //             ShooterStates.DISTANCE_1M.shootingRPS,
+    //             ShooterStates.DISTANCE_1M.backSpinRPS
+    //         };
 
-        } else if (distance <= 1.125) {
-            return new double[] {
-                ShooterStates.DISTANCE_1M.shootingRPS,
-                ShooterStates.DISTANCE_1M.backSpinRPS
-            };
+    //     } else if (distance <= 1.125) {
+    //         return new double[] {
+    //             ShooterStates.DISTANCE_1M.shootingRPS,
+    //             ShooterStates.DISTANCE_1M.backSpinRPS
+    //         };
 
-        }else if (distance <= 1.25) {
-            return new double[] {
-                ShooterStates.DISTANCE_1_25M.shootingRPS,
-                ShooterStates.DISTANCE_1_25M.backSpinRPS
-            };
+    //     }else if (distance <= 1.25) {
+    //         return new double[] {
+    //             ShooterStates.DISTANCE_1_25M.shootingRPS,
+    //             ShooterStates.DISTANCE_1_25M.backSpinRPS
+    //         };
 
-        }else if (distance <= 1.375) {
-            return new double[] {
-                ShooterStates.DISTANCE_1_25M.shootingRPS,
-                ShooterStates.DISTANCE_1_25M.backSpinRPS
-            };
+    //     }else if (distance <= 1.375) {
+    //         return new double[] {
+    //             ShooterStates.DISTANCE_1_25M.shootingRPS,
+    //             ShooterStates.DISTANCE_1_25M.backSpinRPS
+    //         };
 
-        } else if (distance <= 1.5) {
-            return new double[] {
-                ShooterStates.DISTANCE_1_5M.shootingRPS,
-                ShooterStates.DISTANCE_1_5M.backSpinRPS
-            };
+    //     } else if (distance <= 1.5) {
+    //         return new double[] {
+    //             ShooterStates.DISTANCE_1_5M.shootingRPS,
+    //             ShooterStates.DISTANCE_1_5M.backSpinRPS
+    //         };
 
-        } else if (distance <= 1.625) {
-            return new double[] {
-                ShooterStates.DISTANCE_1_5M.shootingRPS,
-                ShooterStates.DISTANCE_1_5M.backSpinRPS
-            };
+    //     } else if (distance <= 1.625) {
+    //         return new double[] {
+    //             ShooterStates.DISTANCE_1_5M.shootingRPS,
+    //             ShooterStates.DISTANCE_1_5M.backSpinRPS
+    //         };
 
-        } else if (distance <= 1.75) {
-           return new double[] {
-                ShooterStates.DISTANCE_1_75M.shootingRPS,
-                ShooterStates.DISTANCE_1_75M.backSpinRPS
-            };
+    //     } else if (distance <= 1.75) {
+    //        return new double[] {
+    //             ShooterStates.DISTANCE_1_75M.shootingRPS,
+    //             ShooterStates.DISTANCE_1_75M.backSpinRPS
+    //         };
 
-        } else if (distance <= 1.875) {
-            return new double[] {
-                ShooterStates.DISTANCE_1_75M.shootingRPS,
-                ShooterStates.DISTANCE_1_75M.backSpinRPS
-            };
+    //     } else if (distance <= 1.875) {
+    //         return new double[] {
+    //             ShooterStates.DISTANCE_1_75M.shootingRPS,
+    //             ShooterStates.DISTANCE_1_75M.backSpinRPS
+    //         };
 
-        }else if (distance <= 2.0) {
-            return new double[] {
-                ShooterStates.DISTANCE_2M.shootingRPS,
-                ShooterStates.DISTANCE_2M.backSpinRPS
-            };
+    //     }else if (distance <= 2.0) {
+    //         return new double[] {
+    //             ShooterStates.DISTANCE_2M.shootingRPS,
+    //             ShooterStates.DISTANCE_2M.backSpinRPS
+    //         };
 
-        } else if (distance <= 2.125) {
-            return new double[] {
-                ShooterStates.DISTANCE_2M.shootingRPS,
-                ShooterStates.DISTANCE_2M.backSpinRPS
-            };
+    //     } else if (distance <= 2.125) {
+    //         return new double[] {
+    //             ShooterStates.DISTANCE_2M.shootingRPS,
+    //             ShooterStates.DISTANCE_2M.backSpinRPS
+    //         };
 
-        }else if (distance <= 2.25) {
-            return new double[] {
-                ShooterStates.DISTANCE_2_25M.shootingRPS,
-                ShooterStates.DISTANCE_2_25M.backSpinRPS
-            };
+    //     }else if (distance <= 2.25) {
+    //         return new double[] {
+    //             ShooterStates.DISTANCE_2_25M.shootingRPS,
+    //             ShooterStates.DISTANCE_2_25M.backSpinRPS
+    //         };
 
-        } else if (distance <= 2.375) {
-            return new double[] {
-                ShooterStates.DISTANCE_2_25M.shootingRPS,
-                ShooterStates.DISTANCE_2_25M.backSpinRPS
-            };
+    //     } else if (distance <= 2.375) {
+    //         return new double[] {
+    //             ShooterStates.DISTANCE_2_25M.shootingRPS,
+    //             ShooterStates.DISTANCE_2_25M.backSpinRPS
+    //         };
 
-        }else if (distance <= 2.5) {
-            return new double[] {
-                ShooterStates.DISTANCE_2_5M.shootingRPS,
-                ShooterStates.DISTANCE_2_5M.backSpinRPS
-            };
-        }
+    //     }else if (distance <= 2.5) {
+    //         return new double[] {
+    //             ShooterStates.DISTANCE_2_5M.shootingRPS,
+    //             ShooterStates.DISTANCE_2_5M.backSpinRPS
+    //         };
+    //     }
 
-        // Default fallback
-        return new double[] {
-            ShooterStates.FORWARD_SHOOT.shootingRPS,
-            ShooterStates.FORWARD_SHOOT.backSpinRPS
-        };
-    }
+    //     // Default fallback
+    //     return new double[] {
+    //         ShooterStates.FORWARD_SHOOT.shootingRPS,
+    //         ShooterStates.FORWARD_SHOOT.backSpinRPS
+    //     };
+    // }
 
     // Set the desired setpoints for all motors 
     // Will continue to move after this

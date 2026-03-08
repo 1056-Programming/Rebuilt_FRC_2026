@@ -126,7 +126,6 @@ public class VisionSubsystem extends SubsystemBase {
         // Get the number of apritags and the distance from the closest one
         SmartDashboard.putNumber(limelightName+" Number of AprilTags", s_poseEstimate.tagCount);
         SmartDashboard.putNumber(limelightName+" Distance", tag_distance);
-        SmartDashboard.putData((Sendable) CameraServer.getVideo());
     }
 
 }
