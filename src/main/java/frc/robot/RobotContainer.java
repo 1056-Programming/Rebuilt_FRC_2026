@@ -122,7 +122,7 @@ public class RobotContainer {
         driver1.rightTrigger().onTrue(c_shooterCommand.setShooterState(States.ShooterStates.VARIABLE_SHOOT));
         driver1.rightTrigger().onFalse(c_shooterCommand.setShooterState(States.ShooterStates.STOP));
 
-        driver1.a().onTrue(c_shooterCommand.setShooterState(States.ShooterStates.IN120));
+        driver1.a().onTrue(c_shooterCommand.setShooterState(States.ShooterStates.IN_120));
         driver1.a().onFalse(c_shooterCommand.setShooterState(States.ShooterStates.STOP));
     }
 
@@ -177,8 +177,7 @@ public class RobotContainer {
     }
 
     private void configureAuto() {
-
-        NamedCommands.registerCommand("Shooting", c_shooterCommand.setShooterState(ShooterStates.DISTANCE_1M));
+        
         NamedCommands.registerCommand("Index", c_indexCommand.setIndexState(IndexStates.INDEX));
         NamedCommands.registerCommand("Starting Positions", c_intakeCommand.setIntakeState(IntakeStates.HOME));
         NamedCommands.registerCommand("Pivot Down", c_intakeCommand.setIntakeState(IntakeStates.INTAKE));

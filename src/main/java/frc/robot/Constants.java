@@ -9,6 +9,8 @@ public class Constants {
         public static final double kSwerveP = 0.078;
         public static final double kSwerveI = 0;
         public static final double kSwerveD = 0; 
+
+        public static final double kYawTranslationLimiter = 0.4; 
     }
 
     public class Shooter {

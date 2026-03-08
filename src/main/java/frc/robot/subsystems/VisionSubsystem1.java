@@ -78,8 +78,8 @@ public class VisionSubsystem1 extends SubsystemBase {
             poseEstimate.timestampSeconds,
             VecBuilder.fill(.7,.7,9999999));
 
-        distanceToCenterTarget = poseEstimate.rawFiducials[0].distToCamera;
-        yawToCenterPiece = poseEstimate.rawFiducials[0].txnc;
+        distanceToCenterTarget = poseEstimate.rawFiducials[0].distToRobot;
+        yawToCenterPiece = LimelightHelpers.getTX(name);
     }
 
 

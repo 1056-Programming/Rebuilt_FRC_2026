@@ -37,6 +37,7 @@ public class ShooterSubsystem extends SubsystemBase {
     // PID controllers to maintain backspin RPS
     private final SparkClosedLoopController c_backSpinPID;
 
+    // Use this to calculate the distance for the shooter RPS 
     private final FieldHelpers fieldHelper; 
 
     // Enable or disable subsystem
@@ -62,7 +63,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     private TalonFXConfiguration setConfigs;
 
-    public ShooterSubsystem(FieldHelpers fieldHelper) { //Supplier<Double> x, Supplier<Double> y) {
+    public ShooterSubsystem(FieldHelpers fieldHelper) { 
         // Initialize Kraken Motors 
         m_rightShooter = new TalonFX(Constants.Shooter.kRightShootingID);
         m_middleShooter = new TalonFX(Constants.Shooter.kMiddleShootingID);

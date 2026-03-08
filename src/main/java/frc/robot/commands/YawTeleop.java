@@ -47,9 +47,6 @@ public class YawTeleop extends Command {
     private double xInput, yInput; 
     private double xSpeed, ySpeed, rSpeed;
 
-    // State of robot
-    private Pose2d swerveState; 
-
     public YawTeleop(CommandSwerveDrivetrain drivetrain, CommandXboxController controller, FieldHelpers fieldHelper) {
         // Initialize drivetrain and controller
         this.drivetrain = drivetrain; 
@@ -80,7 +77,6 @@ public class YawTeleop extends Command {
         yInput = controller.getLeftX();
 
         // Set setpoint depending on desired yaw to center tag
-        swerveState = drivetrain.getState().Pose;
         c_yawPID.setSetpoint(fieldHelper.getYawToCenterPiece());
 
         // Apply polynomial acceleration
@@ -98,8 +94,8 @@ public class YawTeleop extends Command {
     // Apply a polynomial acceleration curve to the joystick inputs for smoother control
     // Calculate speed for yaw align
     private void setSwerveSpeeds() {
-        xSpeed = Utilities.polynomialAccleration(yInput) * MaxSpeed * 0.7;
-        ySpeed = Utilities.polynomialAccleration(xInput) * MaxSpeed * 0.7;
+        xSpeed = Utilities.polynomialAccleration(yInput) * MaxSpeed * Constants.Swerve.kYawTranslationLimiter;
+        ySpeed = Utilities.polynomialAccleration(xInput) * MaxSpeed * Constants.Swerve.kYawTranslationLimiter;
         rSpeed = c_yawPID.calculate(Utilities.processYaw(drivetrain.getPigeon2().getYaw().getValueAsDouble()));
     }
 
