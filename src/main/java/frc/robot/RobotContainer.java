@@ -29,7 +29,7 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-
+import frc.lib.util.FieldHelpers;
 import frc.robot.Constants.Intake;
 
 import frc.robot.States.IndexStates;
@@ -49,6 +49,7 @@ import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.subsystems.VisionSubsystem1;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -63,20 +64,21 @@ public class RobotContainer {
     private final CommandXboxController driver0 = new CommandXboxController(0);
     private final CommandXboxController driver1 = new CommandXboxController(1);
 
-    //** Initialize Subsystems **//
+    //** Initialize Subsystems  & Field Helper Functions **//
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
-   // private final ShooterSubsystem s_shooter = new ShooterSubsystem(() -> drivetrain.getState().Pose.getX(), () -> drivetrain.getState().Pose.getY());
-   private final ShooterSubsystem s_shooter = new ShooterSubsystem(drivetrain);
+    private final FieldHelpers s_FieldHelpers = new FieldHelpers(() -> drivetrain.getState().Pose.getX(), () -> drivetrain.getState().Pose.getY());
+    private final ShooterSubsystem s_shooter = new ShooterSubsystem(s_FieldHelpers);
     private final IndexSubsystem s_indexor = new IndexSubsystem();
     private final IntakeSubsystem s_intake = new IntakeSubsystem();
     private final VisionSubsystem s_VisionSubsystem = new VisionSubsystem(drivetrain,"limelight-hotrock");
+    // private final VisionSubsystem1 s_test = new 
 
     //** Initialize Commands and auto **//
     private final ShooterCommand c_shooterCommand = new ShooterCommand(s_shooter);
     private final IndexCommand c_indexCommand = new IndexCommand(s_indexor);
     private final IntakeCommand c_intakeCommand = new IntakeCommand(s_intake);
     private final SwerveTeleop c_teleop = new SwerveTeleop(drivetrain, driver0);   
-    private final YawTeleop c_yawTeleop = new YawTeleop(drivetrain, driver0);
+    private final YawTeleop c_yawTeleop = new YawTeleop(drivetrain, driver0, s_FieldHelpers);
     private SendableChooser<Command> m_chooser;
 
 
@@ -117,12 +119,11 @@ public class RobotContainer {
     } 
 
     private void setShooterBindings() {
-
         driver1.rightTrigger().onTrue(c_shooterCommand.setShooterState(States.ShooterStates.VARIABLE_SHOOT));
         driver1.rightTrigger().onFalse(c_shooterCommand.setShooterState(States.ShooterStates.STOP));
 
-        driver1.a().onTrue(c_shooterCommand.setShooterState(States.ShooterStates.FORWARD_SHOOT));
-         
+        driver1.a().onTrue(c_shooterCommand.setShooterState(States.ShooterStates.IN120));
+        driver1.a().onFalse(c_shooterCommand.setShooterState(States.ShooterStates.STOP));
     }
 
     private void setDriverBindings() {

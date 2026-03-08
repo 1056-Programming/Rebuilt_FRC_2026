@@ -1,9 +1,11 @@
 package frc.robot;
 
+import edu.wpi.first.math.util.Units;
+
 public class Constants {
     public class Swerve {
-        public static final double kTranslationLimiter = 0.05;
-        public static final double kSwerveDeadband = 0.05;
+        // Amount of dead radius on the controller 
+        public static final double kSwerveDeadband = 0.01;
         public static final double kSwerveP = 0.078;
         public static final double kSwerveI = 0;
         public static final double kSwerveD = 0; 
@@ -71,5 +73,13 @@ public class Constants {
 
         // Vision distance to camera threshold: 
         public static final double distanceThreshold = 5; 
+    }
+
+    public class Field {
+        public static final double kBlueXPos = Units.inchesToMeters(158.84);
+        public static final double kBlueYPos = Units.inchesToMeters(182.11);
+
+        public static final double kRedXPos = 0;
+        public static final double kRedYPos = 0; 
     }
 }

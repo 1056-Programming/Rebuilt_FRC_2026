@@ -89,17 +89,17 @@ public class SwerveTeleop extends Command {
         rSpeed = Utilities.polynomialAccleration(rInput) * MaxAngularRate; 
     }
     
-    // Limit the rate of change of the xSpeed to 0.8 m/s^2
-    private final SlewRateLimiter xLimiter = new SlewRateLimiter(3);
-    private final SlewRateLimiter yLimiter = new SlewRateLimiter(3);
-    private final SlewRateLimiter rLimiter = new SlewRateLimiter(3); 
+    // // Limit the rate of change of the xSpeed to 0.8 m/s^2
+    // private final SlewRateLimiter xLimiter = new SlewRateLimiter(3);
+    // private final SlewRateLimiter yLimiter = new SlewRateLimiter(3);
+    // private final SlewRateLimiter rLimiter = new SlewRateLimiter(3); 
 
-    //My methods of the code 
-    private void phatSpeed() {
-        xSpeed = xLimiter.calculate(xSpeed); //Apply slew rate limiting to the xSpeed
-        ySpeed = yLimiter.calculate(ySpeed);
-        rSpeed = rLimiter.calculate(rSpeed);
-    }
+    // //My methods of the code 
+    // private void phatSpeed() {
+    //     xSpeed = xLimiter.calculate(xSpeed); //Apply slew rate limiting to the xSpeed
+    //     ySpeed = yLimiter.calculate(ySpeed);
+    //     rSpeed = rLimiter.calculate(rSpeed);
+    // }
  
     // Display important information for debugging
     private void setDashboardData() {

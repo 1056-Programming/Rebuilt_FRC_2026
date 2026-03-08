@@ -4,6 +4,7 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
+import java.lang.reflect.Field;
 import java.util.ResourceBundle.Control;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
@@ -18,12 +19,15 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.Constants;
+import frc.lib.util.FieldHelpers;
 import frc.lib.util.Utilities;
 
 // Ensure smooth acceleration with rapid decleration 
 public class YawTeleop extends Command {
+    // Swerve Control 
     private final CommandSwerveDrivetrain drivetrain;
     private final CommandXboxController controller;
+    private final FieldHelpers fieldHelper;
 
     // Set max speeds for swerve driving and deadband
     private final double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
@@ -46,10 +50,11 @@ public class YawTeleop extends Command {
     // State of robot
     private Pose2d swerveState; 
 
-    public YawTeleop(CommandSwerveDrivetrain drivetrain, CommandXboxController controller) {
+    public YawTeleop(CommandSwerveDrivetrain drivetrain, CommandXboxController controller, FieldHelpers fieldHelper) {
         // Initialize drivetrain and controller
         this.drivetrain = drivetrain; 
         this.controller = controller;
+        this.fieldHelper = fieldHelper;
 
         // Intialize controller inputs to 0
         xInput = 0; 
@@ -76,7 +81,7 @@ public class YawTeleop extends Command {
 
         // Set setpoint depending on desired yaw to center tag
         swerveState = drivetrain.getState().Pose;
-        c_yawPID.setSetpoint(Utilities.calculateYawToCenterPiece(swerveState.getX(), swerveState.getY()));
+        c_yawPID.setSetpoint(fieldHelper.getYawToCenterPiece());
 
         // Apply polynomial acceleration
         setSwerveSpeeds();

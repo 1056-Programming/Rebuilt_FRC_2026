@@ -1,26 +1,40 @@
 package frc.robot.subsystems;
 
+import java.util.zip.ZipEntry;
+
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.configs.VoltageConfigs;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
-
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.internal.DriverStationModeThread;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.lib.util.FieldHelpers;
+
 import frc.lib.util.SparkFlexUtils;
 import frc.lib.util.TalonFxUtils;
 import frc.lib.util.Utilities;
+// import frc.robot.CalculateShooterSpeed;
 import frc.robot.Constants;
+import frc.robot.Constants.Swerve;
+import frc.robot.Constants.Vision;
 import frc.robot.States.ShooterStates;
+
+import java.util.Arrays;
+import java.util.function.Supplier;
 
 public class ShooterSubsystem extends SubsystemBase {
     // Different motors for each channel on the robot 
@@ -37,7 +51,9 @@ public class ShooterSubsystem extends SubsystemBase {
     // PID controllers to maintain backspin RPS
     private final SparkClosedLoopController c_backSpinPID;
 
-    private final FieldHelpers fieldHelper; 
+    // Suppliers for current x and y of Robot
+    // private final Supplier<Double> swerveStateXSupplier;
+    // private final Supplier<Double> swerveStateYSupplier;
 
     // Enable or disable subsystem
     private final boolean disable; 
@@ -61,8 +77,9 @@ public class ShooterSubsystem extends SubsystemBase {
     private double distance;
 
     private TalonFXConfiguration setConfigs;
+    private final CommandSwerveDrivetrain x;
 
-    public ShooterSubsystem(FieldHelpers fieldHelper) { //Supplier<Double> x, Supplier<Double> y) {
+    public ShooterSubsystem(CommandSwerveDrivetrain x) { //Supplier<Double> x, Supplier<Double> y) {
         // Initialize Kraken Motors 
         m_rightShooter = new TalonFX(Constants.Shooter.kRightShootingID);
         m_middleShooter = new TalonFX(Constants.Shooter.kMiddleShootingID);
@@ -94,8 +111,11 @@ public class ShooterSubsystem extends SubsystemBase {
         // Initialize PID Controllers
         c_backSpinPID = m_backSpin.getClosedLoopController();
 
-        // Get Field helpers for distance to center piece calculation 
-        this.fieldHelper = fieldHelper;
+        // Intialize Suppliers for the swerve state
+        // swerveStateXSupplier = x;
+        // swerveStateYSupplier = y; 
+
+        this.x = x; 
 
         // Initialize shooter state to STOP 
         s_state = ShooterStates.STOP;
@@ -108,13 +128,14 @@ public class ShooterSubsystem extends SubsystemBase {
 
         // setShooterConfigs(100); 
 
+
+
         // Disable Subsystem if set to true 
         disable = false; 
         if(disable) {
             disableSubsystem();
         }
     }
-
     @Override
     public void periodic() { 
         setDashboardData();
@@ -127,7 +148,6 @@ public class ShooterSubsystem extends SubsystemBase {
         if(state.equals(ShooterStates.VARIABLE_SHOOT)) {
             // TODO: 
             distance = Units.metersToInches(VisionSubsystem.tag_distance);
-            // distance = fieldHelper.getDistanceToCenterPiece(); 
 
         //    distance = Utilities.calculateDistanceToCenterPiece(x.getState().Pose.getX(), x.getState().Pose.getY());
         //    distance = Units.metersToInches(distance) + 13; 
@@ -193,6 +213,135 @@ public class ShooterSubsystem extends SubsystemBase {
         return speeds;
     }
 
+    private double[] checkShooterRange(double distance) {
+        if (distance <= 0.125) {
+            return new double[] {
+                ShooterStates.DISTANCE_0M.shootingRPS,
+                ShooterStates.DISTANCE_0M.backSpinRPS
+            };
+
+        } else if (distance <= 0.25) {
+            return new double[] {
+                ShooterStates.DISTANCE_0_25M.shootingRPS,
+                ShooterStates.DISTANCE_0_25M.backSpinRPS
+            };
+
+        } else if (distance <= 0.375) {
+            return new double[] {
+                ShooterStates.DISTANCE_0_25M.shootingRPS,
+                ShooterStates.DISTANCE_0_25M.backSpinRPS
+            };
+
+        } else if (distance <= 0.5) {
+            return new double[] {
+                ShooterStates.DISTANCE_0_5M.shootingRPS,
+                ShooterStates.DISTANCE_0_5M.backSpinRPS
+            };
+
+        } else if (distance <= 0.625) {
+            return new double[] {
+                ShooterStates.DISTANCE_0_5M.shootingRPS,
+                ShooterStates.DISTANCE_0_5M.backSpinRPS
+            };
+
+        } else if (distance <= 0.75) {
+            return new double[] {
+                ShooterStates.DISTANCE_0_75M.shootingRPS,
+                ShooterStates.DISTANCE_0_75M.backSpinRPS
+            };
+
+        } else if (distance <= 0.875) {
+            return new double[] {
+                ShooterStates.DISTANCE_0_75M.shootingRPS,
+                ShooterStates.DISTANCE_0_75M.backSpinRPS
+            };
+
+        } else if (distance <= 1.0) {
+            return new double[] {
+                ShooterStates.DISTANCE_1M.shootingRPS,
+                ShooterStates.DISTANCE_1M.backSpinRPS
+            };
+
+        } else if (distance <= 1.125) {
+            return new double[] {
+                ShooterStates.DISTANCE_1M.shootingRPS,
+                ShooterStates.DISTANCE_1M.backSpinRPS
+            };
+
+        }else if (distance <= 1.25) {
+            return new double[] {
+                ShooterStates.DISTANCE_1_25M.shootingRPS,
+                ShooterStates.DISTANCE_1_25M.backSpinRPS
+            };
+
+        }else if (distance <= 1.375) {
+            return new double[] {
+                ShooterStates.DISTANCE_1_25M.shootingRPS,
+                ShooterStates.DISTANCE_1_25M.backSpinRPS
+            };
+
+        } else if (distance <= 1.5) {
+            return new double[] {
+                ShooterStates.DISTANCE_1_5M.shootingRPS,
+                ShooterStates.DISTANCE_1_5M.backSpinRPS
+            };
+
+        } else if (distance <= 1.625) {
+            return new double[] {
+                ShooterStates.DISTANCE_1_5M.shootingRPS,
+                ShooterStates.DISTANCE_1_5M.backSpinRPS
+            };
+
+        } else if (distance <= 1.75) {
+           return new double[] {
+                ShooterStates.DISTANCE_1_75M.shootingRPS,
+                ShooterStates.DISTANCE_1_75M.backSpinRPS
+            };
+
+        } else if (distance <= 1.875) {
+            return new double[] {
+                ShooterStates.DISTANCE_1_75M.shootingRPS,
+                ShooterStates.DISTANCE_1_75M.backSpinRPS
+            };
+
+        }else if (distance <= 2.0) {
+            return new double[] {
+                ShooterStates.DISTANCE_2M.shootingRPS,
+                ShooterStates.DISTANCE_2M.backSpinRPS
+            };
+
+        } else if (distance <= 2.125) {
+            return new double[] {
+                ShooterStates.DISTANCE_2M.shootingRPS,
+                ShooterStates.DISTANCE_2M.backSpinRPS
+            };
+
+        }else if (distance <= 2.25) {
+            return new double[] {
+                ShooterStates.DISTANCE_2_25M.shootingRPS,
+                ShooterStates.DISTANCE_2_25M.backSpinRPS
+            };
+
+        } else if (distance <= 2.375) {
+            return new double[] {
+                ShooterStates.DISTANCE_2_25M.shootingRPS,
+                ShooterStates.DISTANCE_2_25M.backSpinRPS
+            };
+
+        }else if (distance <= 2.5) {
+            return new double[] {
+                ShooterStates.DISTANCE_2_5M.shootingRPS,
+                ShooterStates.DISTANCE_2_5M.backSpinRPS
+            };
+        }
+
+        // Default fallback
+        return new double[] {
+            ShooterStates.FORWARD_SHOOT.shootingRPS,
+            ShooterStates.FORWARD_SHOOT.backSpinRPS
+        };
+    }
+
     // Set the desired setpoints for all motors 
     // Will continue to move after this
     public void setVelocitySetpoints(double desiredShooterRPS, double desiredBackSpinRPS) {
@@ -243,7 +392,7 @@ public class ShooterSubsystem extends SubsystemBase {
         SmartDashboard.putNumber(getName() + " Middle Shooter RPS", m_middleShooter.getVelocity().getValueAsDouble());
         SmartDashboard.putNumber(getName() + " Left Shooter RPS", m_leftShooter.getVelocity().getValueAsDouble());
         SmartDashboard.putNumber(getName() + " Back Spin RPS", getBackSpinRPS());
-        SmartDashboard.putNumber(getName() + " Distance", distance);
+                SmartDashboard.putNumber(getName() + " Distance", distance);
 
 
         // PID Setpoint Values

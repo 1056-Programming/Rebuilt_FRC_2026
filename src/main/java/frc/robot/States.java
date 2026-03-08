@@ -10,6 +10,7 @@ public class States {
     public enum IndexStates {
         STOP(0, 0),
         INDEX(0.25, 0.25),
+        MAX_INDEX(1,1),
         REVERSE(-1.0, -1.0);
 
         public final double indexerSpeed;
@@ -72,8 +73,7 @@ public class States {
         // Set the speed of the intak-ing motor and the position of piviot 
         INTAKE(0.3, -206),
         OUTAKE(-0.5,-140),
-
-
+    
         // Set the home values for piviot 
         HOME(0,-140),
         HALF_HOME(0,-190);
