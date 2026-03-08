@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Copy of New Path"
+            "pathName": "COMMAND TEST"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Testing Autos",
   "choreoAuto": false
 }

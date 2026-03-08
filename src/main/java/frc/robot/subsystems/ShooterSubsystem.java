@@ -122,7 +122,6 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void setShooterState(ShooterStates state) {
-        //stateDistance = checkShooterRange();
         s_state = state; 
 
         if(state.equals(ShooterStates.VARIABLE_SHOOT)) {
@@ -130,9 +129,8 @@ public class ShooterSubsystem extends SubsystemBase {
             distance = Units.metersToInches(VisionSubsystem.tag_distance);
             // distance = fieldHelper.getDistanceToCenterPiece(); 
 
-        //    distance = Utilities.calculateDistanceToCenterPiece(x.getState().Pose.getX(), x.getState().Pose.getY());
-        //    distance = Units.metersToInches(distance) + 13; 
-            //checkShooterRange(distance)
+            // distance = Utilities.calculateDistanceToCenterPiece(x.getState().Pose.getX(), x.getState().Pose.getY());
+            // distance = Units.metersToInches(distance) + 13; 
 
             var sigma = calculateMotorSpeeds(distance); 
             setVelocitySetpoints(sigma[0], sigma[1]);
@@ -150,9 +148,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private double[] calculateMotorSpeeds(double distance) {
         double[] speeds = new double[2];
 
-        // Shooter Equations
-        // Logistic Shooter
-        // speeds[0] = Utilities.calculateLogisticShooterSpeed(distance);
+        // Calculate shooter speed for the given distance
         if(distance > 2.9718) {
             speeds[0] = Utilities.calculateCubicShooterSpeed(distance);
         } else if (distance < 2 && distance > 1) { 
@@ -160,27 +156,8 @@ public class ShooterSubsystem extends SubsystemBase {
         } else {
             speeds[0] = Utilities.calculateCubicBackSpinSpeed(distance) *  0.93267;
         }
-        // Quadratic Shooter
-        //speeds[0] = Utilities.calculateQuadraticShooterSpeed(distance);
-
-        // Linear Shooter
-        // speeds[0] = Utilities.calculateLinearShooterSpeed(distance);
-
-        // Quartic Shooter
-        // speeds[0] = Utilities.calculateQuarticShooterSpeed(distance);
-
-        // Backspin Equations
-        // Sinusoidal Backspin
-        // speeds[1] = Utilities.calculcateSinsoidalBackSpinSpeed(distance);
-
-        // Logistic Backspin
-        //peeds[1] = Utilities.calculateLogisticBackSpinSpeed(distance);
-
-        // Quadratic Backspin
-        // speeds[1] = Utilities.calculateQuadraticBackSpinSpeed(distance);
-
-        // Cubic Backspin
-            
+        
+        // Calculate the backspin speed for the given distance
         if(distance > 2.9718) {
             speeds[1] = Utilities.calculateCubicBackSpinSpeed(distance);
         } else if (distance < 2 && distance > 1) { 
@@ -188,8 +165,6 @@ public class ShooterSubsystem extends SubsystemBase {
         } else {
             speeds[1] = Utilities.calculateCubicBackSpinSpeed(distance) *  0.93267;
         }
-        // Quartic Backspin
-        // speeds[1] = Utilities.calculcateQuarticBackSpinSpeed(distance);
 
         return speeds;
     }
@@ -244,18 +219,13 @@ public class ShooterSubsystem extends SubsystemBase {
         SmartDashboard.putNumber(getName() + " Middle Shooter RPS", m_middleShooter.getVelocity().getValueAsDouble());
         SmartDashboard.putNumber(getName() + " Left Shooter RPS", m_leftShooter.getVelocity().getValueAsDouble());
         SmartDashboard.putNumber(getName() + " Back Spin RPS", getBackSpinRPS());
-        SmartDashboard.putNumber(getName() + " Distance", distance);
-
 
         // PID Setpoint Values
         SmartDashboard.putNumber(getName() + " shooter PID setpoints", this.desiredShooterRPS);
         SmartDashboard.putNumber(getName() + " Back Spin PID Setpoint", this.desiredBackSpinRPS);
 
         // Distance to tag
-        SmartDashboard.putNumber(getName() + " Distance to tag", this.desiredBackSpinRPS);
-        // SmartDashboard.putNumber(getName() + " Current x", swerveStateXSupplier.get());
-        // SmartDashboard.putNumber(getName() + " Current y", swerveStateYSupplier.get());
-
+        SmartDashboard.putNumber(getName() + " Distance to tag", distance);
 
         // Current Shooter State
         SmartDashboard.putString(getName() + " Shooter State", s_state.toString());                      

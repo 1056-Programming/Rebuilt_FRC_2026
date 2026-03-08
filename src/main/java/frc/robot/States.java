@@ -11,7 +11,7 @@ public class States {
         STOP(0, 0),
         INDEX(0.25, 0.25),
         MAX_INDEX(1,1),
-        REVERSE(-1.0, -1.0);
+        REVERSE(-0.5, -0.5);
 
         public final double indexerSpeed;
         public final double conveyorSpeed;
@@ -56,15 +56,15 @@ public class States {
     // Pivot is in angles need to set range
     // Positive for intake speed is intaking, positive for pivot angle is pivoting up
     public enum IntakeStates {
-        STOP(0, -180),
+        STOP(0, -206),
 
         // Set the speed of the intak-ing motor and the position of piviot 
         INTAKE(0.3, -206),
         OUTAKE(-0.5,-140),
     
         // Set the home values for piviot 
-        HOME(0,-140),
-        HALF_HOME(0,-190);
+        START(0,-160),
+        HOME(0,-190);
 
         public final double intakeSpeed;
         public final double pivotAngle;

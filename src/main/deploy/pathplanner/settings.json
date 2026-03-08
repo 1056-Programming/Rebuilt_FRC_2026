@@ -2,8 +2,14 @@
   "robotWidth": 0.762,
   "robotLength": 0.61,
   "holonomicMode": true,
-  "pathFolders": [],
-  "autoFolders": [],
+  "pathFolders": [
+    "Arlen Stuff",
+    "Phat Stuff"
+  ],
+  "autoFolders": [
+    "Competition Autos",
+    "Testing Autos"
+  ],
   "defaultMaxVel": 2.0,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,

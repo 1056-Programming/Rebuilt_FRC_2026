@@ -14,15 +14,15 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.FollowPathCommand;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 
-import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.SerialPort.StopBits;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first
+.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
@@ -97,17 +97,17 @@ public class RobotContainer {
         setIndexorBindings();
         setShooterBindings();
     //    setTestBindings();
-        
     }
 
     private void setIntakeBindings() {
         driver1.leftTrigger().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.INTAKE));
-        driver1.leftTrigger().toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.STOP));
+        driver1.leftTrigger().toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.HOME));
 
         driver1.leftBumper().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.OUTAKE));
-        driver1.leftBumper().toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.STOP));
+        driver1.leftBumper().toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.HOME));
 
-        driver1.y().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.HOME)); 
+        driver1.y().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.START)); 
+        driver1.y().toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.HOME));
     }
 
     private void setIndexorBindings() {
@@ -206,11 +206,29 @@ public class RobotContainer {
     // }
 
     private void configureAuto() {
-        // Register intake commands into path planner
+        // Register Intake Commands to Auto
         NamedCommands.registerCommand("Intake Balls", c_intakeCommand.setIntakeState(IntakeStates.INTAKE));
         NamedCommands.registerCommand("Intake Feed Out", c_intakeCommand.setIntakeState(IntakeStates.OUTAKE));
-        NamedCommands.registerCommand("Intake Home", c_intakeCommand.setIntakeState(IntakeStates.HOME));
-        NamedCommands.registerCommand("Intake Start Position", c_intakeCommand.setIntakeState(IntakeStates.setSmartDashboard));
+        NamedCommands.registerCommand("Intake Home ", c_intakeCommand.setIntakeState(IntakeStates.HOME));
+        NamedCommands.registerCommand("Intake Start Pos", c_intakeCommand.setIntakeState(IntakeStates.START));
+        NamedCommands.registerCommand("Intake Stop", c_intakeCommand.setIntakeState(IntakeStates.STOP));
+
+        // Register Shooting Commands to Auto 
+        NamedCommands.registerCommand("Shooter 120 In", c_shooterCommand.setShooterState(ShooterStates.IN_120));
+        NamedCommands.registerCommand("Shooter 100 In", c_shooterCommand.setShooterState(ShooterStates.IN_100));
+        NamedCommands.registerCommand("Shooter Variable", c_shooterCommand.setShooterState(ShooterStates.VARIABLE_SHOOT));
+
+        // Register Indexing Commnads to Auto
+        NamedCommands.registerCommand("Index Balls", c_indexCommand.setIndexState(IndexStates.INDEX));
+        NamedCommands.registerCommand("Index Reverse", c_indexCommand.setIndexState(IndexStates.REVERSE));
+        NamedCommands.registerCommand("Index Stop", c_indexCommand.setIndexState(IndexStates.STOP));
+
+        // Put all of the auto routines onto the Smartdashboard
+        m_chooser = AutoBuilder.buildAutoChooser(); 
+        SmartDashboard.putData(m_chooser);
+
+        // Warmup PathPlanner to avoid Java pauses
+        FollowPathCommand.warmupCommand().schedule();
     }
 
     public Command getAutonomousCommand() {
