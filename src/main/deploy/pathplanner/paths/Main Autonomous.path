@@ -126,37 +126,37 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Starting Positions",
+      "name": "",
       "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": null
     },
     {
-      "name": "Pivot Down",
+      "name": "",
       "waypointRelativePos": 1.3933795227097865,
       "endWaypointRelativePos": null,
       "command": null
     },
     {
-      "name": "Stop Intake",
+      "name": "",
       "waypointRelativePos": 3.225558121632023,
       "endWaypointRelativePos": null,
       "command": null
     },
     {
-      "name": "Pivot Up",
+      "name": "",
       "waypointRelativePos": 3.3641262509622734,
       "endWaypointRelativePos": null,
       "command": null
     },
     {
-      "name": "Index",
+      "name": "",
       "waypointRelativePos": 5.0,
       "endWaypointRelativePos": null,
       "command": null
     },
     {
-      "name": "Shooting",
+      "name": "",
       "waypointRelativePos": 5.0,
       "endWaypointRelativePos": null,
       "command": null

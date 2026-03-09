@@ -9,8 +9,9 @@ public class States {
     // Positive in Index in 
     public enum IndexStates {
         STOP(0, 0),
-        INDEX(0.25, 0.25),
-        REVERSE(-0.5, -0.5);
+        INDEX(0.8, -0.8),
+        AUTO_INDEX(0.5, -0.5),
+        REVERSE(-0.5, 0.5);
 
         public final double indexerSpeed;
         public final double conveyorSpeed;
@@ -26,7 +27,7 @@ public class States {
     // Positive for both is shoot outward 
     // Contains the backspin and shooterspin states for different distances
     public enum ShooterStates {
-        
+
         // Set the shooter move
         STOP(0, 0, 0),
         FORWARD_SHOOT(60, 30, 0),
@@ -45,7 +46,9 @@ public class States {
         // DISTANCE_2_25M(4.7, 46.7, 2.25),
         // DISTANCE_2_5M(5.8, 49.2, 2.5),
 
-        IN_120(62.5,30,Units.inchesToMeters(120)),
+       // IN_120(62.5,30,Units.inchesToMeters(120)),
+       // IN_120(25, 42.5,Units.inchesToMeters(120)),
+        IN_120(7.5 ,47, Units.inchesToMeters(120)),
         IN_89(32, 45,Units.inchesToMeters(89.5)),
         IN_60(22.5,37.5, Units.inchesToMeters(60)),
         IN_45(25, 35, Units.inchesToMeters(45)),
@@ -68,15 +71,17 @@ public class States {
     // Pivot is in angles need to set range
     // Positive for intake speed is intaking, positive for pivot angle is pivoting up
     public enum IntakeStates {
-        STOP(0, -206),
+        STOP(0, -210),
 
         // Set the speed of the intak-ing motor and the position of piviot 
-        INTAKE(0.3, -206),
+        INTAKE(-0.85, -213),
+        AUTO_INTAKE(-0.7, -213),
         OUTAKE(-0.5,-140),
 
         // Set the home values for piviot 
+        GIGA_HOME(0, -105),
         START(0,-160),
-        HOME(0,-190);
+        HOME(0,-210);
 
         public final double intakeSpeed;
         public final double pivotAngle;

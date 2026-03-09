@@ -65,8 +65,8 @@ public class SwerveTeleop extends Command {
     @Override
     public void execute() {
         // Set contoller speeds 
-        xInput = controller.getLeftY();
-        yInput = controller.getLeftX();
+        xInput = -controller.getLeftY();
+        yInput = -controller.getLeftX();
         rInput = -controller.getRightX();
 
         // Apply polynomial acceleration

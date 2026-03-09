@@ -60,7 +60,7 @@ public class IntakeSubsystem extends SubsystemBase {
         setIntakeState(i_state);
 
         // Disable Subsystem if set to true 
-        disable = false;
+        disable = true;
         if(disable) {
             disableSubsystem();
         }
@@ -71,6 +71,9 @@ public class IntakeSubsystem extends SubsystemBase {
         // Set motor speed based on PID calculation
         pivotSpeed = c_pivotPID.calculate(getPiviotPosition()) 
             + c_ArmFeedforward.calculate(Units.degreesToRadians(getPiviotPosition()), pivotEncoder.getVelocity().getValueAsDouble());
+        if(pivotSpeed < 0) {
+            pivotSpeed *= 0.8;
+        }
         m_pivot.set(pivotSpeed);
         setDashboardData();
     }
@@ -93,7 +96,7 @@ public class IntakeSubsystem extends SubsystemBase {
     // For some reasons it negative
     // Increases as you go up 
     private double getPiviotPosition() {
-        return Units.rotationsToDegrees(pivotEncoder.getPosition().getValueAsDouble());
+        return Units.rotationsToDegrees(pivotEncoder.getPosition().getValueAsDouble()) * -1 -60 * 4;
     }
 
     // Disable susbystem if needed
@@ -111,5 +114,6 @@ public class IntakeSubsystem extends SubsystemBase {
         SmartDashboard.putNumber(getName() + " pivot setpoint", c_pivotPID.getSetpoint());
         SmartDashboard.putNumber(getName() + " pivot speed", pivotSpeed);
         SmartDashboard.putNumber(getName() + " intake speed", m_intake.get());
+        SmartDashboard.putNumber(getName() + " piviot position", getPiviotPosition());
     }
 }

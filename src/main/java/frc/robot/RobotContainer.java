@@ -94,7 +94,8 @@ public class RobotContainer {
         setIntakeBindings();
         setIndexorBindings();
         setShooterBindings();
-    //    setTestBindings();
+        //setTestBindings();
+
         
     }
 
@@ -102,10 +103,10 @@ public class RobotContainer {
         driver1.leftTrigger().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.INTAKE));
         driver1.leftTrigger().toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.HOME));
 
-        driver1.leftBumper().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.OUTAKE));
-        driver1.leftBumper().toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.HOME));
+        driver1.x().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.OUTAKE));
+        driver1.x().toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.HOME));
 
-        driver1.y().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.START)); 
+        driver1.y().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.GIGA_HOME)); 
         driver1.y().toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.HOME));
     }
 
@@ -117,16 +118,17 @@ public class RobotContainer {
         driver1.leftBumper().toggleOnFalse(c_indexCommand.setIndexState(IndexStates.STOP));
     } 
 
-    private void setShooterBindings() {
 
+    private void setShooterBindings() {
         driver1.rightTrigger().onTrue(c_shooterCommand.setShooterState(States.ShooterStates.VARIABLE_SHOOT));
         driver1.rightTrigger().onFalse(c_shooterCommand.setShooterState(States.ShooterStates.STOP));
 
-        driver1.a().onTrue(c_shooterCommand.setShooterState(States.ShooterStates.FORWARD_SHOOT));
-         
+        driver1.a().onTrue(c_shooterCommand.setShooterState(States.ShooterStates.IN_120));
+        driver1.a().onFalse(c_shooterCommand.setShooterState(ShooterStates.STOP));
     }
 
     private void setDriverBindings() {
+
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         // Drivetrain will execute this command periodically
@@ -163,32 +165,34 @@ public class RobotContainer {
     }
 
     private void setTestBindings() {
-        driver1.y().onTrue(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS+=5, s_shooter.desiredBackSpinRPS)));
-        driver1.y().onFalse(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS, s_shooter.desiredBackSpinRPS)));
+        driver1.pov(90).onTrue(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS+=5, s_shooter.desiredBackSpinRPS)));
+        driver1.pov(90).onFalse(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS, s_shooter.desiredBackSpinRPS)));
 
-        driver1.a().onTrue(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS, s_shooter.desiredBackSpinRPS+=5)));
-        driver1.a().onFalse(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS, s_shooter.desiredBackSpinRPS)));
+        driver1.pov(180).onTrue(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS, s_shooter.desiredBackSpinRPS+=5)));
+        driver1.pov(180).onFalse(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS, s_shooter.desiredBackSpinRPS)));
         
-        driver1.rightTrigger().onTrue(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS-=2.5, s_shooter.desiredBackSpinRPS)));
-        driver1.rightTrigger().onFalse(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS, s_shooter.desiredBackSpinRPS)));
+        driver1.pov(270).onTrue(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS-=2.5, s_shooter.desiredBackSpinRPS)));
+        driver1.pov(270).onFalse(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS, s_shooter.desiredBackSpinRPS)));
 
-        driver1.x().onTrue(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS, s_shooter.desiredBackSpinRPS-=2.5)));
-        driver1.x().onFalse(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS, s_shooter.desiredBackSpinRPS)));
+        driver1.b().onTrue(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS, s_shooter.desiredBackSpinRPS-=2.5)));
+        driver1.b().onFalse(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS, s_shooter.desiredBackSpinRPS)));
     }
 
     private void configureAuto() {
-        NamedCommands.registerCommand("Intake Balls", c_intakeCommand.setIntakeState(IntakeStates.INTAKE));
+        NamedCommands.registerCommand("Intake Balls", c_intakeCommand.setIntakeState(IntakeStates.AUTO_INTAKE));
         NamedCommands.registerCommand("Intake Feed Out", c_intakeCommand.setIntakeState(IntakeStates.OUTAKE));
-        NamedCommands.registerCommand("Intake Home ", c_intakeCommand.setIntakeState(IntakeStates.HOME));
+        NamedCommands.registerCommand("Intake Home", c_intakeCommand.setIntakeState(IntakeStates.HOME));
         NamedCommands.registerCommand("Intake Start Pos", c_intakeCommand.setIntakeState(IntakeStates.START));
         NamedCommands.registerCommand("Intake Stop", c_intakeCommand.setIntakeState(IntakeStates.STOP));
+        NamedCommands.registerCommand("Intake Mega Home", c_intakeCommand.setIntakeState(IntakeStates.GIGA_HOME));
 
         NamedCommands.registerCommand("Shoot 120 IN", c_shooterCommand.setShooterState(ShooterStates.IN_120));
-        NamedCommands.registerCommand("Shooter 100", c_shooterCommand.setShooterState(ShooterStates.IN_100));
+        NamedCommands.registerCommand("Shoot 100 IN", c_shooterCommand.setShooterState(ShooterStates.IN_100));
 
         NamedCommands.registerCommand("Index Balls", c_indexCommand.setIndexState(IndexStates.INDEX));
         NamedCommands.registerCommand("Index Reverse", c_indexCommand.setIndexState(IndexStates.REVERSE));
         NamedCommands.registerCommand("Index Stop", c_indexCommand.setIndexState(IndexStates.STOP));
+        NamedCommands.registerCommand("Index Auto Balls", c_indexCommand.setIndexState(IndexStates.AUTO_INDEX));
 
         m_chooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData(m_chooser);

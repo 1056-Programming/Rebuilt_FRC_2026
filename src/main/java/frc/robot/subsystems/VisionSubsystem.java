@@ -45,7 +45,6 @@ public class VisionSubsystem extends SubsystemBase {
     public void periodic() {
         s_poseEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName);  
         megaTag2();
-        setSmartDashboard();
     }
 
     public void megaTag2 () { 
@@ -74,6 +73,7 @@ public class VisionSubsystem extends SubsystemBase {
             System.out.println("ntoaehuntsaoehutnsaoeutnoaeu");
             //CameraServer.startAutomaticCapture();
         }            
+        setSmartDashboard();
     }
 
     public static double getTagYaw() {

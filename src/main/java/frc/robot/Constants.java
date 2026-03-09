@@ -19,9 +19,9 @@ public class Constants {
         public static final int kLeftShootingID = 22;
 
         // PID constants for slot 0 on shooter
-        public static final double kShooterP = 0.035;
+        public static final double kShooterP = 0.03;
         public static final double kShooterI = 0;
-        public static final double kShooterD = 0; 
+        public static final double kShooterD = 0.009; 
         public static final double kShooterS = 0;
         public static final double kShooterV = 0.13;
 
@@ -42,7 +42,7 @@ public class Constants {
     public class Indexor {
         // REV SparkMax 
         public static final int kIndexorID = 33;
-        public static final int kConveyorID = 30;
+        public static final int kConveyorID = 31;
     }
 
     public class Intake{
@@ -50,13 +50,13 @@ public class Constants {
         public static final int kIntakeID = 35;
 
         // REV SparkMax
-        public static final int kPivotID = 31;
+        public static final int kPivotID = 30;
 
         // CTRE Through Bore Encoder 
         public static final int kEncoderID = 23;
 
         // PID values
-        public static final double kIntakeP = 0.048;
+        public static final double kIntakeP = 0.03;
         public static final double kIntakeI = 0;
         public static final double kIntakeD = 0;
     

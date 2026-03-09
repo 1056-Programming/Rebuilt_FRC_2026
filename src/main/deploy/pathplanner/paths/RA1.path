@@ -3,42 +3,40 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.0,
-        "y": 7.0
+        "x": 3.664,
+        "y": 3.019315263908702
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.2481090701893223,
-        "y": 6.96930978511333
+        "x": 6.885563480741797,
+        "y": 2.941683309557775
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.0,
-        "y": 7.0
+        "x": 7.7535444444444455,
+        "y": 0.8777999999999986
       },
       "prevControl": {
-        "x": 3.006877370417194,
-        "y": 7.01055625790139
+        "x": 7.450557396887904,
+        "y": 0.9274616269892173
       },
       "nextControl": null,
-      "isLocked": false,
-      "linkedName": null
+      "isLocked": true,
+      "linkedName": "RA1"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.28440366972477077,
+      "rotationDegrees": 0.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": null,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 2.0,
     "maxAcceleration": 3.0,
@@ -49,10 +47,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 111.19405648154232
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Arlen Stuff",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0
