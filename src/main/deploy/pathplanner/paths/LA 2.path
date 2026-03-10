@@ -3,44 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.0,
-        "y": 7.0
+        "x": 7.587888888888889,
+        "y": 7.046033333333332
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.0,
-        "y": 7.0
+        "x": 7.782777777777778,
+        "y": 5.9351666666666665
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "LA1"
     },
     {
       "anchor": {
-        "x": 4.6,
-        "y": 4.0
+        "x": 7.734055555555555,
+        "y": 4.492988888888889
       },
       "prevControl": {
-        "x": 3.5999999999999996,
-        "y": 4.0
+        "x": 7.9192,
+        "y": 5.759766666666667
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "LA2"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "Intake Balls",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": null,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.0,
+    "maxVelocity": 0.5,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -49,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -88.78818788425602
   },
   "reversed": false,
-  "folder": "Arlen Stuff",
+  "folder": "Left Auto Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -73.73979529168778
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

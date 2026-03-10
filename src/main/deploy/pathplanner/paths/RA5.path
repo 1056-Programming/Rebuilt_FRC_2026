@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.0,
-        "y": 7.0
+        "x": 0.24803138373751754,
+        "y": 0.5609700427960058
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.2481090701893223,
-        "y": 6.96930978511333
+        "x": 1.2480313837375172,
+        "y": 0.5609700427960056
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "RA4"
     },
     {
       "anchor": {
-        "x": 2.0,
-        "y": 7.0
+        "x": 3.2239229671897287,
+        "y": 0.6774179743223976
       },
       "prevControl": {
-        "x": 3.006877370417194,
-        "y": 7.01055625790139
+        "x": 2.2239229671897287,
+        "y": 0.6774179743223977
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "",
-      "waypointRelativePos": 0,
+      "name": "Intake Balls",
+      "waypointRelativePos": 0.6293045239702849,
       "endWaypointRelativePos": null,
       "command": null
     }
@@ -49,13 +49,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 69.67686317033699
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Right Auto Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

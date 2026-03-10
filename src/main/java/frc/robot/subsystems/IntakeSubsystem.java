@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -69,12 +68,12 @@ public class IntakeSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         // Set motor speed based on PID calculation
-        pivotSpeed = c_pivotPID.calculate(getPiviotPosition()) 
-            + c_ArmFeedforward.calculate(Units.degreesToRadians(getPiviotPosition()), pivotEncoder.getVelocity().getValueAsDouble());
-        if(pivotSpeed < 0) {
-            pivotSpeed *= 0.8;
-        }
-        m_pivot.set(pivotSpeed);
+        // pivotSpeed = c_pivotPID.calculate(getPiviotPosition()) 
+        //     + c_ArmFeedforward.calculate(Units.degreesToRadians(getPiviotPosition()), pivotEncoder.getVelocity().getValueAsDouble());
+        // if(pivotSpeed < 0) {
+        //     pivotSpeed *= 0.8;
+        // }
+        // m_pivot.set(pivotSpeed);
         setDashboardData();
     }
 

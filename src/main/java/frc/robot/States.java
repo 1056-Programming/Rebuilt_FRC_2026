@@ -9,7 +9,7 @@ public class States {
     // Positive in Index in 
     public enum IndexStates {
         STOP(0, 0),
-        INDEX(0.8, -0.8),
+        INDEX(1, -0.8),
         AUTO_INDEX(0.5, -0.5),
         REVERSE(-0.5, 0.5);
 
@@ -74,8 +74,8 @@ public class States {
         STOP(0, -210),
 
         // Set the speed of the intak-ing motor and the position of piviot 
-        INTAKE(-0.85, -213),
-        AUTO_INTAKE(-0.7, -213),
+        INTAKE(-1, -213),
+        AUTO_INTAKE(-1, -213),
         OUTAKE(-0.5,-140),
 
         // Set the home values for piviot 

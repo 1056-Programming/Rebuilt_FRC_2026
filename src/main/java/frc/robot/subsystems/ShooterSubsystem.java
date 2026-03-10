@@ -23,9 +23,6 @@ import frc.lib.util.Utilities;
 import frc.robot.Constants;
 import frc.robot.States.ShooterStates;
 
-import java.util.Arrays;
-import java.util.function.Supplier;
-
 public class ShooterSubsystem extends SubsystemBase {
     // Different motors for each channel on the robot 
     private final TalonFX m_rightShooter;

@@ -37,10 +37,10 @@ import frc.robot.States.IntakeStates;
 import frc.robot.States.ShooterStates;
 
 import frc.robot.commands.IndexCommand;
+import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.SwerveTeleop;
 import frc.robot.commands.YawTeleop;
-import frc.robot.commands.IntakeCommand;
 
 import frc.robot.generated.TunerConstants;
 
@@ -66,7 +66,7 @@ public class RobotContainer {
     //** Initialize Subsystems **//
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
    // private final ShooterSubsystem s_shooter = new ShooterSubsystem(() -> drivetrain.getState().Pose.getX(), () -> drivetrain.getState().Pose.getY());
-   private final ShooterSubsystem s_shooter = new ShooterSubsystem(drivetrain);
+    private final ShooterSubsystem s_shooter = new ShooterSubsystem(drivetrain);
     private final IndexSubsystem s_indexor = new IndexSubsystem();
     private final IntakeSubsystem s_intake = new IntakeSubsystem();
     private final VisionSubsystem s_VisionSubsystem = new VisionSubsystem(drivetrain,"limelight-hotrock");
@@ -91,44 +91,41 @@ public class RobotContainer {
     }
 
     private void configureBindings() {     
-        setIntakeBindings();
+        //setIntakeBindings();
         setIndexorBindings();
-        setShooterBindings();
-        //setTestBindings();
+        //setShooterBindings();
+        setTestBindings();
 
         
     }
 
     private void setIntakeBindings() {
-        driver1.leftTrigger().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.INTAKE));
-        driver1.leftTrigger().toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.HOME));
+        driver1.a().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.INTAKE));
+        driver1.a().toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.HOME));
 
         driver1.x().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.OUTAKE));
         driver1.x().toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.HOME));
 
         driver1.y().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.GIGA_HOME)); 
-        driver1.y().toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.HOME));
     }
 
     private void setIndexorBindings() {
-        driver1.rightBumper().onTrue(c_indexCommand.setIndexState(IndexStates.INDEX));
-        driver1.rightBumper().onFalse(c_indexCommand.setIndexState(IndexStates.STOP));
+        driver1.leftBumper().onTrue(c_indexCommand.setIndexState(IndexStates.INDEX));
+        driver1.leftBumper().onFalse(c_indexCommand.setIndexState(IndexStates.STOP));
 
-        driver1.leftBumper().toggleOnTrue(c_indexCommand.setIndexState(IndexStates.REVERSE));
-        driver1.leftBumper().toggleOnFalse(c_indexCommand.setIndexState(IndexStates.STOP));
-    } 
-
+        driver1.rightBumper().toggleOnTrue(c_indexCommand.setIndexState(IndexStates.REVERSE));
+        driver1.rightBumper().toggleOnFalse(c_indexCommand.setIndexState(IndexStates.STOP));
+    }
 
     private void setShooterBindings() {
         driver1.rightTrigger().onTrue(c_shooterCommand.setShooterState(States.ShooterStates.VARIABLE_SHOOT));
         driver1.rightTrigger().onFalse(c_shooterCommand.setShooterState(States.ShooterStates.STOP));
 
-        driver1.a().onTrue(c_shooterCommand.setShooterState(States.ShooterStates.IN_120));
-        driver1.a().onFalse(c_shooterCommand.setShooterState(ShooterStates.STOP));
+        driver1.leftTrigger().onTrue(c_shooterCommand.setShooterState(States.ShooterStates.IN_120));
+        driver1.leftTrigger().onFalse(c_shooterCommand.setShooterState(ShooterStates.STOP));
     }
 
     private void setDriverBindings() {
-
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         // Drivetrain will execute this command periodically
@@ -146,7 +143,7 @@ public class RobotContainer {
             drivetrain.applyRequest(() -> idle).ignoringDisable(true)
         );
 
-        driver0.a().whileTrue(drivetrain.applyRequest(() -> brake));
+        driver0.rightTrigger().whileTrue(drivetrain.applyRequest(() -> brake));
         driver0.b().whileTrue(drivetrain.applyRequest(() ->
             point.withModuleDirection(new Rotation2d(-driver0.getLeftY(), -driver0.getLeftX()))
         ));
@@ -189,7 +186,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Shoot 120 IN", c_shooterCommand.setShooterState(ShooterStates.IN_120));
         NamedCommands.registerCommand("Shoot 100 IN", c_shooterCommand.setShooterState(ShooterStates.IN_100));
 
-        NamedCommands.registerCommand("Index Balls", c_indexCommand.setIndexState(IndexStates.INDEX));
+        NamedCommands.registerCommand("Index Balls", c_indexCommand.setIndexState(IndexStates.AUTO_INDEX));
         NamedCommands.registerCommand("Index Reverse", c_indexCommand.setIndexState(IndexStates.REVERSE));
         NamedCommands.registerCommand("Index Stop", c_indexCommand.setIndexState(IndexStates.STOP));
         NamedCommands.registerCommand("Index Auto Balls", c_indexCommand.setIndexState(IndexStates.AUTO_INDEX));

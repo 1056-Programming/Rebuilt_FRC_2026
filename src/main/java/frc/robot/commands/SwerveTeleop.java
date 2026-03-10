@@ -4,11 +4,7 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
-import java.util.ResourceBundle.Control;
-
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
-import com.fasterxml.jackson.databind.util.LRUMap;
-import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -35,8 +31,8 @@ public class SwerveTeleop extends Command {
 
     // Setting up bindings for necessary control of the swerve drive platform 
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-            .withDeadband(MaxSpeed * deadband) // Add a 10% deadband
-            .withRotationalDeadband(MaxAngularRate * deadband) // Add a 10% deadband
+            .withDeadband(MaxSpeed * deadband) 
+            .withRotationalDeadband(MaxAngularRate * deadband) 
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
 
     // Store inputs and speeds
@@ -71,7 +67,7 @@ public class SwerveTeleop extends Command {
 
         // Apply polynomial acceleration
         setPolynomialAcceleration();
-        //phatSpeed(); // Apply slew rate limiting to the speeds
+
         // Apply speeds to the swerve drive
         drivetrain.applyRequest(() -> drive.withVelocityX(ySpeed)
             .withVelocityY(xSpeed)

@@ -3,7 +3,8 @@
   "robotLength": 0.61,
   "holonomicMode": true,
   "pathFolders": [
-    "Arlen Stuff",
+    "Right Auto Paths",
+    "Left Auto Paths",
     "Phat Stuff"
   ],
   "autoFolders": [

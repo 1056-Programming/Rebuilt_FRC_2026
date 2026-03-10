@@ -3,37 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.7155920114122676,
-        "y": 1.9971611982881607
+        "x": 2.9982555555555557,
+        "y": 4.863277777777778
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.937155492154064,
-        "y": 1.9195292439372333
+        "x": 3.9982555555555557,
+        "y": 4.863277777777778
       },
       "isLocked": false,
-      "linkedName": "RA1E"
+      "linkedName": "LA 4"
     },
     {
       "anchor": {
-        "x": 7.7535444444444455,
-        "y": 0.8777999999999986
+        "x": 3.836277777777778,
+        "y": 7.601466666666667
       },
       "prevControl": {
-        "x": 7.450557396887904,
-        "y": 0.9274616269892173
+        "x": 2.836277777777778,
+        "y": 7.601466666666667
       },
       "nextControl": null,
-      "isLocked": true,
-      "linkedName": "RA1"
+      "isLocked": false,
+      "linkedName": "LA 3"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.28440366972477077,
-      "rotationDegrees": 0.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -47,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 111.19405648154233
+    "rotation": -85.71084667118103
   },
   "reversed": false,
-  "folder": "Right Auto Paths",
+  "folder": "Left Auto Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -64.9325365619395
   },
   "useDefaultConstraints": true
 }
