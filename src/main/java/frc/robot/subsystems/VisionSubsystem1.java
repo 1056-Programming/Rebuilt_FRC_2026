@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import org.ejml.dense.row.SpecializedOps_DDRM;
-
 import com.ctre.phoenix6.hardware.Pigeon2;
 
 import edu.wpi.first.math.Matrix;
@@ -9,6 +7,7 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import frc.lib.util.Utilities;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
@@ -20,8 +19,8 @@ public class VisionSubsystem1 extends SubsystemBase {
     private final String leftLimelight;
     private final String rightLimelight;
 
-    private Double yawToCenterPiece; 
-    private Double distanceToCenterTarget;
+    private static double yawToCenterPiece; 
+    private static double distanceToCenterTarget;
 
     private LimelightHelpers.PoseEstimate poseEstimate;
 
@@ -64,7 +63,7 @@ public class VisionSubsystem1 extends SubsystemBase {
         }
 
         // Estimate bot position relative to the filed using MT 2 
-        poseEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(name);
+        poseEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(name);        
         
         // return if estimate not given or no tags detected
         if(poseEstimate == null || poseEstimate.tagCount == 0) {
@@ -78,6 +77,9 @@ public class VisionSubsystem1 extends SubsystemBase {
             poseEstimate.pose, 
             poseEstimate.timestampSeconds,
             VecBuilder.fill(.7,.7,9999999));
+
+        distanceToCenterTarget = poseEstimate.rawFiducials[0].distToRobot;
+        yawToCenterPiece = LimelightHelpers.getTX(name);
     }
 
 
@@ -92,4 +94,12 @@ public class VisionSubsystem1 extends SubsystemBase {
 
         return VecBuilder.fill(calculatedTrans, calculatedTrans, calculatedRot);
     }
+
+    public static double getTagDistance() {
+        return distanceToCenterTarget;
+    }
+
+    public static double getTagYaw() {
+        return yawToCenterPiece;
+   }
 }
