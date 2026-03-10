@@ -53,7 +53,8 @@ public class States {
         IN_60(22.5,37.5, Units.inchesToMeters(60)),
         IN_45(25, 35, Units.inchesToMeters(45)),
         IN_75(25, 40, Units.inchesToMeters(75)),
-        IN_100(57.5, 27, Units.inchesToMeters(100));
+        IN_100(57.5, 27, Units.inchesToMeters(100)),
+        CLIMB_TO_CENTER(15, 42.5, Units.inchesToMeters(115));
         
         public final double backSpinRPS;
         public final double shootingRPS;
