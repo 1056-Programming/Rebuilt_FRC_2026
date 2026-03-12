@@ -13,7 +13,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Simple Bottom Start"
+            "pathName": "la 1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "la 2"
           }
         },
         {
@@ -31,7 +37,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Simple Bottom End"
+            "pathName": "la 3"
           }
         },
         {

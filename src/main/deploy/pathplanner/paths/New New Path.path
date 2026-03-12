@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.9982555555555557,
-        "y": 4.863277777777778
+        "x": 3.836277777777778,
+        "y": 7.601466666666667
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.9982555555555557,
-        "y": 4.863277777777778
+        "x": 4.836277777777778,
+        "y": 7.601466666666667
       },
       "isLocked": false,
       "linkedName": "LA 4"
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -85.71084667118103
+    "rotation": -62.58527392032879
   },
   "reversed": false,
   "folder": "Left Auto Paths",

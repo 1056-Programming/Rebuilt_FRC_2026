@@ -3,35 +3,42 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.17236666666666678,
+        "x": 3.6998555555555557,
         "y": 0.5367444444444436
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.1723666666666672,
-        "y": 0.5367444444444436
+        "x": 2.1017666666666663,
+        "y": 0.5659777777777777
       },
       "isLocked": false,
-      "linkedName": "SB!"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.520777777777778,
+        "x": 0.17236666666666678,
         "y": 0.5367444444444436
       },
       "prevControl": {
-        "x": 1.520777777777778,
-        "y": 0.5367444444444436
+        "x": 1.7217333333333382,
+        "y": 0.49776666666666625
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "SB!"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Intake Balls",
+      "waypointRelativePos": 0.0,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 1.0,
     "maxAcceleration": 2.0,
@@ -42,13 +49,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 59.38376718537941
+    "rotation": 179.30972280213487
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Simple Bottom Auto Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 179.30972280213487
+    "rotation": 180.0
   },
   "useDefaultConstraints": false
 }

@@ -3,9 +3,11 @@
   "robotLength": 0.61,
   "holonomicMode": true,
   "pathFolders": [
-    "Right Auto Paths",
     "Left Auto Paths",
-    "Phat Stuff"
+    "Simple Left",
+    "Phat Stuff",
+    "Right Auto Paths",
+    "Simple Bottom Auto Paths"
   ],
   "autoFolders": [
     "Competition Autos",

@@ -1,0 +1,92 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Balls"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LA 1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LA 2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Start Pos"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot 120 IN"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LA 3"
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Index Balls"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.0
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Index Stop"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shoot Stop"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Balls"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LA 4"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Competition Autos",
+  "choreoAuto": false
+}
