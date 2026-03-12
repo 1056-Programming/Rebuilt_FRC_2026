@@ -87,7 +87,7 @@ public class IntakeSubsystem extends SubsystemBase {
         
         // Set PID setpoint on intake to calculate motor output during periodic
         c_pivotPID.setSetpoint(state.pivotAngle);
-        //m_intake.set(state.intakeSpeed);
+        m_intake.set(state.intakeSpeed);
     }
 
     public String getName() {

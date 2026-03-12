@@ -1,8 +1,10 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.States.IntakeStates;
 import frc.robot.subsystems.IntakeSubsystem;
 
@@ -27,5 +29,17 @@ public class IntakeCommand extends Command{
     public InstantCommand setIntakeState(IntakeStates intakeState) {
         this.intakeState = intakeState;
         return new InstantCommand(() -> s_intakesubsystem.setIntakeState(intakeState), s_intakesubsystem);
+    }
+
+    public RepeatCommand setPiviotShake() {
+        Command piviotShake = Commands.runOnce(() -> {
+            s_intakesubsystem.setIntakeState(IntakeStates.START);
+            new WaitCommand(0.5);
+            s_intakesubsystem.setIntakeState(IntakeStates.OUTAKE);
+        });
+
+
+        return piviotShake.repeatedly();
+       
     }
 }

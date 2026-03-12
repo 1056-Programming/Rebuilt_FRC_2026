@@ -32,9 +32,6 @@ public class VisionSubsystem extends SubsystemBase {
 
         LimelightHelpers.setPipelineIndex(limelightName, 0);
 
-        int[] idlFilters = {27,18};
-
-        LimelightHelpers.SetFiducialIDFiltersOverride(limelightName, idlFilters);
     }
 
     @Override

@@ -15,6 +15,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.FollowPathCommand;
 
+import edu.wpi.first.epilogue.Logged.Strategy;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.SerialPort.StopBits;
@@ -24,6 +25,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
@@ -42,7 +44,6 @@ import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.PivotShake;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.SwerveTeleop;
-import frc.robot.commands.YawTeleop;
 
 import frc.robot.generated.TunerConstants;
 
@@ -73,7 +74,7 @@ public class RobotContainer {
     private final ShooterSubsystem s_shooter = new ShooterSubsystem(drivetrain);
     private final IndexSubsystem s_indexor = new IndexSubsystem();
     private final IntakeSubsystem s_intake = new IntakeSubsystem();
-    private final VisionSubsystem s_VisionSubsystem = new VisionSubsystem(drivetrain,"limelight-hotrock");
+//   private final VisionSubsystem s_VisionSubsystem = new VisionSubsystem(drivetrain,"limelight-hotrock");
     // private final VisionSubsystem1 s_test = new 
 
     //** Initialize Commands and auto **//
@@ -81,13 +82,13 @@ public class RobotContainer {
     private final IndexCommand c_indexCommand = new IndexCommand(s_indexor);
     private final IntakeCommand c_intakeCommand = new IntakeCommand(s_intake);
     private final SwerveTeleop c_teleop = new SwerveTeleop(drivetrain, driver0);   
-    private final YawTeleop c_yawTeleop = new YawTeleop(drivetrain, driver0);
+    //private final YawTeleop c_yawTeleop = new YawTeleop(drivetrain, driver0);
     private final PivotShake c_pivotShake = new PivotShake(s_intake);
-    private final SequentialCommandGroup c_gigaShake = 
+    private final RepeatCommand c_gigaShake = 
         new SequentialCommandGroup(c_intakeCommand.setIntakeState(IntakeStates.PUSH_IN),
                                     new WaitCommand(1),
                                     c_intakeCommand.setIntakeState(IntakeStates.START),
-                                    new WaitCommand(1));               
+                                    new WaitCommand(1)).repeatedly();               
     private SendableChooser<Command> m_chooser;
 
 
@@ -97,7 +98,7 @@ public class RobotContainer {
         drivetrain.getPigeon2().setYaw(0);
 
         configureBindings();
-        //setDriverBindings();
+        setDriverBindings();
         configureAuto();
     
     }
@@ -113,14 +114,18 @@ public class RobotContainer {
 
     private void setIntakeBindings() {
         driver1.a().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.INTAKE));
-        driver1.a().toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.HOME));
+        driver1.a().toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.START));
 
-        driver1.x().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.PUSH_IN));
-        driver1.x().toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.HOME));
+        driver1.x().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.HALF));
+        driver1.x().toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.START));
 
         driver1.y().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.GIGA_HOME)); 
 
-       driver1.b().toggleOnTrue(c_gigaShake);
+        driver1.pov(180).toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.OUTAKE));
+        driver1.pov(180).toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.START));
+
+        driver1.b().toggleOnTrue(c_gigaShake);
+        driver1.b().toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.START));
     }
 
     private void setIndexorBindings() {
@@ -135,7 +140,7 @@ public class RobotContainer {
         // driver1.rightTrigger().onTrue(c_shooterCommand.setShooterState(States.ShooterStates.CLIMB_TO_CENTER));
         // driver1.rightTrigger().onFalse(c_shooterCommand.setShooterState(States.ShooterStates.STOP));
 
-         driver1.rightTrigger().onTrue(c_shooterCommand.setShooterState(States.ShooterStates.IN_100));
+        driver1.rightTrigger().onTrue(c_shooterCommand.setShooterState(States.ShooterStates.CLIMB_TO_CENTER));
         driver1.rightTrigger().onFalse(c_shooterCommand.setShooterState(States.ShooterStates.STOP));
 
         driver1.leftTrigger().onTrue(c_shooterCommand.setShooterState(States.ShooterStates.IN_120));
@@ -153,7 +158,7 @@ public class RobotContainer {
 
         // Yaw align with tag when triggered
         // Return to normal after positioning
-        driver0.leftTrigger().toggleOnTrue(c_yawTeleop);
+      //  driver0.leftTrigger().toggleOnTrue(c_yawTeleop);
         driver0.leftTrigger().toggleOnFalse(c_teleop);
 
         // Idle while the robot is disabled. This ensures the configured
@@ -233,7 +238,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Intake Mega Home", c_intakeCommand.setIntakeState(IntakeStates.GIGA_HOME));
 
         NamedCommands.registerCommand("Shoot 120 IN", c_shooterCommand.setShooterState(ShooterStates.IN_120));
-        NamedCommands.registerCommand("Shoot 100 IN", c_shooterCommand.setShooterState(ShooterStates.IN_100));
+        NamedCommands.registerCommand("Shoot 100 IN", c_shooterCommand.setShooterState(ShooterStates.CLIMB_TO_CENTER));
         NamedCommands.registerCommand("Shoot Stop", c_shooterCommand.setShooterState(ShooterStates.STOP));
 
         NamedCommands.registerCommand("Index Balls", c_indexCommand.setIndexState(IndexStates.AUTO_INDEX));

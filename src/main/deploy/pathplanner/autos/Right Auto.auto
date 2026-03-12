@@ -61,6 +61,43 @@
                 "data": {
                   "name": "Index Stop"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shoot Stop"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Index Balls"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 1.5
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Index Stop"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Index Balls"
+                }
               }
             ]
           }
@@ -81,6 +118,12 @@
           "type": "named",
           "data": {
             "name": "Shoot 120 IN"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Start Pos"
           }
         },
         {
@@ -109,6 +152,12 @@
                 "type": "named",
                 "data": {
                   "name": "Index Stop"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shoot Stop"
                 }
               }
             ]

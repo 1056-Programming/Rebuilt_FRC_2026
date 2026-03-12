@@ -129,15 +129,15 @@ public class ShooterSubsystem extends SubsystemBase {
 
         if(state.equals(ShooterStates.VARIABLE_SHOOT)) {
             // TODO: 
-            distance = Units.metersToInches(VisionSubsystem.tag_distance);
-            // distance = fieldHelper.getDistanceToCenterPiece(); 
+            // distance = Units.metersToInches(VisionSubsystem.tag_distance);
+            // // distance = fieldHelper.getDistanceToCenterPiece(); 
 
-            //distance = Units.metersToInches(Utilities.calculateDistanceToCenterPiece(x.getState().Pose.getX(), x.getState().Pose.getY()));
-            SmartDashboard.putNumber("help me sigma 267", distance);
-            // distance = Units.metersToInches(distance) + 13; 
+            // //distance = Units.metersToInches(Utilities.calculateDistanceToCenterPiece(x.getState().Pose.getX(), x.getState().Pose.getY()));
+            // SmartDashboard.putNumber("help me sigma 267", distance);
+            // // distance = Units.metersToInches(distance) + 13; 
 
-            var sigma = calculateMotorSpeeds(distance); 
-            setVelocitySetpoints(sigma[0], sigma[1]);
+            // var sigma = calculateMotorSpeeds(distance); 
+           // setVelocitySetpoints(sigma[0], sigma[1]);
 
             return;
         } 
@@ -180,10 +180,21 @@ public class ShooterSubsystem extends SubsystemBase {
         this.desiredBackSpinRPS = desiredBackSpinRPS; 
 
         // Set control for desired shooter RPS
-        c_backSpinPID.setSetpoint(Utilities.rpsToRpm(desiredBackSpinRPS), ControlType.kVelocity);
-        m_leftShooter.setControl(new VelocityVoltage(-desiredShooterRPS));
-        m_middleShooter.setControl(new VelocityVoltage(-desiredShooterRPS));
-        m_rightShooter.setControl(new VelocityVoltage(-desiredShooterRPS));
+        if(desiredBackSpinRPS != 0 ) {
+            c_backSpinPID.setSetpoint(Utilities.rpsToRpm(desiredBackSpinRPS), ControlType.kVelocity);
+        } else {
+            m_backSpin.set(0);
+        }
+
+        if(desiredShooterRPS != 0) {
+            m_leftShooter.setControl(new VelocityVoltage(-desiredShooterRPS));
+            m_middleShooter.setControl(new VelocityVoltage(-desiredShooterRPS));
+            m_rightShooter.setControl(new VelocityVoltage(-desiredShooterRPS));
+        } else {
+            m_leftShooter.set(0);
+            m_middleShooter.set(0);
+            m_rightShooter.set(0);
+        }
     }
 
     // Get backspin speed in RPS 

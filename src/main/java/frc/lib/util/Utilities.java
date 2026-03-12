@@ -42,9 +42,15 @@ public class Utilities {
     }
 
     public static double calculateDistanceToCenterPiece(double x, double y) {
-        var t = Math.pow(4.6 - x,2) + Math.pow(4 - y,2);
+        double t = 0; 
+        if(DriverStation.getAlliance().get() != null && DriverStation.getAlliance().get().equals(Alliance.Red)) {
+                t = Math.pow(4 - x,2) + Math.pow(11.895 - y,2);
+        } else {
+            t = Math.pow(4 - x,2) + Math.pow(4.6 - y,2);
+        }
         t = Math.pow(t, 0.5);
         return t;
+
     }
 
     public static double rpsToRpm(double rps) {
