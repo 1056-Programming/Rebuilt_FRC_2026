@@ -21,10 +21,11 @@ import edu.wpi.first.wpilibj.SerialPort.StopBits;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import edu.wpi.first
-.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
@@ -38,6 +39,7 @@ import frc.robot.States.ShooterStates;
 
 import frc.robot.commands.IndexCommand;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.PivotShake;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.SwerveTeleop;
 import frc.robot.commands.YawTeleop;
@@ -66,8 +68,9 @@ public class RobotContainer {
 
     //** Initialize Subsystems  & Field Helper Functions **//
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
-    private final FieldHelpers s_FieldHelpers = new FieldHelpers(() -> drivetrain.getState().Pose.getX(), () -> drivetrain.getState().Pose.getY());
-     private final ShooterSubsystem s_shooter = new ShooterSubsystem(s_FieldHelpers);
+    //private final FieldHelpers s_FieldHelpers = new FieldHelpers(() -> drivetrain.getState().Pose.getX(), () -> drivetrain.getState().Pose.getY());
+    // private final ShooterSubsystem s_shooter = new ShooterSubsystem(s_FieldHelpers);
+    private final ShooterSubsystem s_shooter = new ShooterSubsystem(drivetrain);
     private final IndexSubsystem s_indexor = new IndexSubsystem();
     private final IntakeSubsystem s_intake = new IntakeSubsystem();
     private final VisionSubsystem s_VisionSubsystem = new VisionSubsystem(drivetrain,"limelight-hotrock");
@@ -78,7 +81,13 @@ public class RobotContainer {
     private final IndexCommand c_indexCommand = new IndexCommand(s_indexor);
     private final IntakeCommand c_intakeCommand = new IntakeCommand(s_intake);
     private final SwerveTeleop c_teleop = new SwerveTeleop(drivetrain, driver0);   
-    private final YawTeleop c_yawTeleop = new YawTeleop(drivetrain, driver0, s_FieldHelpers);
+    private final YawTeleop c_yawTeleop = new YawTeleop(drivetrain, driver0);
+    private final PivotShake c_pivotShake = new PivotShake(s_intake);
+    private final SequentialCommandGroup c_gigaShake = 
+        new SequentialCommandGroup(c_intakeCommand.setIntakeState(IntakeStates.PUSH_IN),
+                                    new WaitCommand(1),
+                                    c_intakeCommand.setIntakeState(IntakeStates.START),
+                                    new WaitCommand(1));               
     private SendableChooser<Command> m_chooser;
 
 
@@ -88,15 +97,16 @@ public class RobotContainer {
         drivetrain.getPigeon2().setYaw(0);
 
         configureBindings();
-        setDriverBindings();
+        //setDriverBindings();
         configureAuto();
+    
     }
 
     private void configureBindings() {     
-        //setIntakeBindings();
+        setIntakeBindings();
         setIndexorBindings();
-        //setShooterBindings();
-        setTestBindings();
+        setShooterBindings();
+        //setTestBindings();
 
         
     }
@@ -105,10 +115,12 @@ public class RobotContainer {
         driver1.a().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.INTAKE));
         driver1.a().toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.HOME));
 
-        driver1.x().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.OUTAKE));
+        driver1.x().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.PUSH_IN));
         driver1.x().toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.HOME));
 
         driver1.y().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.GIGA_HOME)); 
+
+       driver1.b().toggleOnTrue(c_gigaShake);
     }
 
     private void setIndexorBindings() {
@@ -120,11 +132,17 @@ public class RobotContainer {
     }
 
     private void setShooterBindings() {
-        driver1.rightTrigger().onTrue(c_shooterCommand.setShooterState(States.ShooterStates.VARIABLE_SHOOT));
+        // driver1.rightTrigger().onTrue(c_shooterCommand.setShooterState(States.ShooterStates.CLIMB_TO_CENTER));
+        // driver1.rightTrigger().onFalse(c_shooterCommand.setShooterState(States.ShooterStates.STOP));
+
+         driver1.rightTrigger().onTrue(c_shooterCommand.setShooterState(States.ShooterStates.IN_100));
         driver1.rightTrigger().onFalse(c_shooterCommand.setShooterState(States.ShooterStates.STOP));
 
         driver1.leftTrigger().onTrue(c_shooterCommand.setShooterState(States.ShooterStates.IN_120));
         driver1.leftTrigger().onFalse(c_shooterCommand.setShooterState(ShooterStates.STOP));
+
+        driver1.pov(90).onTrue(c_shooterCommand.setShooterState(ShooterStates.SHOOT_FAR));
+        driver1.pov(90).onFalse(c_shooterCommand.setShooterState(ShooterStates.STOP));
     }
 
     private void setDriverBindings() {
@@ -135,8 +153,8 @@ public class RobotContainer {
 
         // Yaw align with tag when triggered
         // Return to normal after positioning
-        driver0.rightTrigger().toggleOnTrue(c_yawTeleop);
-        driver0.rightTrigger().toggleOnFalse(c_teleop);
+        driver0.leftTrigger().toggleOnTrue(c_yawTeleop);
+        driver0.leftTrigger().toggleOnFalse(c_teleop);
 
         // Idle while the robot is disabled. This ensures the configured
         // neutral mode is applied to the drive motors while disabled.
@@ -207,7 +225,7 @@ public class RobotContainer {
     // }
 
     private void configureAuto() {
-        NamedCommands.registerCommand("Intake Balls", c_intakeCommand.setIntakeState(IntakeStates.AUTO_INTAKE));
+        NamedCommands.registerCommand("Intake Balls", c_intakeCommand.setIntakeState(IntakeStates.INTAKE));
         NamedCommands.registerCommand("Intake Feed Out", c_intakeCommand.setIntakeState(IntakeStates.OUTAKE));
         NamedCommands.registerCommand("Intake Home", c_intakeCommand.setIntakeState(IntakeStates.HOME));
         NamedCommands.registerCommand("Intake Start Pos", c_intakeCommand.setIntakeState(IntakeStates.START));

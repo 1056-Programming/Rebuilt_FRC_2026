@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
@@ -21,7 +22,7 @@ import frc.robot.States.IntakeStates;
 public class IntakeSubsystem extends SubsystemBase {
     // Spark Flex controlling ball intake
     // Spark Max controlling pivot of intake
-    private final SparkFlex m_intake;
+    private final TalonFX m_intake;
     public final SparkMax m_pivot; 
 
     // Absolute Encorder to track pivot angle
@@ -42,12 +43,12 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public IntakeSubsystem() {
         // Initialize Spark Flex, Spark Max motors, and Throguh Bore Cancoder
-        m_intake = new SparkFlex(Constants.Intake.kIntakeID, MotorType.kBrushless);
+        m_intake = new TalonFX(Constants.Intake.kIntakeID);
         m_pivot = new SparkMax(Constants.Intake.kPivotID, MotorType.kBrushless);
         pivotEncoder = new CANcoder(Constants.Intake.kEncoderID);
 
         // Optimize BUS usage
-        SparkFlexUtils.setSparkFlexBusUsage(m_intake, SparkFlexUtils.Usage.kMinimal, IdleMode.kCoast, false, true);
+        // SparkFlexUtils.setSparkFlexBusUsage(m_intake, SparkFlexUtils.Usage.kMinimal, IdleMode.kCoast, false, true);
         SparkMaxUtils.setSparkMaxBusUsage(m_pivot, SparkMaxUtils.Usage.kAll, IdleMode.kBrake, false, false);
 
         // Initialize PID controller for pivot
@@ -57,6 +58,8 @@ public class IntakeSubsystem extends SubsystemBase {
         // Start intake in STOP position
         i_state = IntakeStates.STOP;
         setIntakeState(i_state);
+
+        c_pivotPID.setTolerance(0.5);
 
         // Disable Subsystem if set to true 
         disable = true;
@@ -68,12 +71,12 @@ public class IntakeSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         // Set motor speed based on PID calculation
-        // pivotSpeed = c_pivotPID.calculate(getPiviotPosition()) 
-        //     + c_ArmFeedforward.calculate(Units.degreesToRadians(getPiviotPosition()), pivotEncoder.getVelocity().getValueAsDouble());
-        // if(pivotSpeed < 0) {
-        //     pivotSpeed *= 0.8;
-        // }
-        // m_pivot.set(pivotSpeed);
+        pivotSpeed = c_pivotPID.calculate(getPiviotPosition()) 
+            + c_ArmFeedforward.calculate(Units.degreesToRadians(getPiviotPosition()), pivotEncoder.getVelocity().getValueAsDouble());
+        if(pivotSpeed < 0) {
+            pivotSpeed *= 0.8;
+        }
+        m_pivot.set(pivotSpeed);
         setDashboardData();
     }
 
@@ -84,7 +87,7 @@ public class IntakeSubsystem extends SubsystemBase {
         
         // Set PID setpoint on intake to calculate motor output during periodic
         c_pivotPID.setSetpoint(state.pivotAngle);
-        m_intake.set(state.intakeSpeed);
+        //m_intake.set(state.intakeSpeed);
     }
 
     public String getName() {
@@ -94,7 +97,7 @@ public class IntakeSubsystem extends SubsystemBase {
     // Return position of encoder in degrees
     // For some reasons it negative
     // Increases as you go up 
-    private double getPiviotPosition() {
+    public double getPiviotPosition() {
         return Units.rotationsToDegrees(pivotEncoder.getPosition().getValueAsDouble()) * -1 -60 * 4;
     }
 
@@ -102,6 +105,14 @@ public class IntakeSubsystem extends SubsystemBase {
     private void disableSubsystem() {
         m_intake.disable();
         m_pivot.disable();
+    }
+    
+    public boolean isPivotAtSetpoint() {
+        return c_pivotPID.atSetpoint();
+    }
+
+    public IntakeStates getState() {
+        return i_state;
     }
 
     // Set dashboard data for testing and debugging purposes

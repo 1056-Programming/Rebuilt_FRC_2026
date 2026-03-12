@@ -27,7 +27,7 @@ public class States {
     // Positive for both is shoot outward 
     // Contains the backspin and shooterspin states for different distances
     public enum ShooterStates {
-        
+
         // Set the shooter move
         STOP(0, 0, 0),
         FORWARD_SHOOT(60, 30, 0),
@@ -54,9 +54,12 @@ public class States {
         IN_45(25, 35, Units.inchesToMeters(45)),
         IN_75(25, 40, Units.inchesToMeters(75)),
         IN_100(57.5, 27, Units.inchesToMeters(100)),
-        CLIMB_TO_CENTER(15, 42.5, Units.inchesToMeters(115));
+        CLIMB_TO_CENTER(15, 42.5, Units.inchesToMeters(115)),
+        // c 
+        SHOOT_FAR(60, 60, Units.inchesToMeters(6700));
+        // ah 
         
-        public final double backSpinRPS;
+         public final double backSpinRPS;
         public final double shootingRPS;
         public final double distance; 
 
@@ -75,12 +78,13 @@ public class States {
         STOP(0, -210),
 
         // Set the speed of the intak-ing motor and the position of piviot 
-        INTAKE(-1, -213),
-        AUTO_INTAKE(-1, -213),
+        INTAKE(1, -213),
+        AUTO_INTAKE(1, -213),
         OUTAKE(-0.5,-140),
     
         // Set the home values for piviot 
         GIGA_HOME(0, -105),
+        PUSH_IN(0, -105),
         START(0,-160),
         HOME(0,-210);
 

@@ -39,14 +39,13 @@ public class ShooterSubsystem extends SubsystemBase {
     // PID controllers to maintain backspin RPS
     private final SparkClosedLoopController c_backSpinPID;
 
-    // Use this to calculate the distance for the shooter RPS 
-    private final FieldHelpers fieldHelper; 
-
     // Enable or disable subsystem
     private final boolean disable; 
 
     // Current shooter state
     private ShooterStates s_state;
+
+    private CommandSwerveDrivetrain x; 
 
     // Current Motor Speeds
     private double rightMotorSpeed;
@@ -65,7 +64,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     private TalonFXConfiguration setConfigs;
 
-    public ShooterSubsystem(FieldHelpers fieldHelper) { 
+    public ShooterSubsystem(CommandSwerveDrivetrain x) { 
         // Initialize Kraken Motors 
         m_rightShooter = new TalonFX(Constants.Shooter.kRightShootingID);
         m_middleShooter = new TalonFX(Constants.Shooter.kMiddleShootingID);
@@ -98,7 +97,6 @@ public class ShooterSubsystem extends SubsystemBase {
         c_backSpinPID = m_backSpin.getClosedLoopController();
 
         // Get Field helpers for distance to center piece calculation 
-        this.fieldHelper = fieldHelper;
 
         // Initialize shooter state to STOP 
         s_state = ShooterStates.STOP;
@@ -109,7 +107,7 @@ public class ShooterSubsystem extends SubsystemBase {
         
         setConfigs = new TalonFXConfiguration(); 
 
-        // setShooterConfigs(100); 
+        this.x = x;
 
         // Disable Subsystem if set to true 
         disable = false; 
@@ -120,6 +118,9 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() { 
+        var swerveState = x.getState().Pose;
+        SmartDashboard.putNumber("nsoetahutnsaeou n198213", Utilities.calculateYawToCenterPiece(swerveState.getX(), swerveState.getY()));
+
         setDashboardData();
     }
 
@@ -131,7 +132,8 @@ public class ShooterSubsystem extends SubsystemBase {
             distance = Units.metersToInches(VisionSubsystem.tag_distance);
             // distance = fieldHelper.getDistanceToCenterPiece(); 
 
-            // distance = Utilities.calculateDistanceToCenterPiece(x.getState().Pose.getX(), x.getState().Pose.getY());
+            //distance = Units.metersToInches(Utilities.calculateDistanceToCenterPiece(x.getState().Pose.getX(), x.getState().Pose.getY()));
+            SmartDashboard.putNumber("help me sigma 267", distance);
             // distance = Units.metersToInches(distance) + 13; 
 
             var sigma = calculateMotorSpeeds(distance); 
@@ -151,7 +153,7 @@ public class ShooterSubsystem extends SubsystemBase {
         double[] speeds = new double[2];
 
         // Calculate shooter speed for the given distance
-        if(distance > 2.9718) {
+        if(distance > Units.metersToInches(2.9718)) {
             speeds[0] = Utilities.calculateCubicShooterSpeed(distance);
         } else if (distance < 2 && distance > 1) { 
            speeds[0] = Utilities.calculateCubicShooterSpeed(distance) * 0.91267;
@@ -160,7 +162,7 @@ public class ShooterSubsystem extends SubsystemBase {
         }
         
         // Calculate the backspin speed for the given distance
-        if(distance > 2.9718) {
+        if(distance > Units.metersToInches(2.9718)) {
             speeds[1] = Utilities.calculateCubicBackSpinSpeed(distance);
         } else if (distance < 2 && distance > 1) { 
             speeds[1] = Utilities.calculateCubicBackSpinSpeed(distance) *  0.91267;

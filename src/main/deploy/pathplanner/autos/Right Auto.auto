@@ -7,7 +7,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Intake Mega Home"
+            "name": "Intake Balls"
           }
         },
         {
@@ -19,13 +19,25 @@
         {
           "type": "path",
           "data": {
+            "pathName": "New Path"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot 120 IN"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
             "pathName": "RAO 2"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Intake Stop"
+            "name": "Intake Start Pos"
           }
         },
         {
@@ -35,32 +47,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Shoot 120 IN"
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 3.0
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Index Balls"
-                      }
-                    }
-                  ]
+                  "name": "Index Balls"
                 }
               },
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 2.0
+                  "waitTime": 1.5
                 }
               },
               {
@@ -81,7 +74,13 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 2.0
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot 120 IN"
           }
         },
         {
@@ -97,32 +96,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Shoot 120 IN"
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 3.0
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Index Balls"
-                      }
-                    }
-                  ]
+                  "name": "Index Balls"
                 }
               },
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 2.0
+                  "waitTime": 1.5
                 }
               },
               {

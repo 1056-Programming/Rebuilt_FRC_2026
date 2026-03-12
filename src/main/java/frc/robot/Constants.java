@@ -5,7 +5,7 @@ import edu.wpi.first.math.util.Units;
 public class Constants {
     public class Swerve {
         // Amount of dead radius on the controller 
-        public static final double kSwerveDeadband = 0.01;
+        public static final double kSwerveDeadband = 0.04;
         public static final double kSwerveP = 0.078;
         public static final double kSwerveI = 0;
         public static final double kSwerveD = 0; 

@@ -31,7 +31,20 @@ public class Utilities {
         } else {
             return yaw % 360;
         }
+    }
 
+    public static double calculateYawToCenterPiece(double x, double y) {
+      //  if(DriverStation.getAlliance().get().equals(Alliance.Blue)) {
+            var yaw = Math.atan((4 - y)/(4.6 - x));
+            return Units.radiansToDegrees(yaw);
+        // }
+        // return 0; 
+    }
+
+    public static double calculateDistanceToCenterPiece(double x, double y) {
+        var t = Math.pow(4.6 - x,2) + Math.pow(4 - y,2);
+        t = Math.pow(t, 0.5);
+        return t;
     }
 
     public static double rpsToRpm(double rps) {

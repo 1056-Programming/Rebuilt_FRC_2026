@@ -31,6 +31,10 @@ public class VisionSubsystem extends SubsystemBase {
         this.robotYaw = 0; 
 
         LimelightHelpers.setPipelineIndex(limelightName, 0);
+
+        int[] idlFilters = {27,18};
+
+        LimelightHelpers.SetFiducialIDFiltersOverride(limelightName, idlFilters);
     }
 
     @Override
