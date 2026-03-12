@@ -234,6 +234,7 @@ public class RobotContainer {
 
         NamedCommands.registerCommand("Shoot 120 IN", c_shooterCommand.setShooterState(ShooterStates.IN_120));
         NamedCommands.registerCommand("Shoot 100 IN", c_shooterCommand.setShooterState(ShooterStates.IN_100));
+        NamedCommands.registerCommand("Shoot Stop", c_shooterCommand.setShooterState(ShooterStates.STOP));
 
         NamedCommands.registerCommand("Index Balls", c_indexCommand.setIndexState(IndexStates.AUTO_INDEX));
         NamedCommands.registerCommand("Index Reverse", c_indexCommand.setIndexState(IndexStates.REVERSE));
