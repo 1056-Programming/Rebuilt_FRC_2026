@@ -56,8 +56,9 @@ public class States {
         IN_100(57.5, 27, Units.inchesToMeters(100)),
         CLIMB_TO_CENTER(15, 42.5, Units.inchesToMeters(115)),
         // c 
-        SHOOT_FAR(60, 60, Units.inchesToMeters(6700));
-        // ah 
+        SHOOT_FAR(60, 60, Units.inchesToMeters(6700)),
+        // ah
+        REVERSE_SHOOT(-40,-40,0); 
         
          public final double backSpinRPS;
         public final double shootingRPS;

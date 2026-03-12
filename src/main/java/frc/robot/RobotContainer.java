@@ -146,6 +146,9 @@ public class RobotContainer {
         driver1.leftTrigger().onTrue(c_shooterCommand.setShooterState(States.ShooterStates.IN_120));
         driver1.leftTrigger().onFalse(c_shooterCommand.setShooterState(ShooterStates.STOP));
 
+        driver1.rightBumper().toggleOnTrue(c_shooterCommand.setShooterState(ShooterStates.REVERSE_SHOOT));
+        driver1.rightBumper().toggleOnFalse(c_shooterCommand.setShooterState(ShooterStates.STOP));
+
         driver1.pov(90).onTrue(c_shooterCommand.setShooterState(ShooterStates.SHOOT_FAR));
         driver1.pov(90).onFalse(c_shooterCommand.setShooterState(ShooterStates.STOP));
     }
