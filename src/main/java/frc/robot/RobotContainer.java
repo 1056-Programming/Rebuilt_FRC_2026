@@ -86,9 +86,9 @@ public class RobotContainer {
     private final PivotShake c_pivotShake = new PivotShake(s_intake);
     private final RepeatCommand c_gigaShake = 
         new SequentialCommandGroup(c_intakeCommand.setIntakeState(IntakeStates.PUSH_IN),
-                                    new WaitCommand(1),
+                                    new WaitCommand(0.4),
                                     c_intakeCommand.setIntakeState(IntakeStates.START),
-                                    new WaitCommand(1)).repeatedly();               
+                                    new WaitCommand(0.4)).repeatedly();               
     private SendableChooser<Command> m_chooser;
 
 
@@ -120,13 +120,22 @@ public class RobotContainer {
 
         driver1.y().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.GIGA_HOME)); 
 
-        driver1.pov(180).toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.OUTAKE));
-        driver1.pov(180).toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.START));
+        // driver1.pov(180).toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.OUTAKE));
+        // driver1.pov(180).toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.START));
 
-        driver1.pov(270).toggleOnTrue(new InstantCommand(() -> s_intake.setOverride(true)));
-        driver1.pov(270).toggleOnFalse(new InstantCommand(() -> s_intake.setOverride(false)));
+        // driver1.pov(270).toggleOnTrue(new InstantCommand(() -> s_intake.setOverride(true)));
+        // driver1.pov(270).toggleOnFalse(new InstantCommand(() -> s_intake.setOverride(false)));
 
-        driver1.b().toggleOnTrue(c_gigaShake);
+
+        driver1.rightTrigger().toggleOnTrue(new InstantCommand(() -> s_intake.setOverride(true)));
+        driver1.rightTrigger().toggleOnFalse(new InstantCommand(() -> s_intake.setOverride(false)));
+
+        driver1.b().onTrue(c_intakeCommand.setIntakeState(IntakeStates.OUTAKE));
+        driver1.b().onFalse(c_intakeCommand.setIntakeState(IntakeStates.START));
+
+        
+        driver1.leftBumper().onTrue(c_gigaShake);
+        driver1.leftBumper().onFalse(c_intakeCommand.setIntakeState(IntakeStates.START));
     }
 
     private void setIndexorBindings() {
@@ -144,8 +153,11 @@ public class RobotContainer {
         // driver1.rightTrigger().onTrue(c_shooterCommand.setShooterState(States.ShooterStates.CLIMB_TO_CENTER));
         // driver1.rightTrigger().onFalse(c_shooterCommand.setShooterState(States.ShooterStates.STOP));
 
-        driver1.rightTrigger().onTrue(c_shooterCommand.setShooterState(States.ShooterStates.CLIMB_TO_CENTER));
-        driver1.rightTrigger().onFalse(c_shooterCommand.setShooterState(States.ShooterStates.STOP));
+        // driver1.rightTrigger().onTrue(c_shooterCommand.setShooterState(States.ShooterStates.CLIMB_TO_CENTER));
+        // driver1.rightTrigger().onFalse(c_shooterCommand.setShooterState(States.ShooterStates.STOP));
+
+        driver1.pov(180).onTrue(c_shooterCommand.setShooterState(States.ShooterStates.CLIMB_TO_CENTER));
+        driver1.pov(180).onFalse(c_shooterCommand.setShooterState(States.ShooterStates.STOP));
 
         driver1.leftTrigger().onTrue(c_shooterCommand.setShooterState(States.ShooterStates.IN_120));
         driver1.leftTrigger().onFalse(c_shooterCommand.setShooterState(ShooterStates.STOP));
@@ -153,8 +165,8 @@ public class RobotContainer {
         driver1.rightBumper().toggleOnTrue(c_shooterCommand.setShooterState(ShooterStates.REVERSE_SHOOT));
         driver1.rightBumper().toggleOnFalse(c_shooterCommand.setShooterState(ShooterStates.STOP));
 
-        driver1.pov(90).onTrue(c_shooterCommand.setShooterState(ShooterStates.SHOOT_FAR));
-        driver1.pov(90).onFalse(c_shooterCommand.setShooterState(ShooterStates.STOP));
+        driver1.pov(0).onTrue(c_shooterCommand.setShooterState(ShooterStates.SHOOT_FAR)); // was 90
+        driver1.pov(0).onFalse(c_shooterCommand.setShooterState(ShooterStates.STOP));
     }
 
     private void setDriverBindings() {
@@ -254,7 +266,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Index Auto Balls", c_indexCommand.setIndexState(IndexStates.AUTO_INDEX));
 
         // Put all of the auto routines onto the Smartdashboard
-        m_chooser = AutoBuilder.buildAutoChooser(); 
+        m_chooser = AutoBuilder.buildAutoChooser("Right Auto"); 
         SmartDashboard.putData(m_chooser);
 
         // Warmup PathPlanner to avoid Java pauses

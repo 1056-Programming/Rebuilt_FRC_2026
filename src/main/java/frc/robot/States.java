@@ -85,7 +85,7 @@ public class States {
     
         // Set the home values for piviot 
         GIGA_HOME(0, -105),
-        PUSH_IN(0, -145),
+        PUSH_IN(0.5, -130),
         HALF(0.5, -150),
         START(0,-170),
         HOME(0,-210),

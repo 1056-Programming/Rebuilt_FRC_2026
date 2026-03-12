@@ -13,13 +13,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "la 1"
+            "pathName": "Simple Left Auto 1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "la 2"
+            "pathName": "Simple Left Auto 2"
           }
         },
         {
@@ -37,7 +37,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "la 3"
+            "pathName": null
           }
         },
         {

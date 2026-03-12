@@ -219,7 +219,8 @@ public class ShooterSubsystem extends SubsystemBase {
         m_leftShooter.getConfigurator().apply(setConfigs); 
         m_middleShooter.getConfigurator().apply(setConfigs);
         m_rightShooter.getConfigurator().apply(setConfigs); 
-    }
+    }   
+
 
     // Set dashboard data for testing and debugging purposes
     private void setDashboardData() {
