@@ -88,7 +88,8 @@ public class States {
         PUSH_IN(0, -145),
         HALF(0.5, -150),
         START(0,-170),
-        HOME(0,-210);
+        HOME(0,-210),
+        pickle(0,-213);
 
         public final double intakeSpeed;
         public final double pivotAngle;

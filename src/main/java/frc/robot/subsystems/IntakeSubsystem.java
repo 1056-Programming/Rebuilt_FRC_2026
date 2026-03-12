@@ -40,6 +40,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     // Enable or disable subsystem
     private final boolean disable;
+    private boolean override; 
 
     public IntakeSubsystem() {
         // Initialize Spark Flex, Spark Max motors, and Throguh Bore Cancoder
@@ -60,6 +61,7 @@ public class IntakeSubsystem extends SubsystemBase {
         setIntakeState(i_state);
 
         c_pivotPID.setTolerance(0.5);
+        override = false; 
 
         // Disable Subsystem if set to true 
         disable = true;
@@ -75,6 +77,9 @@ public class IntakeSubsystem extends SubsystemBase {
             + c_ArmFeedforward.calculate(Units.degreesToRadians(getPiviotPosition()), pivotEncoder.getVelocity().getValueAsDouble());
         if(pivotSpeed < 0) {
             pivotSpeed *= 0.8;
+        }
+        if(override) {
+            pivotSpeed = -0.2;
         }
         m_pivot.set(pivotSpeed);
         setDashboardData();
@@ -113,6 +118,10 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public IntakeStates getState() {
         return i_state;
+    }
+
+    public void setOverride(boolean on) {
+        override = on;
     }
 
     // Set dashboard data for testing and debugging purposes

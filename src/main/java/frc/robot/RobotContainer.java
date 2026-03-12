@@ -114,18 +114,19 @@ public class RobotContainer {
 
     private void setIntakeBindings() {
         driver1.a().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.INTAKE));
-        driver1.a().toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.START));
+        driver1.a().toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.pickle));
 
         driver1.x().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.HALF));
-        driver1.x().toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.START));
 
         driver1.y().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.GIGA_HOME)); 
 
         driver1.pov(180).toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.OUTAKE));
         driver1.pov(180).toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.START));
 
+        driver1.pov(270).toggleOnTrue(new InstantCommand(() -> s_intake.setOverride(true)));
+        driver1.pov(270).toggleOnFalse(new InstantCommand(() -> s_intake.setOverride(false)));
+
         driver1.b().toggleOnTrue(c_gigaShake);
-        driver1.b().toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.START));
     }
 
     private void setIndexorBindings() {
@@ -134,6 +135,9 @@ public class RobotContainer {
 
         driver1.rightBumper().toggleOnTrue(c_indexCommand.setIndexState(IndexStates.REVERSE));
         driver1.rightBumper().toggleOnFalse(c_indexCommand.setIndexState(IndexStates.STOP));
+
+        //  driver1.rightBumper().toggleOnTrue(c_indexCommand.setIndexState(IndexStates.REVERSE));
+        // driver1.rightBumper().toggleOnFalse(c_indexCommand.setIndexState(IndexStates.STOP));
     }
 
     private void setShooterBindings() {
