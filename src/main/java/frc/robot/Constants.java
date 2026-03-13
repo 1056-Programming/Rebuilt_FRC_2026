@@ -85,3 +85,11 @@ public class Constants {
         public static final double kRedYPos = 0; 
     }
 }
+    public class LED {
+    private static final double SOLID_BLUE = 0.87;
+    private static final double SOLID_RED = 0.61;
+    private static final double SOLID_WHITE = 0.93;
+    private static final double HEARTBEAT_BLUE = -0.23;
+    private static final double HEARTBEAT_RED = -0.25;
+    }
+}
