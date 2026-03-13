@@ -82,7 +82,7 @@ public class SwerveTeleop extends Command {
     private void setPolynomialAcceleration() {
         xSpeed = Utilities.polynomialAccleration(yInput) * MaxSpeed;
         ySpeed = Utilities.polynomialAccleration(xInput) * MaxSpeed;
-        rSpeed = rInput * MaxAngularRate; 
+        rSpeed = rInput * MaxAngularRate * 0.8; 
     }
     
     // // Limit the rate of change of the xSpeed to 0.8 m/s^2

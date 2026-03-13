@@ -9,8 +9,8 @@ public class States {
     // Positive in Index in 
     public enum IndexStates {
         STOP(0, 0),
-        INDEX(1, -0.8),
-        AUTO_INDEX(0.5, -0.5),
+        INDEX(0.7, -0.8),
+        AUTO_INDEX(0.75, -0.75),
         REVERSE(-0.5, 0.5);
 
         public final double indexerSpeed;
@@ -47,18 +47,18 @@ public class States {
         // DISTANCE_2_5M(5.8, 49.2, 2.5),
 
        // IN_120(62.5,30,Units.inchesToMeters(120)),
-       // IN_120(25, 42.5,Units.inchesToMeters(120)),
-        IN_120(7.5 ,47, Units.inchesToMeters(120)),
+        //IN_120(25, 42.5,Units.inchesToMeters(120)),
+        IN_120(7.5 ,48, Units.inchesToMeters(120)),
         IN_89(32, 45,Units.inchesToMeters(89.5)),
         IN_60(22.5,37.5, Units.inchesToMeters(60)),
         IN_45(25, 35, Units.inchesToMeters(45)),
         IN_75(25, 40, Units.inchesToMeters(75)),
-        IN_100(57.5, 27, Units.inchesToMeters(100)),
-        CLIMB_TO_CENTER(15, 42.5, Units.inchesToMeters(115)),
+        IN_100(57.5, 30, Units.inchesToMeters(100)),
+        CLIMB_TO_CENTER(15, 45, Units.inchesToMeters(115)),
         // c 
-        SHOOT_FAR(60, 60, Units.inchesToMeters(6700)),
+        SHOOT_FAR(20, 40, Units.inchesToMeters(6700)),
         // ah
-        REVERSE_SHOOT(-40,-40,0); 
+        REVERSE_SHOOT(-100,-100,0); 
         
          public final double backSpinRPS;
         public final double shootingRPS;
@@ -89,7 +89,8 @@ public class States {
         HALF(0.5, -150),
         START(0,-170),
         HOME(0,-210),
-        pickle(0,-213);
+        pickle(0,-213),
+        TESTING_INTAKE(1, -210);
 
         public final double intakeSpeed;
         public final double pivotAngle;

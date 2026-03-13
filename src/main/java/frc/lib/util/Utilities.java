@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 public class Utilities {
     public static double polynomialAccleration(double x) {
-        return Math.pow(x,3) * 0.795903 + x * 0.203938;
+        return Math.pow(x,3) * 0.85903 + x * 0.203938;
     }
     
     // keep drive values within the range of -1 and 1 

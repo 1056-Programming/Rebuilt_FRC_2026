@@ -112,9 +112,13 @@ public class RobotContainer {
         
     }
 
-    private void setIntakeBindings() {
+     private void setIntakeBindings() {
         driver1.a().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.INTAKE));
         driver1.a().toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.pickle));
+
+    
+        // driver1.a().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.TESTING_INTAKE));
+        // driver1.a().toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.pickle));
 
         driver1.x().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.HALF));
 
@@ -255,6 +259,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("Intake Start Pos", c_intakeCommand.setIntakeState(IntakeStates.START));
         NamedCommands.registerCommand("Intake Stop", c_intakeCommand.setIntakeState(IntakeStates.STOP));
         NamedCommands.registerCommand("Intake Mega Home", c_intakeCommand.setIntakeState(IntakeStates.GIGA_HOME));
+        NamedCommands.registerCommand("Intake Push In", c_intakeCommand.setIntakeState(IntakeStates.PUSH_IN));
+
 
         NamedCommands.registerCommand("Shoot 120 IN", c_shooterCommand.setShooterState(ShooterStates.IN_120));
         NamedCommands.registerCommand("Shoot 100 IN", c_shooterCommand.setShooterState(ShooterStates.CLIMB_TO_CENTER));

@@ -8,11 +8,11 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.0465049928673325,
+        "x": 2.046504992867333,
         "y": 7.4572753209700435
       },
       "isLocked": false,
-      "linkedName": "LA 3"
+      "linkedName": "LA2E"
     },
     {
       "anchor": {
@@ -24,7 +24,7 @@
         "y": 7.211440798858773
       },
       "nextControl": {
-        "x": 0.45615453761625957,
+        "x": 0.45615453761625946,
         "y": 7.356008522294895
       },
       "isLocked": false,

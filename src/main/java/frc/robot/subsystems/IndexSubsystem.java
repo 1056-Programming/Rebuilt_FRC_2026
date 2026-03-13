@@ -26,7 +26,7 @@ public class IndexSubsystem extends SubsystemBase {
     // Disable subsystem 
     private final boolean disable;
 
-    public IndexSubsystem(){
+    public IndexSubsystem() {
         // Initalize Motors for Subsystem
         m_conveyor = new SparkMax(Constants.Indexor.kConveyorID, MotorType.kBrushless) ;
         m_indexing = new SparkFlex(Constants.Indexor.kIndexorID, MotorType.kBrushless);

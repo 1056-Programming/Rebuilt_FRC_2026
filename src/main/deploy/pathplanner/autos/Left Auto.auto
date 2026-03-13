@@ -13,19 +13,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": null
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": null
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake Start Pos"
+            "pathName": "LA 1"
           }
         },
         {
@@ -37,7 +25,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LA 3"
+            "pathName": "LA 2"
           }
         },
         {
@@ -53,7 +41,44 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 2.0
+                  "waitTime": 1.5
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Index Stop"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Balls"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LA 4"
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Index Balls"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 1.5
                 }
               },
               {
@@ -75,12 +100,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "LA 4"
           }
         }
       ]
