@@ -74,6 +74,7 @@ public class RobotContainer {
     private final ShooterSubsystem s_shooter = new ShooterSubsystem(drivetrain);
     private final IndexSubsystem s_indexor = new IndexSubsystem();
     private final IntakeSubsystem s_intake = new IntakeSubsystem();
+    private final AddressableLEDSubsystem m_leds;
 //   private final VisionSubsystem s_VisionSubsystem = new VisionSubsystem(drivetrain,"limelight-hotrock");
     // private final VisionSubsystem1 s_test = new 
 
