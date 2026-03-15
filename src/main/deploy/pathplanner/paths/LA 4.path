@@ -8,78 +8,50 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.046504992867333,
-        "y": 7.4572753209700435
+        "x": 2.8228245363766047,
+        "y": 7.573723252496434
       },
       "isLocked": false,
       "linkedName": "LA2E"
     },
     {
       "anchor": {
-        "x": 0.9909000000000001,
-        "y": 7.318877777777777
-      },
-      "prevControl": {
-        "x": 2.5381740370898713,
-        "y": 7.211440798858773
-      },
-      "nextControl": {
-        "x": 0.45615453761625946,
-        "y": 7.356008522294895
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 0.49393333333333334,
+        "x": 1.8653637660485018,
         "y": 6.0521
       },
       "prevControl": {
-        "x": 0.5330499099010658,
-        "y": 6.706568680719964
+        "x": 3.625021398002853,
+        "y": 6.072838801711842
       },
       "nextControl": {
-        "x": 0.4474861111111109,
-        "y": 5.274980555555556
+        "x": 1.2440882461331078,
+        "y": 6.044777831424721
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.3536767361111113,
-        "y": 5.166269097222222
+        "x": 1.2572467902995716,
+        "y": 5.904636233951498
       },
       "prevControl": {
-        "x": 0.9005814236111112,
-        "y": 5.220624826388889
-      },
-      "nextControl": {
-        "x": 1.8067720486111114,
-        "y": 5.111913368055555
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 3.836277777777778,
-        "y": 7.601466666666667
-      },
-      "prevControl": {
-        "x": 2.836277777777778,
-        "y": 7.601466666666667
+        "x": 1.5418972895863048,
+        "y": 5.912436376604851
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "LA 4"
+      "linkedName": "LA4EE"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 3.05,
-      "rotationDegrees": -89.88208073386355
+      "waypointRelativePos": 0.37739872068231006,
+      "rotationDegrees": -46.184223685881264
+    },
+    {
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": -179.86848515017442
     }
   ],
   "constraintZones": [],
@@ -95,7 +67,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -64.9325365619395
+    "rotation": 179.5017883873863
   },
   "reversed": false,
   "folder": "Left Auto Paths",

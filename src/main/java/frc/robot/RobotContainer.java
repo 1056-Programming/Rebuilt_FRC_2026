@@ -74,7 +74,6 @@ public class RobotContainer {
     private final ShooterSubsystem s_shooter = new ShooterSubsystem(drivetrain);
     private final IndexSubsystem s_indexor = new IndexSubsystem();
     private final IntakeSubsystem s_intake = new IntakeSubsystem();
-    private final AddressableLEDSubsystem m_leds;
 //   private final VisionSubsystem s_VisionSubsystem = new VisionSubsystem(drivetrain,"limelight-hotrock");
     // private final VisionSubsystem1 s_test = new 
 
@@ -138,7 +137,6 @@ public class RobotContainer {
         driver1.b().onTrue(c_intakeCommand.setIntakeState(IntakeStates.OUTAKE));
         driver1.b().onFalse(c_intakeCommand.setIntakeState(IntakeStates.START));
 
-        
         driver1.leftBumper().onTrue(c_gigaShake);
         driver1.leftBumper().onFalse(c_intakeCommand.setIntakeState(IntakeStates.START));
     }
@@ -149,6 +147,8 @@ public class RobotContainer {
 
         driver1.rightBumper().toggleOnTrue(c_indexCommand.setIndexState(IndexStates.REVERSE));
         driver1.rightBumper().toggleOnFalse(c_indexCommand.setIndexState(IndexStates.STOP));
+
+
 
         //  driver1.rightBumper().toggleOnTrue(c_indexCommand.setIndexState(IndexStates.REVERSE));
         // driver1.rightBumper().toggleOnFalse(c_indexCommand.setIndexState(IndexStates.STOP));
@@ -164,6 +164,10 @@ public class RobotContainer {
         driver1.pov(180).onTrue(c_shooterCommand.setShooterState(States.ShooterStates.CLIMB_TO_CENTER));
         driver1.pov(180).onFalse(c_shooterCommand.setShooterState(States.ShooterStates.STOP));
 
+        driver1.pov(225).onTrue(c_shooterCommand.setShooterState(States.ShooterStates.CLIMB_TO_CENTER));
+
+        driver1.pov(135).onTrue(c_shooterCommand.setShooterState(States.ShooterStates.CLIMB_TO_CENTER));
+
         driver1.leftTrigger().onTrue(c_shooterCommand.setShooterState(States.ShooterStates.IN_120));
         driver1.leftTrigger().onFalse(c_shooterCommand.setShooterState(ShooterStates.STOP));
 
@@ -172,6 +176,10 @@ public class RobotContainer {
 
         driver1.pov(0).onTrue(c_shooterCommand.setShooterState(ShooterStates.SHOOT_FAR)); // was 90
         driver1.pov(0).onFalse(c_shooterCommand.setShooterState(ShooterStates.STOP));
+
+        driver1.pov(45).onTrue(c_shooterCommand.setShooterState(ShooterStates.SHOOT_FAR)); // was 90
+
+        driver1.pov(315).onTrue(c_shooterCommand.setShooterState(ShooterStates.SHOOT_FAR)); // was 90
     }
 
     private void setDriverBindings() {
@@ -211,6 +219,7 @@ public class RobotContainer {
     }
 
     private void setTestBindings() {
+
         driver1.pov(90).onTrue(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS+=5, s_shooter.desiredBackSpinRPS)));
         driver1.pov(90).onFalse(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS, s_shooter.desiredBackSpinRPS)));
 

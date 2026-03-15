@@ -10,8 +10,8 @@ public class States {
     public enum IndexStates {
         STOP(0, 0),
         INDEX(0.7, -0.8),
-        AUTO_INDEX(0.75, -0.75),
-        REVERSE(-0.5, 0.5);
+        AUTO_INDEX(0.5, -0.5),
+        REVERSE(-1, 0.5);
 
         public final double indexerSpeed;
         public final double conveyorSpeed;
@@ -54,11 +54,11 @@ public class States {
         IN_45(25, 35, Units.inchesToMeters(45)),
         IN_75(25, 40, Units.inchesToMeters(75)),
         IN_100(57.5, 30, Units.inchesToMeters(100)),
-        CLIMB_TO_CENTER(15, 45, Units.inchesToMeters(115)),
+        CLIMB_TO_CENTER(15, 44.5, Units.inchesToMeters(115)),
         // c 
         SHOOT_FAR(20, 40, Units.inchesToMeters(6700)),
         // ah
-        REVERSE_SHOOT(-100,-100,0); 
+        REVERSE_SHOOT(0,-100,0); 
         
          public final double backSpinRPS;
         public final double shootingRPS;

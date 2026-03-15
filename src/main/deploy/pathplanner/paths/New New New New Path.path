@@ -3,58 +3,58 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.610128388017117,
-        "y": 5.749372325249644
+        "x": 1.2572467902995716,
+        "y": 5.904636233951498
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.610128388017117,
-        "y": 5.749372325249644
+        "x": 0.7785164051355205,
+        "y": 5.930513552068473
       },
       "isLocked": false,
-      "linkedName": "SGIMa1"
+      "linkedName": "LA4EE"
     },
     {
       "anchor": {
-        "x": 3.366248216833095,
-        "y": 5.412967189728959
+        "x": 0.3127246790299568,
+        "y": 5.904636233951498
       },
       "prevControl": {
-        "x": 5.16472182596291,
-        "y": 5.244764621968616
+        "x": 0.06277927461022065,
+        "y": 5.899411790492667
       },
       "nextControl": {
-        "x": 1.915022965481507,
-        "y": 5.548693292373352
+        "x": 1.1700103843700078,
+        "y": 5.922555509987045
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.836277777777778,
-        "y": 7.601466666666667
+        "x": 1.7359771754636228,
+        "y": 6.357489300998574
       },
       "prevControl": {
-        "x": 2.836277777777778,
-        "y": 7.601466666666667
+        "x": 1.0631669044180936,
+        "y": 6.318673323829017
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "LA2E"
+      "linkedName": null
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.9509594882729174,
-      "rotationDegrees": 0.0
+      "waypointRelativePos": 1.5607675906183416,
+      "rotationDegrees": -179.23927474033886
     }
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.0,
+    "maxVelocity": 0.5,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -63,13 +63,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -62.58527392032879
+    "rotation": -54.688786560366886
   },
   "reversed": false,
   "folder": "Left Auto Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 179.5017883873863
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

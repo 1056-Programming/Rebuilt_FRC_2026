@@ -13,7 +13,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LA 1"
+            "pathName": "RAO 1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "New New Path"
           }
         },
         {
@@ -25,7 +31,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LA 2"
+            "pathName": "New Path"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RAO 2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Start Pos"
           }
         },
         {
@@ -39,58 +57,15 @@
                 }
               },
               {
-                "type": "wait",
-                "data": {
-                  "waitTime": 1.5
-                }
-              },
-              {
                 "type": "named",
                 "data": {
-                  "name": "Index Stop"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake Balls"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot 120 IN"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "LA 4"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "New New New New Path"
-          }
-        },
-        {
-          "type": "sequential",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Index Balls"
+                  "name": "Intake Push In"
                 }
               },
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 1.5
+                  "waitTime": 5.0
                 }
               },
               {

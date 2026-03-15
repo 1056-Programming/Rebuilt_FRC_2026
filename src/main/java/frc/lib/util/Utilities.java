@@ -9,6 +9,18 @@ public class Utilities {
     public static double polynomialAccleration(double x) {
         return Math.pow(x,3) * 0.85903 + x * 0.203938;
     }
+
+    public static double fastPolynomialAcceleration(double x) {
+        return 0.94848 * Math.pow(x,3) + 0.0749389 * x;
+    }
+    
+    public static double supaHotFireAcceleration(double x) {
+        if(x < 0) {
+            return -(-2.17901 * Math.pow(x,3) + 3.27468 * Math.pow(x,2) - 0.0962891 * x + 0.000671109);
+        } else {
+            return (-2.17901 * Math.pow(x,3) + 3.27468 * Math.pow(x,2) - 0.0962891 * x + 0.000671109);
+        }
+    }
     
     // keep drive values within the range of -1 and 1 
     public static double clampDriveValues(double driveInput) {

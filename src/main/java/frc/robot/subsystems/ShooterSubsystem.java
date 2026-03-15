@@ -178,35 +178,6 @@ public class ShooterSubsystem extends SubsystemBase {
     public void setVelocitySetpoints(double desiredShooterRPS, double desiredBackSpinRPS) {
         this.desiredShooterRPS = desiredShooterRPS; 
         this.desiredBackSpinRPS = desiredBackSpinRPS; 
-                // Set control for desired shooter RPS
-        c_backSpinPID.setSetpoint(Utilities.rpsToRpm(desiredBackSpinRPS), ControlType.kVelocity);
-        m_leftShooter.setControl(new VelocityVoltage(-desiredShooterRPS));
-        m_middleShooter.setControl(new VelocityVoltage(-desiredShooterRPS));
-        m_rightShooter.setControl(new VelocityVoltage(-desiredShooterRPS));
-    }
-
-    public double[] getMotorSpeeds() {
-        double[] speeds = new double[4];
-        speeds[0] = m_rightShooter.getVelocity().getValueAsDouble();
-        speeds[1] = m_middleShooter.getVelocity().getValueAsDouble();
-        speeds[2] = m_leftShooter.getVelocity().getValueAsDouble();
-        return speeds;
-    }
-
-    public boolean checkDesiredRPS() {
-        if (m_leftShooter.getVelocity().getValueAsDouble() >= desiredShooterRPS * 0.98
-            && m_middleShooter.getVelocity().getValueAsDouble() >= desiredShooterRPS * 0.98
-            && m_rightShooter.getVelocity().getValueAsDouble() >= desiredShooterRPS * 0.98
-            && getBackSpinRPS() >= desiredBackSpinRPS * 0.98) {
-            return true;
-        }
-        return false;
-    }
-
-    // Get backspin speed in RPS 
-    private double getBackSpinRPS() {
-        return Utilities.rpmToRps(e_backSpin.getVelocity());
-    }
 
         // Set control for desired shooter RPS
         if(desiredBackSpinRPS != 0 ) {
