@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.3403708987161194,
-        "y": 0.4703994293865924
+        "x": 5.755933333333334,
+        "y": 2.1932999999999994
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.1612931209383417,
-        "y": 0.39244387383103563
+        "x": 3.855766666666667,
+        "y": 2.2225333333333332
       },
       "isLocked": false,
-      "linkedName": "RA3"
+      "linkedName": "YY"
     },
     {
       "anchor": {
-        "x": 0.5197432239657629,
-        "y": 0.4703994293865924
+        "x": 1.6730111111111112,
+        "y": 2.144577777777777
       },
       "prevControl": {
-        "x": 1.5429098906324292,
-        "y": 0.4996327627199254
+        "x": 3.0859555555555556,
+        "y": 2.1640666666666664
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "RA4"
+      "linkedName": "RAOA 2E"
     }
   ],
   "rotationTargets": [],
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 2.0,
-    "maxAcceleration": 3.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 32.7061617939548
   },
   "reversed": false,
   "folder": "Right Auto Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 65.11963314081834
+    "rotation": -1.8476102659945477
   },
   "useDefaultConstraints": false
 }
