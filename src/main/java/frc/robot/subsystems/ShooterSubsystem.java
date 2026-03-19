@@ -96,6 +96,11 @@ public class ShooterSubsystem extends SubsystemBase {
         // Initialize PID Controllers
         c_backSpinPID = m_backSpin.getClosedLoopController();
 
+        m_rightShooter.setVoltage(40);
+        m_middleShooter.setVoltage(40);
+        m_leftShooter.setVoltage(40);
+        m_backSpin.setVoltage(40);
+
         // Get Field helpers for distance to center piece calculation 
 
         // Initialize shooter state to STOP 
@@ -149,6 +154,10 @@ public class ShooterSubsystem extends SubsystemBase {
         return "Shooter Subsystem";
     }
 
+    public ShooterStates getShooterState() {
+        return s_state; 
+    }
+
     private double[] calculateMotorSpeeds(double distance) {
         double[] speeds = new double[2];
 
@@ -198,8 +207,18 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     // Get backspin speed in RPS 
-    private double getBackSpinRPS() {
+    public double getBackSpinRPS() {
         return Utilities.rpmToRps(e_backSpin.getVelocity());
+    }
+
+    public double[] getShooterRPS() {
+        double[] shooterSpeeds = {
+            m_leftShooter.getVelocity().getValueAsDouble(), 
+            m_middleShooter.getVelocity().getValueAsDouble(),
+            m_rightShooter.getVelocity().getValueAsDouble()
+        }; 
+
+        return shooterSpeeds;
     }
 
     // Fully disable subsystem for testing purposes

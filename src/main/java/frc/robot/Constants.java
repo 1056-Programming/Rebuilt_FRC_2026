@@ -55,9 +55,11 @@ public class Constants {
 
         // REV SparkMax
         public static final int kPivotID = 30;
+        public static final int kLeftPivotID = 50; 
 
         // CTRE Through Bore Encoder 
         public static final int kEncoderID = 23;
+        public static final int kLeftEncoderID = 0; 
 
         // PID values
         public static final double kIntakeP = 0.03;
@@ -83,6 +85,12 @@ public class Constants {
 
         public static final double kRedXPos = 0;
         public static final double kRedYPos = 0; 
+    }
+
+    public class AddressableLED {
+        public static final int firstBlinkIn = 0; 
+        
+        
     }
 }
 //     public class LED {

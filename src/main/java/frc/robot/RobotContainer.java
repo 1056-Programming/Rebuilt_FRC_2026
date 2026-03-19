@@ -18,6 +18,7 @@ import com.pathplanner.lib.commands.FollowPathCommand;
 import edu.wpi.first.epilogue.Logged.Strategy;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.SerialPort.StopBits;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -46,7 +47,7 @@ import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.SwerveTeleop;
 
 import frc.robot.generated.TunerConstants;
-
+import frc.robot.subsystems.AddressableLEDSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -90,6 +91,7 @@ public class RobotContainer {
                                     c_intakeCommand.setIntakeState(IntakeStates.START),
                                     new WaitCommand(0.4)).repeatedly();               
     private SendableChooser<Command> m_chooser;
+    private final AddressableLEDSubsystem addressableLEDSubsystem = new AddressableLEDSubsystem(s_shooter);
 
 
     public RobotContainer() {
