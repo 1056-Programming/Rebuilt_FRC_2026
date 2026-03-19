@@ -1,0 +1,159 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Balls"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RAO 1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RAOA 1.5"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot 120 IN"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RAOA 1.7"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RAOA 2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Start Pos"
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Index Balls"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Push In"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 1.5
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Index Stop"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shoot Stop"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Balls"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RAOA 3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot 120 IN"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RAOA 4"
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Index Balls"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Push In"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 1.5
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Index Stop"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shoot Stop"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Balls"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Competition Autos",
+  "choreoAuto": false
+}

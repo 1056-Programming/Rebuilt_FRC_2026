@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.3403708987161194,
-        "y": 0.4703994293865924
+        "x": 7.763288888888889,
+        "y": 2.8754111111111103
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.1612931209383417,
-        "y": 0.39244387383103563
+        "x": 6.857055555555555,
+        "y": 3.0897888888888883
       },
       "isLocked": false,
-      "linkedName": "RA3"
+      "linkedName": "RAOA 1.5E"
     },
     {
       "anchor": {
-        "x": 0.5197432239657629,
-        "y": 0.4703994293865924
+        "x": 5.755933333333334,
+        "y": 2.1932999999999994
       },
       "prevControl": {
-        "x": 1.5429098906324292,
-        "y": 0.4996327627199254
+        "x": 6.6914,
+        "y": 2.144577777777777
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "RA4"
+      "linkedName": "YY"
     }
   ],
   "rotationTargets": [],
@@ -41,14 +41,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 180.0
+    "velocity": 2.0,
+    "rotation": -1.8476102659945477
   },
   "reversed": false,
   "folder": "Right Auto Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 65.11963314081834
+    "rotation": 84.64417495714471
   },
   "useDefaultConstraints": false
 }
