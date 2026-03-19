@@ -1,54 +1,85 @@
-// package frc.robot.subsystems;
+package frc.robot.subsystems;
 
-// import java.util.function.Supplier;
-// import edu.wpi.first.wpilibj.DriverStation;
-// import edu.wpi.first.wpilibj.motorcontrol.Spark;
-// import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import java.lang.Thread.State;
+import java.util.Optional;
+import java.util.function.Supplier;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.RobotContainer;
+import frc.robot.States;
+import frc.robot.Constants.Shooter;
+import frc.robot.States.AddressableLEDStates;
+import frc.robot.States.ShooterStates;
+import frc.robot.generated.TunerConstants;
 
-// public class AddressableLEDSubsystem extends SubsystemBase {
-//     private final Spark blinkin1;
-//     private final Spark blinkin2; // set up both blinkin
-//     private final Supplier<Boolean> isAtRps; // function for max. RPS for shooter motor
-//     private final ShooterSubsystem m_shooter;
+public class AddressableLEDSubsystem extends SubsystemBase {
+    private final Spark blinkin0;
+    // private final Spark blinkin1; // set up both blinkin
+    private Supplier<Boolean> isAtRps; // function for max. RPS for shooter motor
+    private final Optional<DriverStation.Alliance> alliance; 
+    private double pattern; 
+    private AddressableLEDStates ledState; 
+    private final ShooterSubsystem s_shooter; 
+    private double tolerance; 
 
-//     // Simple pattern constants (values are placeholders for Blinkin output)
-//     private static final double SOLID_WHITE = 0.91;
-//     private static final double SOLID_RED = 0.61;
-//     private static final double SOLID_BLUE = 0.87;
-//     private static final double HEARTBEAT_RED = -0.25;
-//     private static final double HEARTBEAT_BLUE = -0.23;
+    // Simple pattern constants (values are placeholders for Blinkin output)
 
-//     public AddressableLEDSubsystem(int port1, int port2, Supplier<Boolean> isAtRps, ShooterSubsystem shooter) {
-//         this.blinkin1 = new Spark(port1);
-//         this.blinkin2 = new Spark(port2);
-//         this.isAtRps = isAtRps;
-//         this.m_shooter = shooter;
-//     }
+// Supplier<Boolean> isAtRps, ShooterSubsystem shooter
+    public AddressableLEDSubsystem(ShooterSubsystem s_shooter) {
+        blinkin0 = new Spark(Constants.AddressableLED.firstBlinkIn); 
+        alliance = DriverStation.getAlliance(); 
+        this.s_shooter = s_shooter; 
+        // s_shooter = new ShooterSubsystem(x);
+        isAtRps = () -> false; 
 
-//     @Override
-//     public void periodic() { // called every 20 ms
-//         var allianceOpt = DriverStation.getAlliance(); //new code to get alliance
-//         double pattern = SOLID_WHITE;
+        // this.alliance = DriverStation.getAlliance().get(); 
+    }
 
-//         boolean atRps = false;
-//         if (isAtRps != null) {
-//             atRps = isAtRps.get();
-//         }
+    @Override
+    public void periodic() { // called every 20 ms
 
-//         if (atRps && alliance == DriverStation.Alliance.Red) { // Apply blinking pattern only when the RPS is max
-//             pattern = HEARTBEAT_RED;
-//         } else if (atRps && alliance == DriverStation.Alliance.Blue) { // Apply blinking pattern only when the RPS is max
-//             pattern = HEARTBEAT_BLUE;
-//         } else if (alliance == DriverStation.Alliance.Red) {
-//             pattern = SOLID_RED;
-//         } else if (alliance == DriverStation.Alliance.Blue) { // Create if-else statement for LED
-//             pattern = SOLID_BLUE;
-//         } else {
-//             pattern = SOLID_WHITE; // Default color if alliance is unknown
-//         }
+        double[] shooterSpeeds = s_shooter.getShooterRPS(); 
 
-//         // Update outputs
-//         blinkin1.set(pattern);
-//         blinkin2.set(pattern);
-//     }
-// }                                 
+        if (s_shooter.getShooterState() == ShooterStates.CLIMB_TO_CENTER) 
+            tolerance = 0.93; 
+        else  
+            tolerance = 0.95; 
+
+        isAtRps = () -> {
+            if (s_shooter.desiredBackSpinRPS != 0 
+                && s_shooter.desiredShooterRPS != 0 
+                && (Math.abs(Math.round(shooterSpeeds[0])) >= Math.round(s_shooter.desiredShooterRPS)*tolerance
+                && Math.abs(Math.round(shooterSpeeds[1])) >= Math.round(s_shooter.desiredShooterRPS)*tolerance
+                && Math.abs(Math.round(shooterSpeeds[2])) >= Math.round(s_shooter.desiredShooterRPS)*tolerance
+                && Math.abs(Math.round(s_shooter.getBackSpinRPS())) >= Math.round(s_shooter.desiredBackSpinRPS)*tolerance)) {
+                return true; 
+            } 
+            return false; 
+        };
+
+        if (alliance.isPresent()) {
+            if (isAtRps.get() && alliance.get() == Alliance.Red) 
+                pattern = setLEDState(AddressableLEDStates.HEARTBEAT_WHITE);
+            else if (isAtRps.get() && alliance.get() == Alliance.Blue)
+                pattern = setLEDState(AddressableLEDStates.HEARTBEAT_WHITE);
+            else if (alliance.get() == Alliance.Red) 
+                pattern = setLEDState(AddressableLEDStates.CHASE_RED); 
+            else if (alliance.get() == Alliance.Blue) 
+                pattern = setLEDState(AddressableLEDStates.CHASE_BLUE);
+        }
+
+        blinkin0.set(pattern);
+        
+    }
+
+    public double setLEDState(AddressableLEDStates ledState) {
+        this.ledState = ledState; 
+
+        return ledState.ledID; 
+    }
+}                                 

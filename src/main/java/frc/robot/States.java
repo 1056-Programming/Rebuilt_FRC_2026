@@ -9,7 +9,7 @@ public class States {
     // Positive in Index in 
     public enum IndexStates {
         STOP(0, 0),
-        INDEX(0.7, -0.8),
+        INDEX(0.8, -0.8),
         AUTO_INDEX(0.5, -0.5),
         REVERSE(-1, 0.5);
 
@@ -79,18 +79,18 @@ public class States {
         STOP(0, -210),
 
         // Set the speed of the intak-ing motor and the position of piviot 
-        INTAKE(1, -213),
-        AUTO_INTAKE(1, -213),
-        OUTAKE(-0.5,-140),
+        INTAKE(-0.5, -205),
+        AUTO_INTAKE(-0.5, -213),
+        OUTAKE(0.5,-140),
     
         // Set the home values for piviot 
         GIGA_HOME(0, -105),
-        PUSH_IN(0.5, -130),
-        HALF(0.5, -150),
+        PUSH_IN(-0.5, -130),
+        HALF(-0.5, -150),
         START(0,-170),
         HOME(0,-210),
-        pickle(0,-213),
-        TESTING_INTAKE(1, -210);
+        pickle(0,-205),
+        TESTING_INTAKE(-1, -210);
 
         public final double intakeSpeed;
         public final double pivotAngle;
@@ -98,6 +98,24 @@ public class States {
         IntakeStates(double intakeSpeed, double pivotAngle) {
             this.intakeSpeed = intakeSpeed;
             this.pivotAngle = pivotAngle;
+        }
+    }
+
+    public enum AddressableLEDStates {
+
+        SOLID_WHITE(0.91),
+        SOLID_RED (0.61),
+        CHASE_RED(-0.73), 
+        CHASE_BLUE(-0.75),
+        SOLID_BLUE (-0.73),
+        HEARTBEAT_RED (-0.25),
+        HEARTBEAT_BLUE (-0.23),
+        HEARTBEAT_WHITE(-0.21);
+
+        public final double ledID; 
+
+        AddressableLEDStates(double ledID) {
+            this.ledID = ledID; 
         }
     }
 }

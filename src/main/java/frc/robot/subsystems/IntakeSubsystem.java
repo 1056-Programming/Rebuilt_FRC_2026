@@ -22,11 +22,13 @@ import frc.robot.States.IntakeStates;
 public class IntakeSubsystem extends SubsystemBase {
     // Spark Flex controlling ball intake
     // Spark Max controlling pivot of intake
-    private final TalonFX m_intake;
+    private final SparkFlex m_intake;
     public final SparkMax m_pivot; 
+    public final SparkMax m_leftPivot; 
 
     // Absolute Encorder to track pivot angle
     private final CANcoder pivotEncoder;
+    private final CANcoder leftPivotEncoder; 
 
     // PID controller to maintain pivot angle
     private final PIDController c_pivotPID;
@@ -44,8 +46,11 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public IntakeSubsystem() {
         // Initialize Spark Flex, Spark Max motors, and Throguh Bore Cancoder
-        m_intake = new TalonFX(Constants.Intake.kIntakeID);
+        m_intake = new SparkFlex(Constants.Intake.kIntakeID, MotorType.kBrushless);
+        
         m_pivot = new SparkMax(Constants.Intake.kPivotID, MotorType.kBrushless);
+        m_leftPivot = new SparkMax(Constants.Intake.kLeftPivotID, MotorType.kBrushless);
+        leftPivotEncoder = new CANcoder(Constants.Intake.kLeftEncoderID); 
         pivotEncoder = new CANcoder(Constants.Intake.kEncoderID);
 
         // Optimize BUS usage
@@ -82,6 +87,7 @@ public class IntakeSubsystem extends SubsystemBase {
             pivotSpeed = -0.2;
         }
         m_pivot.set(pivotSpeed);
+        m_leftPivot.set(pivotSpeed);
         setDashboardData();
     }
 
@@ -110,6 +116,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private void disableSubsystem() {
         m_intake.disable();
         m_pivot.disable();
+        m_leftPivot.disable();
     }
     
     public boolean isPivotAtSetpoint() {
