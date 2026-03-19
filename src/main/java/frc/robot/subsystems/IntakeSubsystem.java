@@ -125,8 +125,8 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public double getLeftPiviotPosition() {
-        return Units.rotationsToDegrees(leftPivotEncoder.getPosition().getValueAsDouble()) * -1 -60 * 4;
-    }
+        return Units.rotationsToDegrees(leftPivotEncoder.getPosition().getValueAsDouble()) * -1 - 60 * 5.6333333333333; 
+      }
 
     // Disable susbystem if needed
     private void disableSubsystem() {
@@ -156,7 +156,8 @@ public class IntakeSubsystem extends SubsystemBase {
         SmartDashboard.putNumber(getName() + " pivot setpoint", c_pivotPID.getSetpoint());
         SmartDashboard.putNumber(getName() + " right pivot speed", pivotSpeed);
         SmartDashboard.putNumber(getName() + " left pivot speed", leftPivotSpeed);
+        SmartDashboard.putNumber(getName() + " left pivot position", getLeftPiviotPosition());
         SmartDashboard.putNumber(getName() + " intake speed", m_intake.get());
-        SmartDashboard.putNumber(getName() + " piviot position", getPiviotPosition());
+        SmartDashboard.putNumber(getName() + " right piviot position", getPiviotPosition());
     }
 }
