@@ -39,6 +39,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     // Calculated PID Speed for pivot
     private double pivotSpeed;
+    private double leftPivotSpeed; 
 
     // Enable or disable subsystem
     private final boolean disable;
@@ -49,9 +50,10 @@ public class IntakeSubsystem extends SubsystemBase {
         m_intake = new SparkFlex(Constants.Intake.kIntakeID, MotorType.kBrushless);
         
         m_pivot = new SparkMax(Constants.Intake.kPivotID, MotorType.kBrushless);
+        pivotEncoder = new CANcoder(Constants.Intake.kEncoderID);
+        
         m_leftPivot = new SparkMax(Constants.Intake.kLeftPivotID, MotorType.kBrushless);
         leftPivotEncoder = new CANcoder(Constants.Intake.kLeftEncoderID); 
-        pivotEncoder = new CANcoder(Constants.Intake.kEncoderID);
 
         // Optimize BUS usage
         // SparkFlexUtils.setSparkFlexBusUsage(m_intake, SparkFlexUtils.Usage.kMinimal, IdleMode.kCoast, false, true);
@@ -80,14 +82,24 @@ public class IntakeSubsystem extends SubsystemBase {
         // Set motor speed based on PID calculation
         pivotSpeed = c_pivotPID.calculate(getPiviotPosition()) 
             + c_ArmFeedforward.calculate(Units.degreesToRadians(getPiviotPosition()), pivotEncoder.getVelocity().getValueAsDouble());
+
+        leftPivotSpeed = c_pivotPID.calculate(getLeftPiviotPosition()) 
+            + c_ArmFeedforward.calculate(Units.degreesToRadians(getLeftPiviotPosition()), leftPivotEncoder.getVelocity().getValueAsDouble());
+
         if(pivotSpeed < 0) {
             pivotSpeed *= 0.65;
+        } 
+
+        if (leftPivotSpeed < 0) {
+            leftPivotSpeed *= 0.65; 
         }
+
         if(override) {
             pivotSpeed = -0.2;
+            leftPivotSpeed = -0.2; 
         }
         m_pivot.set(pivotSpeed);
-        m_leftPivot.set(pivotSpeed);
+        m_leftPivot.set(leftPivotSpeed);
         setDashboardData();
     }
 
@@ -110,6 +122,10 @@ public class IntakeSubsystem extends SubsystemBase {
     // Increases as you go up 
     public double getPiviotPosition() {
         return Units.rotationsToDegrees(pivotEncoder.getPosition().getValueAsDouble()) * -1 -60 * 4;
+    }
+
+    public double getLeftPiviotPosition() {
+        return Units.rotationsToDegrees(leftPivotEncoder.getPosition().getValueAsDouble()) * -1 -60 * 4;
     }
 
     // Disable susbystem if needed
@@ -138,7 +154,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
         // Put motor speeds and pid setpoints
         SmartDashboard.putNumber(getName() + " pivot setpoint", c_pivotPID.getSetpoint());
-        SmartDashboard.putNumber(getName() + " pivot speed", pivotSpeed);
+        SmartDashboard.putNumber(getName() + " right pivot speed", pivotSpeed);
+        SmartDashboard.putNumber(getName() + " left pivot speed", leftPivotSpeed);
         SmartDashboard.putNumber(getName() + " intake speed", m_intake.get());
         SmartDashboard.putNumber(getName() + " piviot position", getPiviotPosition());
     }
