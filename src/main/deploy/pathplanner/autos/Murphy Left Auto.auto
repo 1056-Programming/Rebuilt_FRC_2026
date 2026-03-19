@@ -1,0 +1,209 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Home"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MLA 1"
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Balls"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.5
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MLA 2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot 120 IN"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MLA 3"
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Stop"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Mega Home"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Feed Out"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.5
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Index Balls"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.0
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Index Stop"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shoot Stop"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MLA 4"
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Balls"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.5
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MLA 5"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MLA 6"
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Stop"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Mega Home"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Feed Out"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.5
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Index Balls"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.0
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Index Stop"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shoot Stop"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Competition Autos",
+  "choreoAuto": false
+}

@@ -282,6 +282,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Index Reverse", c_indexCommand.setIndexState(IndexStates.REVERSE));
         NamedCommands.registerCommand("Index Stop", c_indexCommand.setIndexState(IndexStates.STOP));
         NamedCommands.registerCommand("Index Auto Balls", c_indexCommand.setIndexState(IndexStates.AUTO_INDEX));
+        
 
         // Put all of the auto routines onto the Smartdashboard
         m_chooser = AutoBuilder.buildAutoChooser("Right Auto"); 

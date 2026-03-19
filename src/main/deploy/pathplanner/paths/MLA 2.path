@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.17236666666666678,
-        "y": 0.5367444444444436
+        "x": 5.508688888888888,
+        "y": 6.05
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.1723666666666672,
-        "y": 0.5367444444444436
+        "x": 6.508688888888888,
+        "y": 6.05
       },
       "isLocked": false,
-      "linkedName": "SB!"
+      "linkedName": "MLA 1"
     },
     {
       "anchor": {
-        "x": 2.520777777777778,
-        "y": 0.5367444444444436
+        "x": 7.776188888893927,
+        "y": 6.05
       },
       "prevControl": {
-        "x": 1.520777777777778,
-        "y": 0.5367444444444437
+        "x": 6.776188888893927,
+        "y": 6.05
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "MLA 2"
     }
   ],
   "rotationTargets": [],
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.0,
+    "maxVelocity": 1.75,
     "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -41,14 +41,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 59.38376718537941
+    "velocity": 0.25,
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Bottom Auto",
+  "folder": "Murphy Left Auto",
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": 179.30972280213487
+    "velocity": 0.4,
+    "rotation": 0.0
   },
   "useDefaultConstraints": false
 }
