@@ -65,19 +65,13 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 2.0
+                  "waitTime": 3.0
                 }
               },
               {
                 "type": "named",
                 "data": {
                   "name": "Index Stop"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Shoot Stop"
                 }
               },
               {
@@ -121,30 +115,6 @@
                 "type": "named",
                 "data": {
                   "name": "Intake Push In"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 1.5
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Index Stop"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Shoot Stop"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake Balls"
                 }
               }
             ]

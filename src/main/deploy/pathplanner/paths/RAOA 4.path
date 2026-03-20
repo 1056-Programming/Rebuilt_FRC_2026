@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.516251482799527,
-        "y": 3.7713997627520763
+        "x": 7.524244444444443,
+        "y": 2.563644444444444
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.487018149466195,
-        "y": 2.173310873863187
+        "x": 5.2769,
+        "y": 2.4326333333333334
       },
       "isLocked": false,
-      "linkedName": "RAOA 3E TRUE"
+      "linkedName": "JDJ"
     },
     {
       "anchor": {
@@ -48,7 +48,7 @@
   "folder": "Right Auto Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": 0.5672664098579767
   },
   "useDefaultConstraints": true
 }
