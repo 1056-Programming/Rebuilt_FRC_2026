@@ -54,12 +54,10 @@ public class Constants {
         public static final int kIntakeID = 35;
 
         // REV SparkMax
-        public static final int kPivotID = 376;
-        public static final int kLeftPivotID = 50; 
+        public static final int kPivotID = 30;
 
         // CTRE Through Bore Encoder 
         public static final int kEncoderID = 23;
-        public static final int kLeftEncoderID = 19; 
 
         // PID values
         public static final double kIntakeP = 0.03;

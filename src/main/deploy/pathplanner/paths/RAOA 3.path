@@ -8,27 +8,36 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.959277777777778,
-        "y": 2.553844444444444
+        "x": 3.6327876631079485,
+        "y": 3.351791221826809
       },
       "isLocked": false,
       "linkedName": "RAOA 2E"
     },
     {
       "anchor": {
-        "x": 5.785166666666666,
-        "y": 3.9765333333333333
+        "x": 6.516251482799527,
+        "y": 3.7713997627520763
       },
       "prevControl": {
-        "x": 6.106733333333333,
-        "y": 1.2968111111111114
+        "x": 6.837818149466194,
+        "y": 1.0916775405298544
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "RAOA 3E TRUE"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.3018617021276608,
+      "rotationDegrees": 0.0
+    },
+    {
+      "waypointRelativePos": 0.618351063829787,
+      "rotationDegrees": 0.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],

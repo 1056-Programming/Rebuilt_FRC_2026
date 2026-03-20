@@ -45,7 +45,7 @@ import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.PivotShake;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.SwerveTeleop;
-
+import frc.robot.commands.YawSwerveAlign;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.AddressableLEDSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -84,6 +84,8 @@ public class RobotContainer {
     private final IntakeCommand c_intakeCommand = new IntakeCommand(s_intake);
     private final SwerveTeleop c_teleop = new SwerveTeleop(drivetrain, driver0);   
     //private final YawTeleop c_yawTeleop = new YawTeleop(drivetrain, driver0);
+    private final YawSwerveAlign c_zeroHome = new YawSwerveAlign(drivetrain, driver0, 0);
+
     private final PivotShake c_pivotShake = new PivotShake(s_intake);
     private final RepeatCommand c_gigaShake = 
         new SequentialCommandGroup(c_intakeCommand.setIntakeState(IntakeStates.PUSH_IN),
@@ -123,7 +125,6 @@ public class RobotContainer {
         // driver1.a().toggleOnFalse(c_intakeCommand.setIntakeState(IntakeStates.pickle));
 
         driver1.x().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.HALF));
-
         driver1.y().toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.GIGA_HOME)); 
 
         // driver1.pov(180).toggleOnTrue(c_intakeCommand.setIntakeState(IntakeStates.OUTAKE));
@@ -192,7 +193,7 @@ public class RobotContainer {
 
         // Yaw align with tag when triggered
         // Return to normal after positioning
-      //  driver0.leftTrigger().toggleOnTrue(c_yawTeleop);
+        driver0.leftTrigger().toggleOnTrue(c_zeroHome);
         driver0.leftTrigger().toggleOnFalse(c_teleop);
 
         // Idle while the robot is disabled. This ensures the configured

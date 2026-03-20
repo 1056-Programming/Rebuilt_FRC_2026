@@ -41,13 +41,13 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0.5,
+    "velocity": 0.4,
     "rotation": 0.0
   },
   "reversed": false,
   "folder": "Murphy Left Auto",
   "idealStartingState": {
-    "velocity": 1.0,
+    "velocity": 0.0,
     "rotation": 0.0
   },
   "useDefaultConstraints": false

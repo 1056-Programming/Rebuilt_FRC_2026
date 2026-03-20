@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.354344444444444,
+        "x": 2.0,
         "y": 5.355188888888888
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.354344444444444,
+        "x": 3.0,
         "y": 5.355188888888888
       },
       "isLocked": false,
@@ -46,14 +46,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 1.0,
+    "velocity": 0.4,
     "rotation": 0.0
   },
   "reversed": false,
   "folder": "Murphy Left Auto",
   "idealStartingState": {
-    "velocity": 1.0,
-    "rotation": -33.0
+    "velocity": 0.0,
+    "rotation": -32.0
   },
   "useDefaultConstraints": false
 }

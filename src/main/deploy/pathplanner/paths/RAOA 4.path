@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.785166666666666,
-        "y": 3.9765333333333333
+        "x": 6.516251482799527,
+        "y": 3.7713997627520763
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.755933333333334,
-        "y": 2.378444444444444
+        "x": 6.487018149466195,
+        "y": 2.173310873863187
       },
       "isLocked": false,
       "linkedName": "RAOA 3E TRUE"
@@ -25,7 +25,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "RAOA 2E"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 32.7061617939548
+    "rotation": 25.13247963172231
   },
   "reversed": false,
   "folder": "Right Auto Paths",

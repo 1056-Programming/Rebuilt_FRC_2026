@@ -23,10 +23,12 @@ public class PivotShake extends Command {
 
     @Override
     public void execute() {
-        if(state.equals(IntakeStates.PUSH_IN) && Math.abs(s_intake.getPiviotPosition()) > (Math.abs(IntakeStates.PUSH_IN.pivotAngle) - 20)) {
+        if(state.equals(IntakeStates.PUSH_IN) 
+            && Math.abs(s_intake.getPiviotPosition()) > (Math.abs(IntakeStates.PUSH_IN.pivotAngle) - 20)) {
             state = IntakeStates.START;
             s_intake.setIntakeState(state);
-        } else if (state.equals(IntakeStates.START) && Math.abs(s_intake.getPiviotPosition()) < (Math.abs(IntakeStates.START.pivotAngle) + 20)) {
+        } else if (state.equals(IntakeStates.START) 
+            && (Math.abs(s_intake.getPiviotPosition()) < (Math.abs(IntakeStates.START.pivotAngle) + 20))) {
             state = IntakeStates.PUSH_IN;
             s_intake.setIntakeState(state);
         }

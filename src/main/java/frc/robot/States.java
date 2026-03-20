@@ -54,7 +54,7 @@ public class States {
         IN_45(25, 35, Units.inchesToMeters(45)),
         IN_75(25, 40, Units.inchesToMeters(75)),
         IN_100(57.5, 30, Units.inchesToMeters(100)),
-        CLIMB_TO_CENTER(15, 44.5, Units.inchesToMeters(115)),
+        CLIMB_TO_CENTER(15, 44.25, Units.inchesToMeters(115)),
         // c 
         SHOOT_FAR(20, 40, Units.inchesToMeters(6700)),
         // ah
@@ -79,14 +79,14 @@ public class States {
         STOP(0, -210),
 
         // Set the speed of the intak-ing motor and the position of piviot 
-        INTAKE(-0.5, -205),
-        AUTO_INTAKE(-0.5, -205),
+        INTAKE(-0.7, -205),
+        AUTO_INTAKE(-0.7, -205),
         OUTAKE(0.5,-140),
     
         // Set the home values for piviot 
         GIGA_HOME(0, -105),
-        PUSH_IN(-0.5, -130),
-        HALF(-0.5, -150),
+        PUSH_IN(-0.7, -130),
+        HALF(-0.7, -150),
         START(0,-170),
         HOME(0,-210),
         pickle(0,-205),

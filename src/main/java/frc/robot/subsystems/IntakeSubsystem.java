@@ -24,11 +24,11 @@ public class IntakeSubsystem extends SubsystemBase {
     // Spark Max controlling pivot of intake
     private final SparkFlex m_intake;
     public final SparkMax m_pivot; 
-    public final SparkMax m_leftPivot; 
+    // public final SparkMax m_leftPivot; 
 
     // Absolute Encorder to track pivot angle
     private final CANcoder pivotEncoder;
-    private final CANcoder leftPivotEncoder; 
+    // private final CANcoder leftPivotEncoder; 
 
     // PID controller to maintain pivot angle
     private final PIDController c_pivotPID;
@@ -39,7 +39,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     // Calculated PID Speed for pivot
     private double pivotSpeed;
-    private double leftPivotSpeed; 
+    // private double leftPivotSpeed; 
 
     // Enable or disable subsystem
     private final boolean disable;
@@ -52,8 +52,8 @@ public class IntakeSubsystem extends SubsystemBase {
         m_pivot = new SparkMax(Constants.Intake.kPivotID, MotorType.kBrushless);
         pivotEncoder = new CANcoder(Constants.Intake.kEncoderID);
         
-        m_leftPivot = new SparkMax(Constants.Intake.kLeftPivotID, MotorType.kBrushless);
-        leftPivotEncoder = new CANcoder(Constants.Intake.kLeftEncoderID); 
+        // m_leftPivot = new SparkMax(Constants.Intake.kLeftPivotID, MotorType.kBrushless);
+        // leftPivotEncoder = new CANcoder(Constants.Intake.kLeftEncoderID); 
 
         // Optimize BUS usage
         // SparkFlexUtils.setSparkFlexBusUsage(m_intake, SparkFlexUtils.Usage.kMinimal, IdleMode.kCoast, false, true);
@@ -71,7 +71,7 @@ public class IntakeSubsystem extends SubsystemBase {
         override = false; 
 
         // Disable Subsystem if set to true 
-        disable = true;
+        disable = false;
         if(disable) {
             disableSubsystem();
         }
@@ -83,23 +83,23 @@ public class IntakeSubsystem extends SubsystemBase {
         pivotSpeed = c_pivotPID.calculate(getPiviotPosition()) 
             + c_ArmFeedforward.calculate(Units.degreesToRadians(getPiviotPosition()), pivotEncoder.getVelocity().getValueAsDouble());
 
-        leftPivotSpeed = c_pivotPID.calculate(getLeftPiviotPosition()) 
-            + c_ArmFeedforward.calculate(Units.degreesToRadians(getLeftPiviotPosition()), leftPivotEncoder.getVelocity().getValueAsDouble());
+        // leftPivotSpeed = c_pivotPID.calculate(getLeftPiviotPosition()) 
+            // + c_ArmFeedforward.calculate(Units.degreesToRadians(getLeftPiviotPosition()), leftPivotEncoder.getVelocity().getValueAsDouble());
 
         if(pivotSpeed < 0) {
             pivotSpeed *= 0.65;
         } 
 
-        if (leftPivotSpeed < 0) {
-            leftPivotSpeed *= 0.65; 
-        }
+        // if (leftPivotSpeed < 0) {
+        //     leftPivotSpeed *= 0.65; 
+        // }
 
         if(override) {
             pivotSpeed = -0.2;
-            leftPivotSpeed = -0.2; 
+            // leftPivotSpeed = -0.2; 
         }
         m_pivot.set(pivotSpeed);
-        m_leftPivot.set(leftPivotSpeed);
+        // m_leftPivot.set(leftPivotSpeed);
         setDashboardData();
     }
 
@@ -124,15 +124,15 @@ public class IntakeSubsystem extends SubsystemBase {
         return Units.rotationsToDegrees(pivotEncoder.getPosition().getValueAsDouble()) * -1 -60 * 4;
     }
 
-    public double getLeftPiviotPosition() {
-        return Units.rotationsToDegrees(leftPivotEncoder.getPosition().getValueAsDouble()) * -1 - 60 * 5.6333333333333; 
-      }
+    // public double getLeftPiviotPosition() {
+    //     // return Units.rotationsToDegrees(leftPivotEncoder.getPosition().getValueAsDouble()) * -1 - 60 * 5.6333333333333; 
+    //   }
 
     // Disable susbystem if needed
     private void disableSubsystem() {
         m_intake.disable();
         m_pivot.disable();
-        m_leftPivot.disable();
+        // m_leftPivot.disable();
     }
     
     public boolean isPivotAtSetpoint() {
@@ -155,8 +155,8 @@ public class IntakeSubsystem extends SubsystemBase {
         // Put motor speeds and pid setpoints
         SmartDashboard.putNumber(getName() + " pivot setpoint", c_pivotPID.getSetpoint());
         SmartDashboard.putNumber(getName() + " right pivot speed", pivotSpeed);
-        SmartDashboard.putNumber(getName() + " left pivot speed", leftPivotSpeed);
-        SmartDashboard.putNumber(getName() + " left pivot position", getLeftPiviotPosition());
+        // SmartDashboard.putNumber(getName() + " left pivot speed", leftPivotSpeed);
+        // SmartDashboard.putNumber(getName() + " left pivot position", getLeftPiviotPosition());
         SmartDashboard.putNumber(getName() + " intake speed", m_intake.get());
         SmartDashboard.putNumber(getName() + " right piviot position", getPiviotPosition());
     }
