@@ -4,24 +4,24 @@
     {
       "anchor": {
         "x": 7.6997627520759195,
-        "y": 5.355188888888888
+        "y": 5.2
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.69976275207592,
-        "y": 5.355188888888888
+        "x": 6.430177935949537,
+        "y": 6.213736654799262
       },
       "isLocked": false,
       "linkedName": "MLA 5 NEW"
     },
     {
       "anchor": {
-        "x": 2.6466000000000003,
-        "y": 5.728066666666666
+        "x": 2.0,
+        "y": 5.355
       },
       "prevControl": {
-        "x": 3.6466000000000003,
-        "y": 5.728066666666666
+        "x": 2.944199288256229,
+        "y": 5.6112218268090155
       },
       "nextControl": null,
       "isLocked": false,
@@ -47,7 +47,7 @@
   },
   "goalEndState": {
     "velocity": 0.0,
-    "rotation": -32.0
+    "rotation": -31.250000000000004
   },
   "reversed": false,
   "folder": "Murphy Left Auto",

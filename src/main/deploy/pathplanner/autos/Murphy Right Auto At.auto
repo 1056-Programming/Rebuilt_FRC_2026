@@ -41,25 +41,19 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Intake Start Pos"
-          }
-        },
-        {
           "type": "sequential",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "Index Balls"
+                  "name": "Intake Mega Home"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Intake Push In"
+                  "name": "Index Balls"
                 }
               },
               {
@@ -72,6 +66,12 @@
                 "type": "named",
                 "data": {
                   "name": "Index Stop"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shoot Stop"
                 }
               },
               {
@@ -108,13 +108,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Index Balls"
+                  "name": "Intake Mega Home"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Intake Push In"
+                  "name": "Index Balls"
                 }
               }
             ]

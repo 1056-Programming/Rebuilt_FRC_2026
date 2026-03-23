@@ -85,6 +85,9 @@ public class RobotContainer {
     private final SwerveTeleop c_teleop = new SwerveTeleop(drivetrain, driver0);   
     //private final YawTeleop c_yawTeleop = new YawTeleop(drivetrain, driver0);
     private final YawSwerveAlign c_zeroHome = new YawSwerveAlign(drivetrain, driver0, 0);
+    private final YawSwerveAlign c_leftScore = new YawSwerveAlign(drivetrain, driver0, 284);
+    private final YawSwerveAlign c_rightScore = new YawSwerveAlign(drivetrain, driver0, 76);
+
 
     private final PivotShake c_pivotShake = new PivotShake(s_intake);
     private final RepeatCommand c_gigaShake = 
@@ -203,6 +206,12 @@ public class RobotContainer {
             drivetrain.applyRequest(() -> idle).ignoringDisable(true)
         );
 
+        driver0.leftBumper().onTrue(c_rightScore);
+        driver0.leftBumper().onFalse(c_teleop);
+
+        driver0.rightBumper().onTrue(c_leftScore);
+        driver0.rightBumper().onFalse(c_teleop); 
+
         driver0.rightTrigger().whileTrue(drivetrain.applyRequest(() -> brake));
         driver0.b().whileTrue(drivetrain.applyRequest(() ->
             point.withModuleDirection(new Rotation2d(-driver0.getLeftY(), -driver0.getLeftX()))
@@ -216,7 +225,7 @@ public class RobotContainer {
         driver0.start().and(driver0.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
         // reset the field-centric heading on left bumper press
-        driver0.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+        driver0.y().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }
@@ -283,6 +292,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Index Reverse", c_indexCommand.setIndexState(IndexStates.REVERSE));
         NamedCommands.registerCommand("Index Stop", c_indexCommand.setIndexState(IndexStates.STOP));
         NamedCommands.registerCommand("Index Auto Balls", c_indexCommand.setIndexState(IndexStates.AUTO_INDEX));
+        NamedCommands.registerCommand("Auto IN", c_shooterCommand.setShooterState(ShooterStates.AUTO_IN));
         
 
         // Put all of the auto routines onto the Smartdashboard

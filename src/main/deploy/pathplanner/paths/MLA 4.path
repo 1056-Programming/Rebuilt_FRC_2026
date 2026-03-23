@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.6466000000000003,
-        "y": 5.728066666666666
+        "x": 2.0,
+        "y": 5.355
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.6466000000000003,
-        "y": 5.728066666666666
+        "x": 2.8366073546856474,
+        "y": 5.729572953736655
       },
       "isLocked": false,
       "linkedName": "MLA 3"
     },
     {
       "anchor": {
-        "x": 5.035033333338373,
-        "y": 5.355188888888888
+        "x": 5.128315539739028,
+        "y": 5.729572953736655
       },
       "prevControl": {
-        "x": 4.035033333338373,
-        "y": 5.355188888888888
+        "x": 3.3853262158956117,
+        "y": 5.944756820877817
       },
       "nextControl": null,
       "isLocked": false,
@@ -53,7 +53,7 @@
   "folder": "Murphy Left Auto",
   "idealStartingState": {
     "velocity": 0.0,
-    "rotation": -32.0
+    "rotation": -31.250000000000004
   },
   "useDefaultConstraints": false
 }

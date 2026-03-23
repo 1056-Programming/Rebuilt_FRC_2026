@@ -31,7 +31,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot 100 IN"
+            "name": "Auto IN"
           }
         },
         {
@@ -90,15 +90,15 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Shoot 100 IN"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "MLA 5"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Auto IN"
           }
         },
         {
