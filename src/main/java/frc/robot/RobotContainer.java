@@ -274,7 +274,7 @@ public class RobotContainer {
     //             FollowPathCommand.warmupCommand().schedule();
     // }
 
-    private void configureAuto() {
+    private void configureAuto() { //Set command group for path planner
         NamedCommands.registerCommand("Intake Balls", c_intakeCommand.setIntakeState(IntakeStates.INTAKE));
         NamedCommands.registerCommand("Intake Feed Out", c_intakeCommand.setIntakeState(IntakeStates.OUTAKE));
         NamedCommands.registerCommand("Intake Home", c_intakeCommand.setIntakeState(IntakeStates.HOME));
@@ -297,13 +297,13 @@ public class RobotContainer {
 
         // Put all of the auto routines onto the Smartdashboard
         m_chooser = AutoBuilder.buildAutoChooser("Right Auto"); 
-        SmartDashboard.putData(m_chooser);
+        SmartDashboard.putData(m_chooser); //Use elastic to choose auto
 
         // Warmup PathPlanner to avoid Java pauses
-        FollowPathCommand.warmupCommand().schedule();
+        FollowPathCommand.warmupCommand().schedule(); //Make sure to warm it up 
     }
 
     public Command getAutonomousCommand() {
-        return m_chooser.getSelected();
-    }
+        return m_chooser.getSelected(); //return the commands into path planner
+    } 
 }

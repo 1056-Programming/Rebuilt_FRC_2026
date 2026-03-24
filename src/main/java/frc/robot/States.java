@@ -56,7 +56,7 @@ public class States {
         IN_100(57.5, 30, Units.inchesToMeters(100)),
         CLIMB_TO_CENTER(15, 44.25, Units.inchesToMeters(115)),
         AUTO_IN(57.5,28.5, Units.inchesToMeters(67)),
-        // c 
+        // New auto states for left auto
         SHOOT_FAR(15, 47.5, Units.inchesToMeters(6700)),
         // ah
         REVERSE_SHOOT(0,-100,0); 
