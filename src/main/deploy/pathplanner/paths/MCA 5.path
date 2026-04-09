@@ -8,24 +8,40 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.601679292929293,
-        "y": 7.47060606060606
+        "x": 4.574958317067533,
+        "y": 7.539624400446747
       },
       "isLocked": false,
       "linkedName": "mc 4"
     },
     {
       "anchor": {
-        "x": 3.689191919191919,
-        "y": 7.47060606060606
+        "x": 2.6170164348982747,
+        "y": 7.354551201011378
       },
       "prevControl": {
-        "x": 4.689191919191919,
-        "y": 7.47060606060606
+        "x": 3.532253671545078,
+        "y": 7.7168845390320335
+      },
+      "nextControl": {
+        "x": 1.5969989628842862,
+        "y": 6.9507364077799645
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.0575726927996651,
+        "y": 5.955638432364096
+      },
+      "prevControl": {
+        "x": 1.2197989566937157,
+        "y": 6.161729557543691
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "mc 1"
+      "linkedName": "mca 5 end"
     }
   ],
   "rotationTargets": [],
@@ -42,7 +58,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -75.0
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": "Murphy Citrus Auto",

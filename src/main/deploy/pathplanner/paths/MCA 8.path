@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.720303030303031,
-        "y": 7.012525252525253
+        "x": 1.058,
+        "y": 5.955638432364096
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.720303030303031,
-        "y": 6.012525252525253
+        "x": 1.8372945638432374,
+        "y": 6.655094816687737
       },
       "isLocked": false,
-      "linkedName": "mc 1 end"
+      "linkedName": "mca 5 end"
     },
     {
       "anchor": {
-        "x": 7.720303030303031,
-        "y": 4.355656565656567
+        "x": 3.689191919191919,
+        "y": 7.47060606060606
       },
       "prevControl": {
-        "x": 7.720303030303031,
-        "y": 5.355656565656567
+        "x": 2.689191919191919,
+        "y": 7.47060606060606
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "mc 2 end"
+      "linkedName": "mc 1"
     }
   ],
   "rotationTargets": [],
@@ -33,22 +33,22 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 0.9,
-    "maxAcceleration": 2.0,
+    "maxVelocity": 2.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
-    "unlimited": false
+    "unlimited": true
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": -75.0
   },
   "reversed": false,
   "folder": "Murphy Citrus Auto",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": false
 }
