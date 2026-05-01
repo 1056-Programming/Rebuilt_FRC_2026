@@ -5,15 +5,9 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "Intake Home"
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "MLA 1"
+            "pathName": "MR 1"
           }
         },
         {
@@ -25,19 +19,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "MLA 2"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Auto IN"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "MLA 3"
+            "pathName": "MR 2"
           }
         },
         {
@@ -50,6 +32,25 @@
                   "name": "Intake Mega Home"
                 }
               },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shoot 120 IN"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MR 3"
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
               {
                 "type": "named",
                 "data": {
@@ -73,12 +74,6 @@
                 "data": {
                   "name": "Shoot Stop"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake Balls"
-                }
               }
             ]
           }
@@ -86,25 +81,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "MLA 4"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "MLA 5"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Auto IN"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "MLA 6"
+            "pathName": "MR 4"
           }
         },
         {
@@ -114,22 +91,40 @@
               {
                 "type": "named",
                 "data": {
+                  "name": "Intake Balls"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 6.0
+                }
+              },
+              {
+                "type": "named",
+                "data": {
                   "name": "Intake Mega Home"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Index Balls"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 1.7
+                  "name": "Shoot 120 IN"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MR 5"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Index Balls"
           }
         }
       ]

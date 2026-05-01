@@ -42,6 +42,7 @@ import frc.robot.States.ShooterStates;
 
 import frc.robot.commands.IndexCommand;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.LimeLightAlign;
 import frc.robot.commands.PivotShake;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.SwerveTeleop;
@@ -87,8 +88,7 @@ public class RobotContainer {
     private final YawSwerveAlign c_zeroHome = new YawSwerveAlign(drivetrain, driver0, 0);
     private final YawSwerveAlign c_leftScore = new YawSwerveAlign(drivetrain, driver0, 284);
     private final YawSwerveAlign c_rightScore = new YawSwerveAlign(drivetrain, driver0, 76);
-
-
+    private final LimeLightAlign c_visionAlign = new LimeLightAlign(drivetrain, driver0);
 
     private final PivotShake c_pivotShake = new PivotShake(s_intake);
     private final RepeatCommand c_gigaShake = 
@@ -202,6 +202,8 @@ public class RobotContainer {
         // Return to normal after positioning
         driver0.leftTrigger().toggleOnTrue(c_zeroHome);
         driver0.leftTrigger().toggleOnFalse(c_teleop);
+        driver0.a().toggleOnTrue(c_visionAlign); 
+        driver0.a().toggleOnFalse(c_teleop);
 
         // Idle while the robot is disabled. This ensures the configured
         // neutral mode is applied to the drive motors while disabled.
@@ -310,6 +312,6 @@ public class RobotContainer {
     // }
 
     public Command getAutonomousCommand() {
-        return m_chooser.getSelected();
-    }
+        return m_chooser.getSelected(); //return the commands into path planner
+    } 
 }

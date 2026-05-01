@@ -15,6 +15,7 @@ import frc.robot.LimelightHelpers;
 public class VisionSubsystem extends SubsystemBase {
     // private final CameraServer cameraServer;
     private final CommandSwerveDrivetrain drivetrain; 
+
     private static LimelightHelpers.PoseEstimate s_poseEstimate; 
     private static String limelightName; 
     
@@ -67,7 +68,7 @@ public class VisionSubsystem extends SubsystemBase {
         setSmartDashboard();
     }
 
-    public static double getTagYaw() {
+    public double getTagYaw() {
         return LimelightHelpers.getTX(limelightName); 
     }
 

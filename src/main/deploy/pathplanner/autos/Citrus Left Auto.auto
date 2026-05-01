@@ -5,15 +5,15 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Intake Home"
+            "pathName": "CL 1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "MLA 1"
+            "pathName": "CL 2"
           }
         },
         {
@@ -25,19 +25,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "MLA 2"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Auto IN"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "MLA 3"
+            "pathName": "CL 3"
           }
         },
         {
@@ -53,13 +41,38 @@
               {
                 "type": "named",
                 "data": {
+                  "name": "Shoot 120 IN"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CL 4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CL 5"
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
                   "name": "Index Balls"
                 }
               },
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 2.0
+                  "waitTime": 1.0
                 }
               },
               {
@@ -73,12 +86,6 @@
                 "data": {
                   "name": "Shoot Stop"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake Balls"
-                }
               }
             ]
           }
@@ -86,50 +93,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "MLA 4"
+            "pathName": "CL 1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "MLA 5"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Auto IN"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "MLA 6"
-          }
-        },
-        {
-          "type": "sequential",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake Mega Home"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Index Balls"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 1.7
-                }
-              }
-            ]
+            "pathName": "COL 1"
           }
         }
       ]

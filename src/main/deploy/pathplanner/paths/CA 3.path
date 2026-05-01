@@ -3,40 +3,40 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.128315539739028,
-        "y": 5.729572953736655
+        "x": 7.8577272727272724,
+        "y": 1.4697474747474746
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.128315539739028,
-        "y": 5.729572953736655
+        "x": 7.856236583700993,
+        "y": 2.520260344782374
       },
       "isLocked": false,
-      "linkedName": "MLA 4 NEW"
+      "linkedName": "CA 2"
     },
     {
       "anchor": {
-        "x": 7.6997627520759195,
-        "y": 5.2
+        "x": 7.8577272727272724,
+        "y": 3.4280429292929298
       },
       "prevControl": {
-        "x": 6.6997627520759195,
-        "y": 5.2
+        "x": 7.850115640303595,
+        "y": 2.3593851668005725
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "MLA 5 NEW"
+      "linkedName": "CA 3"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.7073991031390099,
+      "minWaypointRelativePos": 0.0,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 0.5,
-        "maxAcceleration": 2.0,
+        "maxVelocity": 0.9,
+        "maxAcceleration": 4.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -47,22 +47,22 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.0,
-    "maxAcceleration": 2.0,
+    "maxVelocity": 2.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0.0,
-    "rotation": 0.0
+    "velocity": 0,
+    "rotation": 90.0
   },
   "reversed": false,
-  "folder": "Murphy Left Auto",
+  "folder": "Citrus Auto",
   "idealStartingState": {
-    "velocity": 0.4,
-    "rotation": 0.0
+    "velocity": 0,
+    "rotation": 90.0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }
