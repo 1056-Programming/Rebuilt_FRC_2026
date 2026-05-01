@@ -22,7 +22,8 @@ import frc.robot.States.IntakeStates;
 public class IntakeSubsystem extends SubsystemBase {
     // Spark Flex controlling ball intake
     // Spark Max controlling pivot of intake
-    private final SparkFlex m_intake;
+    private final TalonFX m_rightIntake;
+    private final TalonFX m_leftIntake; 
     public final SparkMax m_pivot; 
     // public final SparkMax m_leftPivot; 
 
@@ -47,7 +48,9 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public IntakeSubsystem() {
         // Initialize Spark Flex, Spark Max motors, and Throguh Bore Cancoder
-        m_intake = new SparkFlex(Constants.Intake.kIntakeID, MotorType.kBrushless);
+        m_rightIntake = new TalonFX(Constants.Intake.kRightIntakeID); 
+        m_leftIntake = new TalonFX(Constants.Intake.kLeftIntakeID); 
+
         
         m_pivot = new SparkMax(Constants.Intake.kPivotID, MotorType.kBrushless);
         pivotEncoder = new CANcoder(Constants.Intake.kEncoderID);
@@ -56,8 +59,8 @@ public class IntakeSubsystem extends SubsystemBase {
         // leftPivotEncoder = new CANcoder(Constants.Intake.kLeftEncoderID); 
 
         // Optimize BUS usage
-        // SparkFlexUtils.setSparkFlexBusUsage(m_intake, SparkFlexUtils.Usage.kMinimal, IdleMode.kCoast, false, true);
-        SparkMaxUtils.setSparkMaxBusUsage(m_pivot, SparkMaxUtils.Usage.kAll, IdleMode.kBrake, false, false);
+        // SparkFlexUtils.setSparkFlexBusUsage(m_rightIntake, SparkFlexUtils.Usage.kMinimal, IdleMode.kCoast, false, true);
+        SparkMaxUtils.setSparkMaxBusUsage(m_pivot, SparkMaxUtils.Usage.kAll, IdleMode.kBrake, false, true);
 
         // Initialize PID controller for pivot
         c_pivotPID = new PIDController(Constants.Intake.kIntakeP, Constants.Intake.kIntakeI, Constants.Intake.kIntakeD);
@@ -79,6 +82,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+
         // Set motor speed based on PID calculation
         pivotSpeed = c_pivotPID.calculate(getPiviotPosition()) 
             + c_ArmFeedforward.calculate(Units.degreesToRadians(getPiviotPosition()), pivotEncoder.getVelocity().getValueAsDouble());
@@ -110,7 +114,8 @@ public class IntakeSubsystem extends SubsystemBase {
         
         // Set PID setpoint on intake to calculate motor output during periodic
         c_pivotPID.setSetpoint(state.pivotAngle);
-        m_intake.set(state.intakeSpeed);
+        m_rightIntake.set(state.intakeSpeed); // try to invert the motor internally. 
+        m_leftIntake.set(state.intakeSpeed);
     }
 
     public String getName() {
@@ -129,8 +134,9 @@ public class IntakeSubsystem extends SubsystemBase {
     //   }
 
     // Disable susbystem if needed
-    private void disableSubsystem() {
-        m_intake.disable();
+    void disableSubsystem() {
+        m_rightIntake.disable();
+        m_leftIntake.disable();
         m_pivot.disable();
         // m_leftPivot.disable();
     }
@@ -157,7 +163,11 @@ public class IntakeSubsystem extends SubsystemBase {
         SmartDashboard.putNumber(getName() + " right pivot speed", pivotSpeed);
         // SmartDashboard.putNumber(getName() + " left pivot speed", leftPivotSpeed);
         // SmartDashboard.putNumber(getName() + " left pivot position", getLeftPiviotPosition());
-        SmartDashboard.putNumber(getName() + " intake speed", m_intake.get());
+        SmartDashboard.putNumber(getName() + " right intake speed", m_rightIntake.get());
+        SmartDashboard.putNumber(getName() + " left intake speed", m_leftIntake.get()); 
         SmartDashboard.putNumber(getName() + " right piviot position", getPiviotPosition());
+        SmartDashboard.putData(getName() + "pivot pid", c_pivotPID);
+        
+        SmartDashboard.putBoolean(getName() + "at set point", c_pivotPID.atSetpoint());
     }
 }

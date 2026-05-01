@@ -77,21 +77,21 @@ public class States {
     // Pivot is in angles need to set range
     // Positive for intake speed is intaking, positive for pivot angle is pivoting up
     public enum IntakeStates {
-        STOP(0, -210),
+        STOP(0, -304),
 
         // Set the speed of the intak-ing motor and the position of piviot 
-        INTAKE(-0.7, -205),
-        AUTO_INTAKE(-0.7, -205),
-        OUTAKE(0.5,-140),
+        INTAKE(1, -209),
+        AUTO_INTAKE(0.7, -219),
+        OUTAKE(-0.5,-280),
     
         // Set the home values for piviot 
-        GIGA_HOME(0, -105),
-        PUSH_IN(-0.7, -130),
-        HALF(-0.7, -150),
-        START(0,-170),
-        HOME(0,-210),
-        pickle(0,-205),
-        TESTING_INTAKE(-1, -210);
+        GIGA_HOME(0, -324),
+        PUSH_IN(0.7, -280),
+        HALF(0.7, -280),
+        START(0,-219),
+        HOME(0,-300),
+        pickle(0,-271),
+        TESTING_INTAKE(1, -210);
 
         public final double intakeSpeed;
         public final double pivotAngle;

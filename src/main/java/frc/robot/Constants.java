@@ -51,7 +51,8 @@ public class Constants {
 
     public class Intake{
         // REV SparkFLex 
-        public static final int kIntakeID = 35;
+        public static final int kLeftIntakeID = 36;
+        public static final int kRightIntakeID = 35; 
 
         // REV SparkMax
         public static final int kPivotID = 30;
@@ -60,7 +61,7 @@ public class Constants {
         public static final int kEncoderID = 23;
 
         // PID values
-        public static final double kIntakeP = 0.03;
+        public static final double kIntakeP = 0.03; // 0.03
         public static final double kIntakeI = 0;
         public static final double kIntakeD = 0;
     

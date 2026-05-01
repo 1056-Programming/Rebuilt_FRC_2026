@@ -89,6 +89,7 @@ public class RobotContainer {
     private final YawSwerveAlign c_rightScore = new YawSwerveAlign(drivetrain, driver0, 76);
 
 
+
     private final PivotShake c_pivotShake = new PivotShake(s_intake);
     private final RepeatCommand c_gigaShake = 
         new SequentialCommandGroup(c_intakeCommand.setIntakeState(IntakeStates.PUSH_IN),
@@ -106,7 +107,7 @@ public class RobotContainer {
 
         configureBindings();
         setDriverBindings();
-        configureAuto();
+        // configureAuto();
     
     }
 
@@ -194,6 +195,9 @@ public class RobotContainer {
         // Drivetrain will execute this command periodically
         drivetrain.setDefaultCommand(c_teleop);
 
+        
+
+
         // Yaw align with tag when triggered
         // Return to normal after positioning
         driver0.leftTrigger().toggleOnTrue(c_zeroHome);
@@ -212,9 +216,11 @@ public class RobotContainer {
         driver0.rightBumper().onTrue(c_leftScore);
         driver0.rightBumper().onFalse(c_teleop); 
 
+
+
         driver0.rightTrigger().whileTrue(drivetrain.applyRequest(() -> brake));
         driver0.b().whileTrue(drivetrain.applyRequest(() ->
-            point.withModuleDirection(new Rotation2d(-driver0.getLeftY(), -driver0.getLeftX()))
+            point.withModuleDirection(new Rotation2d(driver0.getLeftY(), driver0.getLeftX()))
         ));
 
         // Run SysId routin zes when holding back/start and X/Y.
@@ -245,7 +251,7 @@ public class RobotContainer {
         driver1.b().onFalse(new InstantCommand(() -> s_shooter.setVelocitySetpoints(s_shooter.desiredShooterRPS, s_shooter.desiredBackSpinRPS)));
     }
 
-    // private void configureAuto() {
+    private void configureAuto() {
         
     //     NamedCommands.registerCommand("Index", c_indexCommand.setIndexState(IndexStates.INDEX));
     //     NamedCommands.registerCommand("Starting Positions", c_intakeCommand.setIntakeState(IntakeStates.HOME));
@@ -272,36 +278,36 @@ public class RobotContainer {
         
     //             // Warmup PathPlanner to avoid Java pauses
     //             FollowPathCommand.warmupCommand().schedule();
-    // }
+    }
 
-    private void configureAuto() {
-        NamedCommands.registerCommand("Intake Balls", c_intakeCommand.setIntakeState(IntakeStates.INTAKE));
-        NamedCommands.registerCommand("Intake Feed Out", c_intakeCommand.setIntakeState(IntakeStates.OUTAKE));
-        NamedCommands.registerCommand("Intake Home", c_intakeCommand.setIntakeState(IntakeStates.HOME));
-        NamedCommands.registerCommand("Intake Start Pos", c_intakeCommand.setIntakeState(IntakeStates.START));
-        NamedCommands.registerCommand("Intake Stop", c_intakeCommand.setIntakeState(IntakeStates.STOP));
-        NamedCommands.registerCommand("Intake Mega Home", c_intakeCommand.setIntakeState(IntakeStates.GIGA_HOME));
-        NamedCommands.registerCommand("Intake Push In", c_intakeCommand.setIntakeState(IntakeStates.PUSH_IN));
+    // private void configureAuto() {
+    //     NamedCommands.registerCommand("Intake Balls", c_intakeCommand.setIntakeState(IntakeStates.INTAKE));
+    //     NamedCommands.registerCommand("Intake Feed Out", c_intakeCommand.setIntakeState(IntakeStates.OUTAKE));
+    //     NamedCommands.registerCommand("Intake Home", c_intakeCommand.setIntakeState(IntakeStates.HOME));
+    //     NamedCommands.registerCommand("Intake Start Pos", c_intakeCommand.setIntakeState(IntakeStates.START));
+    //     NamedCommands.registerCommand("Intake Stop", c_intakeCommand.setIntakeState(IntakeStates.STOP));
+    //     NamedCommands.registerCommand("Intake Mega Home", c_intakeCommand.setIntakeState(IntakeStates.GIGA_HOME));
+    //     NamedCommands.registerCommand("Intake Push In", c_intakeCommand.setIntakeState(IntakeStates.PUSH_IN));
 
 
-        NamedCommands.registerCommand("Shoot 120 IN", c_shooterCommand.setShooterState(ShooterStates.IN_120));
-        NamedCommands.registerCommand("Shoot 100 IN", c_shooterCommand.setShooterState(ShooterStates.CLIMB_TO_CENTER));
-        NamedCommands.registerCommand("Shoot Stop", c_shooterCommand.setShooterState(ShooterStates.STOP));
+    //     NamedCommands.registerCommand("Shoot 120 IN", c_shooterCommand.setShooterState(ShooterStates.IN_120));
+    //     NamedCommands.registerCommand("Shoot 100 IN", c_shooterCommand.setShooterState(ShooterStates.CLIMB_TO_CENTER));
+    //     NamedCommands.registerCommand("Shoot Stop", c_shooterCommand.setShooterState(ShooterStates.STOP));
 
-        NamedCommands.registerCommand("Index Balls", c_indexCommand.setIndexState(IndexStates.AUTO_INDEX));
-        NamedCommands.registerCommand("Index Reverse", c_indexCommand.setIndexState(IndexStates.REVERSE));
-        NamedCommands.registerCommand("Index Stop", c_indexCommand.setIndexState(IndexStates.STOP));
-        NamedCommands.registerCommand("Index Auto Balls", c_indexCommand.setIndexState(IndexStates.AUTO_INDEX));
-        NamedCommands.registerCommand("Auto IN", c_shooterCommand.setShooterState(ShooterStates.AUTO_IN));
+    //     NamedCommands.registerCommand("Index Balls", c_indexCommand.setIndexState(IndexStates.AUTO_INDEX));
+    //     NamedCommands.registerCommand("Index Reverse", c_indexCommand.setIndexState(IndexStates.REVERSE));
+    //     NamedCommands.registerCommand("Index Stop", c_indexCommand.setIndexState(IndexStates.STOP));
+    //     NamedCommands.registerCommand("Index Auto Balls", c_indexCommand.setIndexState(IndexStates.AUTO_INDEX));
+    //     NamedCommands.registerCommand("Auto IN", c_shooterCommand.setShooterState(ShooterStates.AUTO_IN));
         
 
-        // Put all of the auto routines onto the Smartdashboard
-        m_chooser = AutoBuilder.buildAutoChooser("Right Auto"); 
-        SmartDashboard.putData(m_chooser);
+    //     // Put all of the auto routines onto the Smartdashboard
+    //     m_chooser = AutoBuilder.buildAutoChooser("Right Auto"); 
+    //     SmartDashboard.putData(m_chooser);
 
-        // Warmup PathPlanner to avoid Java pauses
-        FollowPathCommand.warmupCommand().schedule();
-    }
+    //     // Warmup PathPlanner to avoid Java pauses
+    //     FollowPathCommand.warmupCommand().schedule();
+    // }
 
     public Command getAutonomousCommand() {
         return m_chooser.getSelected();
