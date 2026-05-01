@@ -77,7 +77,7 @@ public class LimeLightAlign extends Command {
     @Override
     public void execute() {
 
-        desiredYaw = limelight.getTagYaw() + Utilities.processYaw(drivetrain.getPigeon2().getYaw().getValueAsDouble()); 
+        desiredYaw = -limelight.getTagYaw() + Utilities.processYaw(drivetrain.getPigeon2().getYaw().getValueAsDouble()); 
 
         // Set contoller speeds 
         xInput = -controller.getLeftY();
@@ -97,7 +97,7 @@ public class LimeLightAlign extends Command {
             .withRotationalRate(rSpeed))
             .execute();
 
-        setDashboardData();
+        // setDashboardData();
     }
     
     // Apply a polynomial acceleration curve to the joystick inputs for smoother control
@@ -109,24 +109,7 @@ public class LimeLightAlign extends Command {
     }
 
     // Display important information for debugging
-    private void setDashboardData() {
-        // Display current odometry positioning of robot
-        SmartDashboard.putNumber(drivetrain.getName() + " pidgeon 2", Utilities.processYaw(drivetrain.getPigeon2().getYaw().getValueAsDouble()));
-        SmartDashboard.putNumber(drivetrain.getName() + " state x pos", drivetrain.getState().Pose.getMeasureX().baseUnitMagnitude());
-        SmartDashboard.putNumber(drivetrain.getName() + " state y pos", drivetrain.getState().Pose.getMeasureY().baseUnitMagnitude());
-        SmartDashboard.putNumber(drivetrain.getName() + " state rot pos", drivetrain.getState().Pose.getRotation().getDegrees());
+    // private void setDashboardData() {
         
-         // Controller Inputs
-        SmartDashboard.putNumber(drivetrain.getName() + "xInput", xInput);
-        SmartDashboard.putNumber(drivetrain.getName() + "yInput", yInput);
-
-        // Calculated Speeds
-        SmartDashboard.putNumber(drivetrain.getName() + "xSpeed", xSpeed);
-        SmartDashboard.putNumber(drivetrain.getName() + "ySpeed", ySpeed);
-        SmartDashboard.putNumber(drivetrain.getName() + "rSpeed", rSpeed);
-
-        // PID information
-        SmartDashboard.putNumber(drivetrain.getName() + "yawSetpoint", c_yawPID.getSetpoint());
-        SmartDashboard.putNumber(drivetrain.getName() + "yawError", c_yawPID.getPositionError());
-    }
+    // }
 }
